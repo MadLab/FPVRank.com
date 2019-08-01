@@ -52,6 +52,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('events')->group(function () {
         Route::name('event.')->group(function () {
             Route::get('/', 'EventController@index')->name('index');
+            Route::get('show/{text}', 'EventController@show')->name('show');
+            Route::get('create', 'EventController@create')->name('create');
+            Route::post('store', 'EventController@store')->name('store');
+            Route::get('edit/{id}', 'EventController@edit')->name('edit');
+            Route::put('update/{id}', 'EventController@update')->name('update');
         });
     });
     Route::prefix('results')->group(function () {

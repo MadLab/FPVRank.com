@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
+    
     /**
      * The table associated with the model.
      **Model name can't be 'Class' 
@@ -37,5 +38,12 @@ class Classes extends Model
     public function search($text){
         return $this->select('id','name', 'description','created_at')
         ->where('name', 'LIKE', $text.'%')->get();
+    }
+    /**
+     * Get a listing of the resource to fill select input
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillSelect(){
+        return $this->select('id','name')->get();
     }
 }

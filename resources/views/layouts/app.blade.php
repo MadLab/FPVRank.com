@@ -12,11 +12,17 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/jquery-1.8.3.min.js') }}" defer></script>
     @if(Auth::check())
-        <script src="{{ asset('js/user.js') }}" defer></script>
-        <script src="{{ asset('js/class.js') }}" defer></script>
-        <script src="{{ asset('js/pilot.js') }}" defer></script>
+    <script src="{{ asset('js/user.js') }}" defer></script>
+    <script src="{{ asset('js/class.js') }}" defer></script>
+    <script src="{{ asset('js/pilot.js') }}" defer></script>
+    <script src="{{ asset('js/event.js') }}" defer></script>
+    <script src="{{ asset('js/bootstrap-datetimepicker.js') }}" defer ></script>
+    <script src="{{ asset('js/locales/bootstrap-datetimepicker.es.js') }}" defer></script>
     @endif
+
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -24,9 +30,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     @if(Auth::check())
     <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     @endif
+
 </head>
 
 <body>
