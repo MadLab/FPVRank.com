@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Event;
 use App\Classes;
 use App\Http\Requests\EventRequest;
@@ -28,8 +27,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        $event = $this->event->getList();   
-        //dd($event->toArray());     
+        
+        $event = $this->event->getList();           
         return view('event.index', ['events' => $event]);
     }
 
@@ -51,9 +50,9 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(EventRequest $request)
-    {
+    {        
         $this->event->create($request->toArray());
-        $message = 'Class has been saved succesfully!';
+        $message = 'Event has been saved succesfully!';
         return redirect()->route('event.index')->with('status', $message);
     }
 
@@ -65,7 +64,8 @@ class EventController extends Controller
      */
     public function show($text)
     {
-        //
+        $events = $this->event->search($text);
+        return response()->view('event._eventtable', ['events' => $events], 200);
     }
 
     /**
@@ -89,7 +89,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EventRequest $request, $id)
     {
         
         $event = $this->event->findOrFail($id);        

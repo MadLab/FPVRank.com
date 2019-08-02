@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Edit a pilot</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('pilot.update', ['id' => $pilot->id]) }}">
+                    <form method="POST" action="{{ route('pilot.update', ['id' => $pilot->pilotId]) }}">
                         @method('PUT')
                         @csrf
                         @include('pilot._pilotform')

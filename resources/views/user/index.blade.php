@@ -22,7 +22,7 @@ Users
 @endslot
 @slot('searchBar')
 <div class="search-bar">
-    <input id="search_user" class="form-control" type="text" placeholder="Please type the name you want to search">
+    <input id="search_user" class="form-control" type="text" placeholder="You can search by '#', Name or Email">
 </div>
 @endslot
 <div>

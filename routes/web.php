@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +9,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+try {
+    DB::connection()->getPdo();
+} catch (\Exception $e) {    
+    die('Database error, please contact developers.    '.$e->getMessage());   
+}
 
 Route::get('/', function () {
     return view('welcome');
@@ -56,12 +60,20 @@ Route::middleware('auth')->group(function () {
             Route::get('create', 'EventController@create')->name('create');
             Route::post('store', 'EventController@store')->name('store');
             Route::get('edit/{id}', 'EventController@edit')->name('edit');
-            Route::put('update/{id}', 'EventController@update')->name('update');
+            Route::put('update/{id}', 'EventController@update')->name('update');        
+            
         });
     });
     Route::prefix('results')->group(function () {
         Route::name('result.')->group(function () {
             Route::get('/', 'ResultController@index')->name('index');
+            Route::get('show/{text}', 'ResultController@show')->name('show');
+            Route::get('create', 'ResultController@create')->name('create');
+            Route::post('store', 'ResultController@store')->name('store');
+            Route::get('edit/{id}', 'ResultController@edit')->name('edit');
+            Route::put('update/{id}', 'ResultController@update')->name('update');
+            Route::get('inputs/{count}', 'ResultController@inputs')->name('inputs');
+            
         });
     });
 });

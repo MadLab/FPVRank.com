@@ -14,6 +14,12 @@ class Pilot extends Model
     protected $fillable = [
         'name', 'username',
     ];
+      /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'pilotId';
          /**
      * 
      * Get a listing of the resource
@@ -21,14 +27,21 @@ class Pilot extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
-        return $this->select('id','name', 'username','created_at')->paginate(12);
+        return $this->select('pilotId','name', 'username','created_at')->paginate(12);
     }
      /**
      * Get a listing of the resource by name
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text){
-        return $this->select('id','name', 'username','created_at')
-        ->where('name', 'LIKE', $text.'%')->get();
+        return $this->select('pilotId','name', 'username','created_at')
+        ->where('name', 'LIKE', $text.'%')->orWhere('username', 'LIKE', $text.'%')->orWhere('pilotId', '=', $text)->get();
+    }
+      /**
+     * Get a listing of the resource to fill select input
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillSelect(){
+        return $this->select('pilotId','name')->get();
     }
 }

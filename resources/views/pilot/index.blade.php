@@ -22,7 +22,7 @@ Pilots
 @endslot
 @slot('searchBar')
 <div class="search-bar">
-    <input id="search_pilot" class="form-control" type="text" placeholder="Please type the name you want to search">
+    <input id="search_pilot" class="form-control" type="text" placeholder="You can search by '#', Name or Username">
 </div>
 @endslot
 <div>

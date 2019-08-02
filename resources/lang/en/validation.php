@@ -145,6 +145,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'email' => 'E-mail Address',
+        'classId' => 'Class',
+        'pilotId' => 'Pilot'
+    ],
 
 ];

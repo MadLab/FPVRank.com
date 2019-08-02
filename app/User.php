@@ -18,6 +18,12 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
+      /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'userId';
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,14 +49,14 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
-        return $this->select('id','name', 'email','created_at')->paginate(12);
+        return $this->select('userId','name', 'email','created_at')->paginate(12);
     }
      /**
      * Get a listing of the resource by name
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text){
-        return $this->select('id','name', 'email','created_at')
-        ->where('users.name', 'LIKE', $text.'%')->get();
+        return $this->select('userId','name', 'email','created_at')
+        ->where('users.name', 'LIKE', $text.'%')->orWhere('userId', '=', $text)->orWhere('email', 'LIKE', $text.'%')->get();
     }
 }

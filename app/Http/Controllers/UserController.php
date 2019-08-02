@@ -6,11 +6,14 @@ use App\User;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Hash;
+use DB;
 
 class UserController extends Controller
 {
     protected $user;
-
+    public function check(){
+        
+    }    
     /**
      * Create a new controller instance.
      *
@@ -19,6 +22,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->user = new User();
+        //$this->check();
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +30,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {        
         $users = $this->user->getList();
         return view('user.index', ['users' => $users]);
     }

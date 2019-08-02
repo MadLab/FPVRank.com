@@ -12,11 +12,11 @@
         <tbody>
             @foreach($classes as $class)
             <tr>
-                <th scope="row">{{$class->id }}</th>
+                <th scope="row">{{$class->classId }}</th>
                 <td>{{$class->name }}</td>
                 <td>{{$class->description}}</td>
                 <td>{{$class->created_at }}</td>                             
-                <td><a href="{{route('class.edit', ['id' => $class->id])}}">Edit</a></td>
+                <td><a href="{{route('class.edit', ['id' => $class->classId])}}">Edit</a></td>
             </tr>
             @endforeach
         </tbody>

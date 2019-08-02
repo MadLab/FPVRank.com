@@ -12,11 +12,11 @@
         <tbody>
             @foreach($users as $user)
             <tr>
-                <th scope="row">{{$user->id }}</th>
+                <th scope="row">{{$user->userId }}</th>
                 <td>{{$user->name }}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->created_at }}</td>                             
-                <td><a href="{{route('user.edit', ['id' => $user->id])}}">Edit</a></td>
+                <td><a href="{{route('user.edit', ['id' => $user->userId])}}">Edit</a></td>
             </tr>
             @endforeach
         </tbody>

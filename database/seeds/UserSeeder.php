@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'email' => 'andy@email.com',            
             'password' => Hash::make('secret'),            
         ]);
-        for ($i=0; $i < 100; $i++) { 
+        /*for ($i=0; $i < 100; $i++) { 
             DB::table('users')->insert([            
                 'name' => Str::random(10),                
                 'email' => 'andy'.$i.'@email.com',            
@@ -34,6 +34,6 @@ class UserSeeder extends Seeder
                 'name' => Str::random(10),                
                 'username' => Str::random(10),                            
             ]);
-        }
+        }*/
     }
 }

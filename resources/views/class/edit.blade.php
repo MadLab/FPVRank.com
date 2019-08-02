@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Edit a class</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('class.update', ['id' => $class->id]) }}">
+                    <form method="POST" action="{{ route('class.update', ['id' => $class->classId]) }}">
                         @method('PUT')
                         @csrf
                         @include('class._classform')

@@ -14,7 +14,7 @@ class CreatePilotsTable extends Migration
     public function up()
     {
         Schema::create('pilots', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('pilotId');
             $table->string('name');
             $table->string('username');
             $table->timestamps();
