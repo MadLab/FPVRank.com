@@ -22,12 +22,7 @@
                                     Save
                                 </button>
                             </div>
-                        </div>
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <a href="{{route('pilot.index')}}" class="btn btn-secondary">Go back to list</a>
-                            </div>
-                        </div>
+                        </div>                        
                     </form>
                 </div>
             </div>

@@ -11,15 +11,18 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @include('layouts.scripts')
+    @if(Route::currentRouteName() == 'welcome')
+    <script src="{{ asset('js/welcome.js') }}" defer></script>
+    @endif
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
+
     @if(Auth::check())
-    <link href="{{ asset('css/home.css') }}" rel="stylesheet">    
+    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
     @endif
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
 
@@ -39,6 +42,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @if(Auth::check())
                         @if(Route::currentRouteName() != 'home')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}">Home</a>
@@ -55,9 +59,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('event.index')}}">Events</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('result.index')}}">Results</a>
-                        </li>
+                        @endif
                         @endif
                     </ul>
 

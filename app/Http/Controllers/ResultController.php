@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Pilot;
 use App\Result;
+use View;
 use App\Http\Requests\ResultRequest;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,13 @@ class ResultController extends Controller
      */
     public function inputs($count){
         $pilots = $this->pilot->fillSelect();
-        return response()->view('result._inputs', ['pilots' => $pilots, 'count' => $count], 200);
+        $var = null;
+        for($i=1; $i < 11; $i++) { 
+            $var = $var . View::make('event._inputs', ['pilots' => $pilots, 'count' => $count +$i]);            
+        }
+        return response($var);
+        
+        
     }
     /**
      * Display a listing of the resource.

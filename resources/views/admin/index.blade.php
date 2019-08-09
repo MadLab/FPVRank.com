@@ -14,8 +14,7 @@
                         <a href="{{route('user.index')}}">Users</a>
                         <a href="{{route('class.index')}}">Classes</a>
                         <a href="{{route('pilot.index')}}">Pilots</a>
-                        <a href="{{route('event.index')}}">Events</a>
-                        <a href="{{route('result.index')}}">Results</a>                        
+                        <a href="{{route('event.index')}}">Events</a>                                            
                     </div>
                 </div>
             </div>

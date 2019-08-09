@@ -31,8 +31,10 @@ class EventRequest extends FormRequest
         return [
             "name" => 'required|max:250',
             "location" => 'required|max:250',  
-            "classId" => 'required|numeric',  
-            "date" => 'required|date',  
+            "classId" => 'required|numeric',              
+            "date" => 'required|date',
+                    
+            "notes.*" => 'nullable|max:250',
         ];
     }
 }

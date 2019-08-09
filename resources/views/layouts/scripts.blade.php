@@ -12,21 +12,22 @@
     @case('pilot.index')
     <script src="{{ asset('js/pilot.js') }}" defer></script>
     @break
-    @case('event.index')
-    <script src="{{ asset('js/event.js') }}" defer></script>
-    @break
     @case('event.create')
     <script src="{{ asset('js/event_create.js') }}" defer></script>
     <script src="{{ asset('js/bootstrap-datetimepicker.js') }}" defer></script>
     <script src="{{ asset('js/locales/bootstrap-datetimepicker.es.js') }}" defer></script>
     <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     @break
-    @case('result.index')
-    <script src="{{ asset('js/result.js') }}" defer></script>
+    @case('event.edit')
+    <script src="{{ asset('js/event_create.js') }}" defer></script>
+    <script src="{{ asset('js/bootstrap-datetimepicker.js') }}" defer></script>
+    <script src="{{ asset('js/locales/bootstrap-datetimepicker.es.js') }}" defer></script>
+    <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
     @break
-    @case('result.create')
-    <script src="{{ asset('js/result_create.js') }}" defer></script>
+    @case('event.index')
+    <script src="{{ asset('js/event.js') }}" defer></script>
     @break
     @default
+    
     @endswitch
     @endif

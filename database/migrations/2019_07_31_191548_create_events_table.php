@@ -19,6 +19,7 @@ class CreateEventsTable extends Migration
             $table->dateTime('date');
             $table->unsignedBigInteger('classId');
             $table->string('location');
+            $table->dateTime('dateRanked')->nullable();
             $table->timestamps();
 
             $table->foreign('classId')->references('classId')->on('classes');

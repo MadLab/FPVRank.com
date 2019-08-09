@@ -12,7 +12,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'date','classId', 'location'
+        'name', 'date','classId', 'location', 'dateRanked'
     ];
       /**
      * The primary key associated with the table.
@@ -45,6 +45,13 @@ class Event extends Model
      */
     public function fillSelect(){
         return $this->select('eventId','name')->get();
+    }
+    /**
+     * Get a listing of the resource to rank pilots
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function selectForRank($eventId){
+        return $this->select('classId')->where('eventId','=',$eventId)->first();
     }
 
 }

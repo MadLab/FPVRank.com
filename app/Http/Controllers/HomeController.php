@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Ranking;
+use App\Classes;
+use Route;
 
 class HomeController extends Controller
 {
+    protected $ranking;
+    protected $class;
     /**
      * Create a new controller instance.
      *
@@ -13,7 +18,9 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        
+        $this->ranking = new Ranking();
+        $this->class = new Classes();
     }
 
     /**
@@ -23,6 +30,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $classes = $this->class->fillSelect();
+        $rankings = $this->ranking->getRankingByClass(1);
+        
+        return view('welcome', ['classes' => $classes, 'rankings' => $rankings, 'count' => 1]);
     }
 }

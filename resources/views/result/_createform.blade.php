@@ -15,11 +15,7 @@
             @enderror
         </div>
     </div>
-    <div class="form-group row">
-        <div id="create-message" class="alert" role="alert">
-            
-        </div>
-    </div>
+
 </form>
 <div class="inputs-title row">
     <div class="col-sm-12 col-md-3">

@@ -45,8 +45,8 @@ class ClassController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ClassRequest $request)
-    {
-        $this->class->create($request->toArray());
+    {        
+        $this->class->create($request->toArray());   
         $message = 'Class has been saved succesfully!';
         return redirect()->route('class.index')->with('status', $message);
     }

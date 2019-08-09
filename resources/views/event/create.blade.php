@@ -5,28 +5,51 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Create an event</div>
+                <div class="card-header">Create an event
+                    @if (session('statusDanger'))
+                    <div class="alert alert-danger">
+                        {{ session('statusDanger') }}
+                    </div>
+                    @endif
+                    @if (session('statusSuccess'))
+                    <div class="alert alert-success">
+                        {{ session('statusSuccess') }}
+                    </div>
+                    @endif
+                </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('event.store') }}">
                         @csrf
-                        
                         @include('event._eventform')
-                        @if (session('status'))
-                        <div class="alert alert-danger">
-                            {{ session('status') }}
+                        <div class="inputs-title row">
+                            <div class="col-sm-12 col-md-3">
+                                Pilot
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                Position
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                Notes
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+
+                            </div>
                         </div>
-                        @endif
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                        <input type="hidden" value="0" id="form-count">
+                        <div name="results" id="result-form-content">
+
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
                                 <button type="submit" class="btn btn-success">
                                     Save
                                 </button>
-                            </div>                            
-                        </div>
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <a href="{{route('event.index')}}" class="btn btn-secondary">
-                                        Go back to list</a>
+                            </div>
+
+                            <div class="col-md-6">
+                                <a onclick="getInput()" class="btn btn-primary text-white">
+                                    Add 10 rows
+                                </a>
                             </div>
                         </div>
                     </form>

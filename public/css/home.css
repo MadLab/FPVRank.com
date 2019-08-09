@@ -15,7 +15,7 @@
 }
 
 
-/* Smartphones (portrait) ----------- */
+/* Smartphones (portrait and landscape) */
 
 @media only screen and (max-width: 750px) {
     .inputs-title {
@@ -28,7 +28,16 @@
     .label-mobile {
         margin-top: 4%;
     }
+    .mobile-view-inputs {
+        border: 1px dashed grey;
+        border-radius: 5px;
+        padding-bottom: 5%;
+        margin-bottom: 3%;
+    }
 }
+
+
+/* All devices */
 
 html,
 body {

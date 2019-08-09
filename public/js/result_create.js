@@ -35,7 +35,7 @@ function saveForm(count) {
                 getInput();
                 $('#resultId' + count).val(response.result.resultId);
             } else {
-                showMessage('Result updated!', 'alert-success');
+                showMessage('Result updated!', 'alert-info');
             }
         },
         error: function(response) {
