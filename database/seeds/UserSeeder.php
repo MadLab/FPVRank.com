@@ -17,30 +17,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('secret'),
         ]);
 
-        DB::table('classes')->insert([
-            'name' => 'drone grande',
-            'description' => 'description',
-        ]);
-        DB::table('classes')->insert([
-            'name' => 'drone pequeno',
-            'description' => 'description',
-        ]);
-        DB::table('pilots')->insert([
-            'name' => 'Andy Alfaro',
-            'username' => 'username',
-        ]);
-        DB::table('pilots')->insert([
-            'name' => 'Erick Alfaro',
-            'username' => 'username',
-        ]);
-        DB::table('pilots')->insert([
-            'name' => 'Henry Alfaro',
-            'username' => 'username',
-        ]);
-        DB::table('pilots')->insert([
-            'name' => 'Alison Alfaro',
-            'username' => 'username',
-        ]);
+
         /*
         for ($i=0; $i < 100; $i++) { 
             DB::table('classes')->insert([            

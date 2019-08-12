@@ -12,13 +12,13 @@ $(function() {
     $('.select2').select2();
     $('#create-message').hide();
     getInput();
-    orderList();
+    //orderList();
 
 });
 
 function changeOrder(val, oldVal) {
     oldVal.attr('id', val);
-    orderList();
+    //orderList();
 }
 
 function orderList() {

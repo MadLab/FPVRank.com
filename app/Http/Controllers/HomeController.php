@@ -35,4 +35,18 @@ class HomeController extends Controller
         
         return view('welcome', ['classes' => $classes, 'rankings' => $rankings, 'count' => 1]);
     }
+    /**
+     * Search ranking
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function search($text)
+    {    
+        $rankings = $this->ranking->getRankingByClass($text);
+        return response()->view('pilot._pilottable', ['rankings' => $rankings, 'count' => 1], 200);                
+    }
+    public function ranking(){
+        $rankings = $this->ranking->all();
+        return response()->json($rankings);
+    }
 }

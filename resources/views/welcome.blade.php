@@ -18,6 +18,9 @@ Rankings
 @endif
 @endslot
 @slot('addButtonName')
+
+@endslot
+@slot('searchBar')
 <div class="form-group col-md-12">
     <label for="classId">Class</label>
     <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">
@@ -30,11 +33,6 @@ Rankings
         <strong>{{ $message }}</strong>
     </span>
     @enderror
-</div>
-@endslot
-@slot('searchBar')
-<div class="search-bar">
-    <input id="search_event" class="form-control" type="text" placeholder="You can search by '#', Name or Nickname">
 </div>
 @endslot
 <div>

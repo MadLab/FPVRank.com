@@ -41,5 +41,6 @@ class Ranking extends Model
         ->orderBy('rankings.rating', 'desc')->paginate(100);
     }
 
+
    
 }

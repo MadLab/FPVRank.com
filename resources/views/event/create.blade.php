@@ -18,9 +18,19 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('event.store') }}">
+                    <form method="POST" action="{{ route('event.store') }}" enctype="multipart/form-data">
                         @csrf
                         @include('event._eventform')
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Upload JSON with results</label>
+                            <input type="file" class="form-control-file @error('jsonfile') is-invalid @enderror" 
+                            id="json-file" name="jsonfile">
+                            @error('jsonfile')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
                         <div class="inputs-title row">
                             <div class="col-sm-12 col-md-3">
                                 Pilot

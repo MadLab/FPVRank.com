@@ -33,24 +33,6 @@ class EventController extends Controller
         $this->ranking = new Ranking();
     }
     /**
-     * to remove duplicates in array
-     */
-    public function removeDuplicates($array)
-    {
-        $newArray = [];
-        for ($i = 0; $i < count($array) - 1; $i++) { ///to remove duplicates in the....             
-            for ($a = 1; $a < count($array); $a++) { //....pilots that participated in the event
-
-                if ($i != $a) {
-                    if ($array[$i]['pilotId'] == $array[$a]['pilotId']) {
-                        array_push($newArray, $array[$a]);
-                    }
-                }
-            }
-        }
-        return $newArray;
-    }
-    /**
      * Do the rankings for the event
      * * @param  int  $eventId
      */
@@ -77,7 +59,7 @@ class EventController extends Controller
         }
         $rankingCompete = $this->ranking->getCurrentRanking($classId, $pilotsResults);
         $rankingNoCompete = $this->ranking->getCurrentRanking($classId, $pilotsNotInResults);
-                
+
         foreach ($results as $result) {
             if (count($rankingCompete) == 0) {
                 array_push($competePilots, [
@@ -86,8 +68,8 @@ class EventController extends Controller
                     'glicko' => new Glicko2Player()
                 ]);
             } else {
-                if($rankingCompete->contains('pilotId', $result->pilotId)){
-                    $val = $rankingCompete->where('pilotId', $result->pilotId)->first();                    
+                if ($rankingCompete->contains('pilotId', $result->pilotId)) {
+                    $val = $rankingCompete->where('pilotId', $result->pilotId)->first();
                     array_push($competePilots, [
                         'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
@@ -103,13 +85,13 @@ class EventController extends Controller
                     ]);
                     $val->current = 0;
                     $val->save();
-                }else{
+                } else {
                     array_push($competePilots, [
                         'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
                         'glicko' => new Glicko2Player()
-                    ]); 
-                }                
+                    ]);
+                }
             }
         }
         foreach ($rankingNoCompete as $val) {
@@ -128,7 +110,7 @@ class EventController extends Controller
             ]);
             $val->current = 0;
             $val->save();
-        }             
+        }
         for ($i = 0; $i < count($competePilots); $i++) {
             for ($a = 0; $a < count($competePilots); $a++) {
                 if ($competePilots[$i]['pilotId'] != $competePilots[$a]['pilotId']) {
@@ -145,7 +127,7 @@ class EventController extends Controller
         }
         for ($i = 0; $i < count($noCompetePilots); $i++) {
             $noCompetePilots[$i]['glicko']->update();
-        }        
+        }
         foreach ($competePilots as $val) {
             array_push($insertData, array(
                 'pilotId' => $val['pilotId'], 'eventId' => $eventId,
@@ -153,7 +135,7 @@ class EventController extends Controller
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
             ));
-        }        
+        }
         foreach ($noCompetePilots as $val) {
             array_push($insertData, array(
                 'pilotId' => $val['pilotId'], 'eventId' => $eventId,
@@ -161,10 +143,10 @@ class EventController extends Controller
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
             ));
-        }                
+        }
         Ranking::insert($insertData);
         $message = 'Event has been ranked succesfully!';
-        return redirect()->route('event.edit', ['id' => $eventId])->with('statusSuccess', $message);        
+        return redirect()->route('event.edit', ['id' => $eventId])->with('statusSuccess', $message);
     }
     /**
      * Display a listing of the resource.
@@ -265,19 +247,51 @@ class EventController extends Controller
 
             ]);
             for ($i = 0; $i < count($request->pilotId); $i++) {
-                if ($request->pilotId[$i] != "null") {
-                    $this->result->create([
-                        'eventId' => $event->eventId,
-                        'pilotId' => $request->pilotId[$i],
-                        'position' => $request->position[$i],
-                        'notes' => $request->notes[$i],
-                    ]);
-                }
+                if ($request->pilotId[$i] != "null") { }
             }
             $message = 'Event has been saved succesfully!';
             return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
         } else { ///if there is no row, return messsage error
-            $message = 'Add atleast one result!';
+            $jsonString = file_get_contents($request->jsonfile);
+            $json = json_decode($jsonString, true);
+            $pilots = $this->pilot->all();
+            $event = $this->event->create([
+                'name' => $request->name,
+                'location' => $request->location,
+                'date' => $request->date,
+                'classId' => $request->classId,
+
+            ]);
+            $count = 1;
+            foreach ($json as $key => $val) {
+                if ($pilots->contains('name', $val['pilotUserName'])) {
+                    $pi = $pilots->where('name', $val['pilotUserName'])->first();
+                    $this->result->create([
+                        'eventId' => $event->eventId,
+                        'pilotId' => $pi->pilotId,
+                        'position' => $count,
+                        'notes' => 'notes',
+                    ]);
+                } else {
+                    $pilot = $this->pilot->create([
+                        'name' => $val['pilotUserName'],
+                        'username' => 'username'
+                    ]);
+                    $this->result->create([
+                        'eventId' => $event->eventId,
+                        'pilotId' => $pilot->pilotId,
+                        'position' => $count,
+                        'notes' => 'notes',
+                    ]);
+                }
+
+                $count++;
+            }
+
+            //dd($json);
+
+            //dd('rip');
+            $message = 'Add atleast one result!(json saved) testing purposes';
             return back()->withInput()->with('statusDanger', $message);
         }
     }
@@ -312,6 +326,7 @@ class EventController extends Controller
             'formCount' => count($results), 'count' => count($results)
         ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
