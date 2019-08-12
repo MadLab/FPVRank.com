@@ -10,13 +10,19 @@ confirmRank
 @endslot
 @slot('button')
 <div id="modalbutton">
+    @if ($event->dateRanked == null)
     <a href="{{ route('event.rank', ['eventId' => $event->eventId, 'classId' => $event->classId]) }}" class="btn btn-info text-white">
         Rank event
     </a>
+    @endif
 </div>
 @endslot
 <div id="modalcontent">
-    
+    @if ($event->dateRanked == null)
+    This event hasn't been ranked yet
+    @else
+    This event is already ranked, date ranked: {{$event->dateRanked}}
+    @endif
 </div>
 @endcomponent
 

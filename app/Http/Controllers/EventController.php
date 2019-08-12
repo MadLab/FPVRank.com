@@ -145,6 +145,10 @@ class EventController extends Controller
             ));
         }
         Ranking::insert($insertData);
+        $eve = $this->event->findOrFail($eventId);
+        $eve->dateRanked = date("Y-m-d H:i:s");
+        $eve->save();
+
         $message = 'Event has been ranked succesfully!';
         return redirect()->route('event.edit', ['id' => $eventId])->with('statusSuccess', $message);
     }
@@ -284,13 +288,8 @@ class EventController extends Controller
                         'notes' => 'notes',
                     ]);
                 }
-
                 $count++;
             }
-
-            //dd($json);
-
-            //dd('rip');
             $message = 'Add atleast one result!(json saved) testing purposes';
             return back()->withInput()->with('statusDanger', $message);
         }
@@ -319,8 +318,7 @@ class EventController extends Controller
         $event = $this->event->findOrFail($id);
         $classes = $this->class->fillSelect();
         $results = $this->result->byEventId($event->eventId);
-        $pilots = $this->pilot->fillSelect();
-
+        $pilots = $this->pilot->fillSelect();        
         return view('event.edit', [
             'pilots' => $pilots, 'results' => $results, 'event' => $event, 'classes' => $classes,
             'formCount' => count($results), 'count' => count($results)

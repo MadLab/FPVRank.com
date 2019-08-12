@@ -22,10 +22,10 @@ Rankings
 @endslot
 @slot('searchBar')
 <div class="form-group col-md-12">
-    <label for="classId">Class</label>
+    <label for="classId">Search by class</label>
     <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">
         @foreach ($classes as $class)
-        <option value="{{$class->classId}}" @if(isset($event->classId)) @if($class->classId == $event->classId) selected @endif @endif>{{$class->name}}</option>
+        <option value="{{$class->classId}}" @if(isset($classId)) @if($class->classId == $classId) selected @endif @endif>{{$class->name}}</option>
         @endforeach
     </select>
     @error('classId')
@@ -35,7 +35,7 @@ Rankings
     @enderror
 </div>
 @endslot
-<div>
+<div id="rankingtable">
     @include('_rankingtable')
 </div>
 <div class="links-table">

@@ -16,7 +16,7 @@ try {
 }
 
 Route::get('/', 'HomeController@index')->name('welcome');
-Route::get('/search/{text}', 'HomeController@search')->name('welcome.search');
+Route::get('/ranking/{text}', 'HomeController@search')->name('welcome.search');
 Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 
 Auth::routes();

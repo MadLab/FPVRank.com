@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @include('layouts.scripts')
-    @if(Route::currentRouteName() == 'welcome')
+    @if(Route::currentRouteName() == 'welcome' || Route::currentRouteName() == 'welcome.search')
     <script src="{{ asset('js/welcome.js') }}" defer></script>
     @endif
     <!-- Fonts -->
