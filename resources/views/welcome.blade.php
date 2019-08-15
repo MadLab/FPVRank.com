@@ -7,7 +7,7 @@
 
 @endslot
 @slot('idmodal')
-rankings
+event_public
 @endslot
 @slot('bigtitle')
 Rankings
@@ -21,6 +21,25 @@ Rankings
 
 @endslot
 @slot('searchBar')
+
+@endslot
+@slot('rankingbar')
+@component('components.modal')
+@slot('id')
+event_results_ranking
+@endslot
+@slot('title')
+<div id="modaltitle">Event</div>
+@endslot
+@slot('button')
+<div id="modalbutton">
+    
+</div>
+@endslot
+<div id="modalcontent2">
+    
+</div>
+@endcomponent
 <div class="form-group col-md-12">
     <label for="classId">Search by class</label>
     <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">
@@ -34,13 +53,15 @@ Rankings
     </span>
     @enderror
 </div>
+<div class="search-bar">
+    <input id="search_ranking" class="form-control" type="text" 
+    placeholder="You can search by 'Position', 'Pilot's name or Nickname in the current class">
+</div>
 @endslot
 <div id="rankingtable">
     @include('_rankingtable')
 </div>
-<div class="links-table">
-    {{$rankings->onEachSide(1)->links()}}
-</div>
 @endcomponent
+
 
 @endsection

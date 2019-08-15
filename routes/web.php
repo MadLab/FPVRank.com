@@ -11,21 +11,34 @@
 */
 try {
     DB::connection()->getPdo();
-} catch (\Exception $e) {    
-    die('Database error, please contact developers.    '.$e->getMessage());   
+} catch (\Exception $e) {
+    die('Database error, please contact developers.    ' . $e->getMessage());
 }
 
-Route::get('/', 'HomeController@index')->name('welcome');
-Route::get('/ranking/{text}', 'HomeController@search')->name('welcome.search');
+//get json for testing
+Route::get('/json', 'HomeController@json')->name('json');
+///get excel with current rankings
 Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 
-Auth::routes();
-Route::get('home', 'AdminController@index')->name('home');
 
+///public routes
+Route::prefix('/')->group(function () {
+    Route::name('welcome.')->group(function () {
+        Route::get('', 'HomeController@index')->name('index');
+        Route::get('/getevent/{eventId}', 'HomeController@getEvent')->name('getevent');
+        Route::get('/ranking/{text}', 'HomeController@searchByClass')->name('searchclass');
+        Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');
+        Route::get('/events-list', 'HomeController@event')->name('event');
+        Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');
+        Route::get('/pilot/info/{pilotId}/{type}', 'HomeController@pilotinfo')->name('pilotinfo');        
+    });
+});
+Auth::routes();//for auth controller
+Route::get('home', 'AdminController@index')->name('home');//for home view in admin
 Route::middleware('auth')->group(function () {
     Route::prefix('users')->group(function () {
         Route::name('user.')->group(function () {
-            Route::get('/', 'UserController@index')->name('index');            
+            Route::get('/', 'UserController@index')->name('index');
             Route::get('show/{text}', 'UserController@show')->name('show');
             Route::get('create', 'UserController@create')->name('create');
             Route::post('store', 'UserController@store')->name('store');
@@ -39,6 +52,7 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{text}', 'ClassController@show')->name('show');
             Route::get('create', 'ClassController@create')->name('create');
             Route::post('store', 'ClassController@store')->name('store');
+            Route::post('storejson', 'ClassController@storejson')->name('storejson');
             Route::get('edit/{id}', 'ClassController@edit')->name('edit');
             Route::put('update/{id}', 'ClassController@update')->name('update');
         });
@@ -49,6 +63,7 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{text}', 'PilotController@show')->name('show');
             Route::get('create', 'PilotController@create')->name('create');
             Route::post('store', 'PilotController@store')->name('store');
+            Route::post('storejson', 'PilotController@storejson')->name('storejson');
             Route::get('edit/{id}', 'PilotController@edit')->name('edit');
             Route::put('update/{id}', 'PilotController@update')->name('update');
         });
@@ -60,9 +75,8 @@ Route::middleware('auth')->group(function () {
             Route::get('create', 'EventController@create')->name('create');
             Route::post('store', 'EventController@store')->name('store');
             Route::get('edit/{id}', 'EventController@edit')->name('edit');
-            Route::put('update/{id}', 'EventController@update')->name('update'); 
+            Route::put('update/{id}', 'EventController@update')->name('update');
             Route::get('rank/{eventId}/{classId}', 'EventController@rank')->name('rank');
-            
         });
     });
     Route::prefix('results')->group(function () {
@@ -74,7 +88,6 @@ Route::middleware('auth')->group(function () {
             //Route::get('edit/{id}', 'ResultController@edit')->name('edit');
             //Route::put('update/{id}', 'ResultController@update')->name('update');
             Route::get('inputs/{count}', 'ResultController@inputs')->name('inputs');
-            
         });
     });
 });

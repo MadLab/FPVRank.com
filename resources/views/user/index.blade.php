@@ -20,6 +20,9 @@ Users
 @slot('addButtonName')
 <a href="{{route('user.create')}}" class="add-button btn btn-success">Add user</a>
 @endslot
+@slot('rankingbar')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_user" class="form-control" type="text" placeholder="You can search by '#', Name or Email">

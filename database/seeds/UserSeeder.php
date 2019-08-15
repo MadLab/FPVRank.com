@@ -16,20 +16,22 @@ class UserSeeder extends Seeder
             'email' => 'andy@email.com',
             'password' => Hash::make('secret'),
         ]);
+        DB::table('classes')->insert([
+            'classId' => '1',
+            'name' => 'class',
+            'description' => 'descriprtion',
+        ]);
 
-
-        /*
-        for ($i=0; $i < 100; $i++) { 
-            DB::table('classes')->insert([            
-                'name' => Str::random(10),                
-                'description' => Str::random(10),                            
+        
+        
+        /*for ($i=0; $i < 1000; $i++) { 
+            DB::table('events')->insert([            
+                'name' => Str::random(20),                                
+                'date' => date('Y/m/d H:i:s', strtotime(rand(2015,2019).'-'.rand(1,12).'-'.rand(1,31).
+            ' '.rand(1,12).':'.rand(0,59).':'.rand(0,59))),
+                'classId' => 1,
+                'location' => Str::random(10),
             ]);
-        }
-        for ($i=0; $i < 100; $i++) { 
-            DB::table('pilots')->insert([            
-                'name' => Str::random(10),                
-                'username' => Str::random(10),                            
-            ]);
-        }*/
+        } */       
     }
 }

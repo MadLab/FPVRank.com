@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Classes;
 use App\Http\Requests\ClassRequest;
+use App\Http\Requests\JSONRequest;
+
 
 class ClassController extends Controller
 {
@@ -35,7 +37,8 @@ class ClassController extends Controller
      */
     public function create()
     {
-        return view('class.create');
+        $class = $this->class->all()->last();
+        return view('class.create', ['lastClassId' => isset($class->classId) ? $class->classId : null]);
     }
 
     /**
@@ -45,10 +48,43 @@ class ClassController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(ClassRequest $request)
-    {        
-        $this->class->create($request->toArray());   
+    {
+        $this->class->create($request->toArray());
         $message = 'Class has been saved succesfully!';
-        return redirect()->route('class.index')->with('status', $message);
+        return redirect()->route('class.create')->with('status', $message);
+    }
+    /**
+     * Store a newly created resource with JSON data
+     * @param  App\Http\Requests\ClassRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storejson(JSONRequest $request)
+    {
+        try {
+            $json = json_decode(file_get_contents($request->jsonurl), true);            
+            if ($json == null) {
+                $message = 'Please enter a valid JSON URL!';
+                return redirect()->route('class.create')->with('status', $message);
+            } else {
+                $classes = $this->class->all();
+                foreach ($json as $val) {
+                    if ($classes->contains('classId', '=', $val['classId'])){
+                        $class = $classes->where('classId','=',$val['classId'])->first();
+                        $class->name = $val['name'];
+                        $class->description = $val['description'];
+                        $class->save();
+                    }else{
+                        $this->class->create($val);
+                    }
+
+                }                
+                $message = 'Classes have been saved succesfully!';
+                return redirect()->route('class.create')->with('status', $message);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Please enter a valid JSON URL!';
+            return redirect()->route('class.create')->with('status', $message);
+        }
     }
 
     /**
@@ -84,7 +120,7 @@ class ClassController extends Controller
      */
     public function update(ClassRequest $request, $id)
     {
-        $class = $this->class->findOrFail($id);        
+        $class = $this->class->findOrFail($id);
         $class->fill($request->toArray());
         $class->save();
 

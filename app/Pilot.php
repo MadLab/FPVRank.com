@@ -12,7 +12,7 @@ class Pilot extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'username',
+        'name', 'username','pilotId'
     ];
       /**
      * The primary key associated with the table.
@@ -44,4 +44,12 @@ class Pilot extends Model
     public function fillSelect(){
         return $this->select('pilotId','name')->get();
     }
+     /**
+     * Get a listing of the resource to make public pilot info
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function showInfo($pilotId){
+        return $this->select('pilots.name','pilots.username')->get();
+    }
+
 }

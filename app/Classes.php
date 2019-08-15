@@ -26,7 +26,7 @@ class Classes extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description',
+        'classId','name', 'description',
     ];
        /**
      * 

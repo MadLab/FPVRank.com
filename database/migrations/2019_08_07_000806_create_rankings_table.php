@@ -17,7 +17,7 @@ class CreateRankingsTable extends Migration
             $table->bigIncrements('rankingId');            
             $table->unsignedBigInteger('eventId');
             $table->unsignedBigInteger('pilotId');
-            $table->unsignedBigInteger('classId');
+            $table->string('classId');
             
             $table->decimal('rating', 50 ,14);            
             $table->decimal('mu', 50 ,14);

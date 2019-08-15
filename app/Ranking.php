@@ -34,11 +34,24 @@ class Ranking extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getRankingByClass($classId){
-        return $this->select('pilots.name as pilotId', 'pilots.username',
+        return $this->select('classes.name as className','pilots.pilotId','pilots.name', 'pilots.username',
         'rankings.rating')->join('pilots', 'pilots.pilotId','=','rankings.pilotId')->
         join('classes', 'classes.classId', '=', 'rankings.classId')
         ->where([['rankings.classId','=',$classId],['rankings.current','=',1]])
-        ->orderBy('rankings.rating', 'desc')->paginate(100);
+        ->orderBy('rankings.rating', 'desc')->get();
+    }
+
+       /**
+     * Get a listing of the resource with current ranking = 1 by classId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function searchRankings($classId,$text){
+        return $this->select('pilots.pilotId', 'pilots.name', 'pilots.username',
+        'rankings.rating')->join('pilots', 'pilots.pilotId','=','rankings.pilotId')->
+        join('classes', 'classes.classId', '=', 'rankings.classId')
+        ->where([['rankings.classId','=',$classId],['rankings.current','=',1],['pilots.name','LIKE',$text.'%']])
+        ->orWhere([['rankings.classId','=',$classId],['rankings.current','=',1],['pilots.username','LIKE',$text.'%']])        
+        ->orderBy('rankings.rating', 'desc')->get();
     }
 
 

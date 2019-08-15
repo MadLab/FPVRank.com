@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @include('layouts.scripts')
-    @if(Route::currentRouteName() == 'welcome' || Route::currentRouteName() == 'welcome.search')
+    @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclass' || Route::currentRouteName() == 'welcome.event')
     <script src="{{ asset('js/welcome.js') }}" defer></script>
     @endif
     <!-- Fonts -->
@@ -21,9 +21,11 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    @if(Auth::check())
+    <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    @endif
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
 
 </head>
@@ -42,7 +44,27 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        @if(Auth::check())
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('welcome.index') }}">Rankings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('welcome.event') }}">Events</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                        @endif
+                        @else
                         @if(Route::currentRouteName() != 'home')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}">Home</a>
@@ -60,22 +82,6 @@
                             <a class="nav-link" href="{{route('event.index')}}">Events</a>
                         </li>
                         @endif
-                        @endif
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>

@@ -20,6 +20,9 @@ Classes
 @slot('addButtonName')
 <a href="{{route('class.create')}}" class="add-button btn btn-success">Add classes</a>
 @endslot
+@slot('rankingbar')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_class" class="form-control" type="text" placeholder="You can search by '#' or Name">

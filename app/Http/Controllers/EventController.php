@@ -51,23 +51,26 @@ class EventController extends Controller
 
         $results = $this->result->byEventId($eventId);
         foreach ($results as $val) {
-            array_push($pilotsResults, $val->pilotId);
+            array_push($pilotsResults, $val->pilotId);//to get the pilots that did compete
         }
+        //get the pilots that have competed in the same class but not this event
         $pilotsInclassNoCompete = $this->result->getNoCompetePilots($eventId, $classId, $pilotsResults);
         foreach ($pilotsInclassNoCompete as $val) {
             array_push($pilotsNotInResults, $val->pilotId);
         }
+        //get the current rankings for both group of pilots
         $rankingCompete = $this->ranking->getCurrentRanking($classId, $pilotsResults);
         $rankingNoCompete = $this->ranking->getCurrentRanking($classId, $pilotsNotInResults);
 
         foreach ($results as $result) {
-            if (count($rankingCompete) == 0) {
+            if (count($rankingCompete) == 0) { //if rankings table is empty make all pilots new to competition
                 array_push($competePilots, [
                     'oldRankingId' => null, 'pilotId' => $result->pilotId,
                     'position' => $result->position,
                     'glicko' => new Glicko2Player()
                 ]);
             } else {
+                //search if the pilot has current ranking
                 if ($rankingCompete->contains('pilotId', $result->pilotId)) {
                     $val = $rankingCompete->where('pilotId', $result->pilotId)->first();
                     array_push($competePilots, [
@@ -85,7 +88,7 @@ class EventController extends Controller
                     ]);
                     $val->current = 0;
                     $val->save();
-                } else {
+                } else { //if the pilot doesnt have ranking it means new pilot
                     array_push($competePilots, [
                         'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
@@ -94,6 +97,7 @@ class EventController extends Controller
                 }
             }
         }
+        //get the current ranking for the pilots that didnt compete, to update their ranking
         foreach ($rankingNoCompete as $val) {
             array_push($noCompetePilots, [
                 'oldRankingId' => 'null', 'pilotId' => $val->pilotId,
@@ -111,6 +115,7 @@ class EventController extends Controller
             $val->current = 0;
             $val->save();
         }
+        ////add win and loss for every pilot based in their position
         for ($i = 0; $i < count($competePilots); $i++) {
             for ($a = 0; $a < count($competePilots); $a++) {
                 if ($competePilots[$i]['pilotId'] != $competePilots[$a]['pilotId']) {
@@ -122,12 +127,15 @@ class EventController extends Controller
                 }
             }
         }
+        ///update ranking for the pilots in the event
         for ($i = 0; $i < count($competePilots); $i++) {
             $competePilots[$i]['glicko']->update();
         }
+        //update ranking for the pilots that didnt go to the event
         for ($i = 0; $i < count($noCompetePilots); $i++) {
             $noCompetePilots[$i]['glicko']->update();
         }
+        ///adding data to array to update database
         foreach ($competePilots as $val) {
             array_push($insertData, array(
                 'pilotId' => $val['pilotId'], 'eventId' => $eventId,
@@ -144,7 +152,9 @@ class EventController extends Controller
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
             ));
         }
+        //updating database with the new current ranking
         Ranking::insert($insertData);
+        ///set the event as "Ranked"
         $eve = $this->event->findOrFail($eventId);
         $eve->dateRanked = date("Y-m-d H:i:s");
         $eve->save();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Pilot;
 use App\Http\Requests\PilotRequest;
+use App\Http\Requests\JSONRequest;
 
 class PilotController extends Controller
 {
@@ -37,7 +38,42 @@ class PilotController extends Controller
      */
     public function create()
     {
-        return view('pilot.create');
+        $pilot = $this->pilot->all()->last();
+  
+        return view('pilot.create', ['lastPilotId' => isset($pilot->pilotId) ? $pilot->pilotId : null]);
+    }
+        /**
+     * Store a newly created resource with JSON data
+     * @param  App\Http\Requests\ClassRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storejson(JSONRequest $request)
+    {
+        try {
+            $json = json_decode(file_get_contents($request->jsonurl), true);            
+            if ($json == null) {
+                $message = 'Please enter a valid JSON URL!';
+                return redirect()->route('pilot.create')->with('status', $message);
+            } else {
+                $pilots = $this->pilot->all();
+                foreach ($json as $val) {
+                    if ($pilots->contains('pilotId', '=', $val['pilotId'])){
+                        $pilot = $pilots->where('pilotId','=',$val['pilotId'])->first();
+                        $pilot->name = $val['name'];
+                        $pilot->username = $val['username'];
+                        $pilot->save();
+                    }else{
+                        $this->class->create($val);
+                    }
+
+                }                
+                $message = 'Pilots have been saved succesfully!';
+                return redirect()->route('pilot.create')->with('status', $message);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Please enter a valid JSON URL!';
+            return redirect()->route('pilot.create')->with('status', $message);
+        }
     }
 
     /**
@@ -50,7 +86,7 @@ class PilotController extends Controller
     {
         $this->pilot->create($request->toArray());
         $message = 'Pilot has been saved succesfully!';
-        return redirect()->route('pilot.index')->with('status', $message);
+        return redirect()->route('pilot.create')->with('status', $message);
     }
 
     /**
@@ -86,7 +122,7 @@ class PilotController extends Controller
      */
     public function update(PilotRequest $request, $id)
     {
-        $pilot = $this->pilot->findOrFail($id);        
+        $pilot = $this->pilot->findOrFail($id);
         $pilot->fill($request->toArray());
         $pilot->save();
 

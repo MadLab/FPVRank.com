@@ -10,7 +10,9 @@
     {{$modalButton}}
 </div>
 @endslot
-<div id="modalcontent"></div>
+<div id="modalcontent">
+    
+</div>
 @endcomponent
 
 <div class="container">
@@ -20,6 +22,9 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            {{$rankingbar}}
+        </div>
         <div class="col-sm-12 col-md-9 col-lg-9">
             {{$searchBar}}
         </div>

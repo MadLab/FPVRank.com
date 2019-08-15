@@ -20,6 +20,9 @@ Results
 @slot('addButtonName')
 <a href="{{route('result.create')}}" class="add-button btn btn-success">Add results</a>
 @endslot
+@slot('rankingbar')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_result" class="form-control" type="text" 

@@ -1,7 +1,9 @@
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="name">{{ __('Name') }}</label>
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ !isset($event->name) ? old('name') : $event->name }}" autocomplete="name" autofocus>
+        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
+        name="name" value="{{ !isset($event->name) ? old('name') : $event->name }}" 
+        autocomplete="name" autofocus>
         @error('name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

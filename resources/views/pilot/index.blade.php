@@ -20,6 +20,9 @@ Pilots
 @slot('addButtonName')
 <a href="{{route('pilot.create')}}" class="add-button btn btn-success">Add pilots</a>
 @endslot
+@slot('rankingbar')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_pilot" class="form-control" type="text" placeholder="You can search by '#', Name or Username">

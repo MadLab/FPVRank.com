@@ -20,6 +20,9 @@ Events
 @slot('addButtonName')
 <a href="{{route('event.create')}}" class="add-button btn btn-success">Add events</a>
 @endslot
+@slot('rankingbar')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_event" class="form-control" type="text" 

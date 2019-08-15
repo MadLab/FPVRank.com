@@ -1,6 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
+@component('components.modal')
+@slot('id')
+jsonmodal
+@endslot
+@slot('title')
+<div id="modaltitle">
+    Create event with JSON
+</div>
+@endslot
+@slot('button')
+<div id="modalbutton">
+
+</div>
+@endslot
+<div id="modalcontent">
+    <form method="POST" action="{{ route('class.storejson') }}">
+        @csrf
+        @include('components._jsonform', ['rows' => 7])
+    </form>
+    <hr class="separator-line">
+
+</div>
+@endcomponent
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -18,13 +41,20 @@
                     @endif
                 </div>
                 <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-md-right"></label>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#jsonmodal">
+                                Submit JSON
+                            </button>
+                        </div>
+                    </div>
                     <form method="POST" action="{{ route('event.store') }}" enctype="multipart/form-data">
                         @csrf
                         @include('event._eventform')
                         <div class="form-group">
                             <label for="exampleFormControlFile1">Upload JSON with results</label>
-                            <input type="file" class="form-control-file @error('jsonfile') is-invalid @enderror" 
-                            id="json-file" name="jsonfile">
+                            <input type="file" class="form-control-file @error('jsonfile') is-invalid @enderror" id="json-file" name="jsonfile">
                             @error('jsonfile')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -33,10 +63,10 @@
                         </div>
                         <div class="inputs-title row">
                             <div class="col-sm-12 col-md-3">
-                                Pilot
+                                Position
                             </div>
                             <div class="col-sm-12 col-md-3">
-                                Position
+                                Pilot
                             </div>
                             <div class="col-sm-12 col-md-3">
                                 Notes

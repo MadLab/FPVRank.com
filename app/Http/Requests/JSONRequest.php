@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Auth;
 
-class ClassRequest extends FormRequest
+class JSONRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +29,7 @@ class ClassRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => 'required|max:250',
-            "description" => 'required|max:250',  
-            "classId" => 'required|max:250|unique:classes',            
+            "jsonurl" => 'required|max:250',
         ];
     }
 }
