@@ -27,26 +27,20 @@ Events
 
 @endslot
 <div class="row">
-    <div class="col-5">
-        <div>
-            @include('event_public._searchform')
+    <div class="col-6">
+        @include('event_public._searchform')
+        <div id="events-content">
+            @include('event_public._eventtable')
         </div>
-        <div class="navsbar-event" id="navsbar-event">
-
-            @include('event_public._navbarcontent')
-
+        <div class="links-table">
+            {{$events->onEachSide(1)->links()}}
         </div>
     </div>
-    <div class="col-7">
-        <div class="tab-content" id="v-pills-tabContent">
-            @foreach($events as $event)
-            <div class="tab-pane fade show {{(($events->first())->eventId == $event->eventId) ? 'active' : ' '}}" id="v-pills-home{{$event->eventId}}" role="tabpanel" aria-labelledby="v-pills-home-tab{{$event->eventId}}">
-                @include('event_public._navscontent', ['event' => $event, 'results' => $results])
-            </div>
-            @endforeach
-        </div>
+    <div class="col-6">
+        @include('event_public._resultcontent')
     </div>
 </div>
 @endcomponent
+
 
 @endsection

@@ -12,7 +12,7 @@
             @foreach($rankings as $ranking)            
             <tr>
                 <th scope="row">{{$ranking["position"]}}</th>
-                <td class="buttonstyle"><a onclick="openModalPilotInfo({{$ranking['pilotId']}},'welcome')">{{$ranking["name"]}}</a></td>
+                <td class="buttonstyle"><a href="{{route('welcome.pilot', ['pilotId' => $ranking['pilotId']])}}">{{$ranking["name"]}}</a></td>
                 <td>{{$ranking["username"]}}</td>       
                 
             </tr>

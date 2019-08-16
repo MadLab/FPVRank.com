@@ -27,7 +27,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-
         $this->ranking = new Ranking();
         $this->class = new Classes();
         $this->pilot = new Pilot();
@@ -37,14 +36,47 @@ class HomeController extends Controller
     public function json()
     {
         //$data = $this->class->all();
-        $data = $this->pilot->all();
+        //$data = $this->pilot->all();
+
+        $data = [
+            
+            [ 'pilotId' => 8, 'pilotFirstName' => 'Johnn', 'pilotLastName' => 'Solano' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 1, 'pilotFirstName' => 'Jose', 'pilotLastName' => 'Quinonez' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 4, 'pilotFirstName' => 'Robert', 'pilotLastName' => 'Gentel' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 2, 'pilotFirstName' => 'Ever', 'pilotLastName' => 'Rios' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 3, 'pilotFirstName' => 'Ricardo', 'pilotLastName' => 'Garcia' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 9, 'pilotFirstName' => 'Yoel', 'pilotLastName' => 'Zumbado' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 5, 'pilotFirstName' => 'Luis Diego', 'pilotLastName' => 'Cubero' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 10, 'pilotFirstName' => 'Juan Carlos', 'pilotLastName' => 'Cabezas' , 
+            'pilotHandle' => 'null' ],  
+            
+                        
+            [ 'pilotId' => 6, 'pilotFirstName' => 'Esteban', 'pilotLastName' => 'Carvajal' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 7, 'pilotFirstName' => 'Manuel', 'pilotLastName' => 'Solano' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 11, 'pilotFirstName' => 'Diego', 'pilotLastName' => 'Somarribas' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 12, 'pilotFirstName' => 'Arturo', 'pilotLastName' => 'Yong' , 
+            'pilotHandle' => 'null' ],  
+            [ 'pilotId' => 13, 'pilotFirstName' => 'Fernando', 'pilotLastName' => 'Borrase' , 
+            'pilotHandle' => 'null' ],  
+        ];                          
+                        
 
         return response()->json($data, 200);
     }
     /**
-     * Show view with the pilot info
+     * get view with pilot
      */
-    public function pilotinfo($pilotId, $type)
+    public function pilot($pilotId)
     {
         $pilot = $this->pilot->findOrFail($pilotId);
         $results = $this->result->select('results.*', 'events.name as eventName')->where('results.pilotId', '=', $pilotId)->join('events', 'events.eventId', '=', 'results.eventId')->get();
@@ -60,19 +92,21 @@ class HomeController extends Controller
             $data = collect($rankinginfo)->where('pilotId', '=', $pilotId)->first();
             array_push($info, $data);
         }
-        return response()->view('_pilotinfo', [
+        return view('pilotinfo', [
             'pilot' => $pilot, 'resultsPilot' => $results,
-            'info' => $info, 'type' => $type
-        ], 200);
+            'info' => $info, 'type' => 'event'
+        ]);
     }
     /**
      * return table view with the event
      */
-    public function getEvent($eventId){
-        $event = $this->event->findOrFail($eventId);
+    public function getEvent($eventId)
+    {
+        $events = $this->event->getEventsForPublic();
         $results = $this->result->fillNavs();
+        $event = $this->event->searchById($eventId);
 
-        return response()->view('event_public._navscontent', ['type'=>'welcome', 'event' => $event, 'results' => $results], 200);
+        return view('event_public.index', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event]);
     }
     /**
      * Search for events in public page
@@ -80,13 +114,15 @@ class HomeController extends Controller
     public function eventinfo($text, $date1, $date2)
     {
         if ($text == 'null' && $date1 == 'null' && $date2 == 'null') {
-            $eventsNavbar = $this->event->fillNavs();
+            $events = $this->event->getEventsForPublic();
         } else if ($text != 'null' && $date1 == 'null' && $date2 == 'null') {
-            $eventsNavbar = $this->event->searchByNameOrClassName($text);
-        } else if ($text != 'null' && $date1 != 'null' && $date2 != 'null') {            
-            $eventsNavbar = $this->event->searchByNameOrClassNameWithDate($text,$date1,$date2);            
+            $events = $this->event->searchByNameOrClassName($text);
+        } else if ($text != 'null' && $date1 != 'null' && $date2 != 'null') {
+            $events = $this->event->searchByNameOrClassNameWithDate($text, $date1, $date2);
+        } else if ($text == 'null' && $date1 != 'null' && $date2 != 'null') {
+            $events = $this->event->searchBetweenDate($date1, $date2);
         }
-        return response()->view('event_public._navbarcontent', ['events' => $eventsNavbar], 200);
+        return response()->view('event_public._eventtable', ['events' => $events], 200);
     }
     /**
      * Show the event public view.
@@ -95,10 +131,11 @@ class HomeController extends Controller
      */
     public function event()
     {
-        $eventsNavbar = $this->event->fillNavs();
+        $events = $this->event->getEventsForPublic();
         $results = $this->result->fillNavs();
+        $event = $this->event->searchById(($events->first())->eventId);
 
-        return view('event_public.index', ['events' => $eventsNavbar, 'results' => $results ,'type' => 'event']);
+        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event]);
     }
 
     /**
@@ -150,12 +187,10 @@ class HomeController extends Controller
      */
     public function searchRankings(Request $request, $text, $classId)
     {
-
         $rankings = $this->ranking->getRankingByClass($classId)->toArray();
         $data = [];
         //to add positions
         $position = 1;
-
         for ($i = 0; $i < count($rankings); $i++) {
             $rankings[$i]['position'] = $position;
             $position++;

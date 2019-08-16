@@ -24,17 +24,22 @@ Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 ///public routes
 Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
-        Route::get('', 'HomeController@index')->name('index');
-        Route::get('/getevent/{eventId}', 'HomeController@getEvent')->name('getevent');
-        Route::get('/ranking/{text}', 'HomeController@searchByClass')->name('searchclass');
+        Route::get('', 'HomeController@index')->name('index'); //index rankings        
+        Route::get('/ranking/{text}', 'HomeController@searchByClass')->name('searchclass'); //rankings by class
+        Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
+        Route::get('/event-list', 'HomeController@event')->name('event');
+        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');
+
+        
         Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');
-        Route::get('/events-list', 'HomeController@event')->name('event');
+        
         Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');
-        Route::get('/pilot/info/{pilotId}/{type}', 'HomeController@pilotinfo')->name('pilotinfo');        
+        
     });
 });
-Auth::routes();//for auth controller
-Route::get('home', 'AdminController@index')->name('home');//for home view in admin
+
+Auth::routes(); //for auth controller
+Route::get('home', 'AdminController@index')->name('home'); //for home view in admin
 Route::middleware('auth')->group(function () {
     Route::prefix('users')->group(function () {
         Route::name('user.')->group(function () {
@@ -74,6 +79,7 @@ Route::middleware('auth')->group(function () {
             Route::get('show/{text}', 'EventController@show')->name('show');
             Route::get('create', 'EventController@create')->name('create');
             Route::post('store', 'EventController@store')->name('store');
+            Route::post('storejson', 'EventController@storejson')->name('storejson');
             Route::get('edit/{id}', 'EventController@edit')->name('edit');
             Route::put('update/{id}', 'EventController@update')->name('update');
             Route::get('rank/{eventId}/{classId}', 'EventController@rank')->name('rank');

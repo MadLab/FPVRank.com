@@ -89,8 +89,17 @@ confirmRank
                         </div>
                     </form>
                 </div>
+                <div class="fixed-bottom">
+                    <button data-toggle="tooltip" data-placement="top" title="Go to Top" onclick="$('html, body').animate({ scrollTop: 0 }, 500)" type="button" id="button_up" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
+                            arrow_upward
+                        </i></button>
+                    <button data-toggle="tooltip" data-placement="top" title="Go to Bottom" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)" type="button" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
+                            arrow_downward
+                        </i></button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection

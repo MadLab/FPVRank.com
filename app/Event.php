@@ -53,12 +53,19 @@ class Event extends Model
     public function selectForRank($eventId){
         return $this->select('classId')->where('eventId','=',$eventId)->first();
     }
+    public function searchById($eventId){
+        return $this->select('events.location', 'events.eventId','events.name', 'events.date', 
+        'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
+        ->where('events.eventId', '=',$eventId)->get()->first();
+    }
     /**
      * Get a listing of the resource to fill navbar
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function fillNavs(){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date', 'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')->orderBy('date', 'desc')->get();
+    public function getEventsForPublic(){
+        return $this->select('events.location', 'events.eventId','events.name', 'events.date', 
+        'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
+        ->orderBy('date', 'desc')->paginate(20);
     }
     public function searchByNameOrClassName($text){
         return $this->select('events.location', 'events.eventId','events.name', 'events.date', 
@@ -71,6 +78,14 @@ class Event extends Model
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')        
         ->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
         ->where('events.name', 'LIKE', $text.'%')->orWhere('classes.name', 'LIKE', $text.'%')->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
+        ->orderBy('date', 'desc')
+        ->get();
+    }
+    public function searchBetweenDate($date1,$date2){        
+        return $this->select('events.location', 'events.eventId','events.name', 'events.date', 
+        'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')        
+        ->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
+        
         ->orderBy('date', 'desc')
         ->get();
     }

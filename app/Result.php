@@ -71,6 +71,7 @@ class Result extends Model
      */
     public function fillNavs(){
         return $this->select('results.eventId','results.resultId', 'results.pilotId', 'results.position', 'results.notes', 'pilots.name')
-        ->join('pilots', 'pilots.pilotId', '=', 'results.pilotId')->get();
+        ->join('pilots', 'pilots.pilotId', '=', 'results.pilotId')
+        ->get();
     }
 }

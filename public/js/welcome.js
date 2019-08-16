@@ -48,45 +48,6 @@ $(function() {
         });
     });
 });
-//int id = resultId
-function openModalPilotInfo(id, type) {
-    $("#event_results_ranking").modal('hide');
-    $("#event_public").modal('show');
-    $.ajax('/pilot/info/' + id + '/' + type, {
-        method: 'GET',
-        dataType: 'html',
-        success: function(response, status, data) {
-            $('#modaltitle').html('Pilot Information');
-            $('#modalcontent').html(response);
-        },
-        error: function(response, data) {},
-        complete: function(status, data) {}
-    });
-}
-
-function goToEvent(id) {
-    searchByText('', '', '', function() {
-        $('#search_event').val("");
-        clearDate(1);
-        clearDate(2);
-        $('#v-pills-home-tab' + id).tab('show');
-        $('#event_public').modal('hide');
-    });
-}
-
-function goToEventFromRankings(id) {
-    $.ajax('/getevent/' + id, {
-        method: 'GET',
-        dataType: 'html',
-        success: function(response, status, data) {
-            $('#modalcontent2').html(response);
-        },
-        error: function(response, data) {},
-        complete: function(status, data) {}
-    });
-    $("#event_results_ranking").modal('toggle');
-
-}
 
 //search event
 function searchByText(text, date1, date2, action) {
@@ -101,7 +62,7 @@ function searchByText(text, date1, date2, action) {
             method: 'GET',
             dataType: 'html',
             success: function(response, status, data) {
-                $('#navsbar-event').html(response);
+                $('#events-content').html(response);
             },
             error: function(response, data) {},
             complete: function(status, data) {

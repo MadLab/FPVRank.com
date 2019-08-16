@@ -12,6 +12,17 @@
     .label-mobile {
         display: none;
     }
+    /* for the navigation top and bottom buttons */
+    .navpage-button {
+        margin-right: 5%;
+        margin-bottom: 1px;
+    }
+    .navpage-button i {
+        margin-top: 4px;
+    }
+    #button_up {
+        margin-right: 8%;
+    }
 }
 
 
@@ -48,6 +59,12 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
+}
+
+small {
+    display: block;
+    line-height: 1.428571429;
+    color: #999;
 }
 
 .flex-center {

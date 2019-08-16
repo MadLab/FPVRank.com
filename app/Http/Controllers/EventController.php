@@ -9,6 +9,7 @@ use App\Result;
 use App\Ranking;
 use App\Glicko2Player;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\JSONRequest;
 use Config;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,7 @@ class EventController extends Controller
 
         $results = $this->result->byEventId($eventId);
         foreach ($results as $val) {
-            array_push($pilotsResults, $val->pilotId);//to get the pilots that did compete
+            array_push($pilotsResults, $val->pilotId); //to get the pilots that did compete
         }
         //get the pilots that have competed in the same class but not this event
         $pilotsInclassNoCompete = $this->result->getNoCompetePilots($eventId, $classId, $pilotsResults);
@@ -235,6 +236,68 @@ class EventController extends Controller
             return back()->withInput()->with('statusDanger', $message);
         }
     }
+    /**
+     * Store a newly created resource with JSON data
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function storejson(JSONRequest $request)
+    {
+
+        try {
+            $json = json_decode(file_get_contents($request->jsonurl), true);
+            if ($json == null) {
+                $message = 'Please enter a valid JSON URL!';
+                return back()->withInput()->with('statusDanger', $message);
+            } else {
+                $data = $request->validate([
+                    'name' => 'required',
+                    'location' => 'required',
+                    'classId' => 'required',
+                    'date' => 'required',
+                ]);       
+                    
+                $json = json_decode(file_get_contents($request->jsonurl), true); 
+                $pilots = $this->pilot->all();
+                $event = $this->event->create([
+                    'name' => $data['name'],
+                    'location' => $data['location'],
+                    'date' => $data['date'],
+                    'classId' => $data['classId'],
+                ]);
+                $count = 1;
+                foreach ($json as $key => $val) {
+                    if ($pilots->contains('pilotId', $val['pilotId'])) {
+                        $pi = $pilots->where('pilotId', $val['pilotId'])->first();
+                        $this->result->create([
+                            'eventId' => $event->eventId,
+                            'pilotId' => $pi->pilotId,
+                            'position' => $count,
+                            'notes' => null,
+                        ]);
+                    } else {
+                        $pilot = $this->pilot->create([
+                            'pilotId' => $val['pilotId'],
+                            'name' => $val['pilotFirstName'].' '.$val['pilotLastName'],
+                            'username' => $val['pilotHandle']
+                        ]);
+                        $this->result->create([
+                            'eventId' => $event->eventId,
+                            'pilotId' => $pilot->pilotId,
+                            'position' => $count,
+                            'notes' => null,
+                        ]);
+                    }
+                    $count++;
+                }           
+                $message = 'Event have been saved succesfully!';
+                return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
+            }
+        } catch (\Throwable $th) {
+            $message = 'Please enter a valid JSON URL!';
+            return back()->withInput()->with('statusDanger', $message);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -261,46 +324,19 @@ class EventController extends Controller
 
             ]);
             for ($i = 0; $i < count($request->pilotId); $i++) {
-                if ($request->pilotId[$i] != "null") { }
+                if ($request->pilotId[$i] != "null") {
+                    $this->result->create([
+                        'eventId' => $event->eventId,
+                        'pilotId' => $request->pilotId[$i],
+                        'position' => $request->position[$i],
+                        'notes' => $request->notes[$i],
+                    ]);
+                }
             }
             $message = 'Event has been saved succesfully!';
             return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
-        } else { ///if there is no row, return messsage error
-            $jsonString = file_get_contents($request->jsonfile);
-            $json = json_decode($jsonString, true);
-            $pilots = $this->pilot->all();
-            $event = $this->event->create([
-                'name' => $request->name,
-                'location' => $request->location,
-                'date' => $request->date,
-                'classId' => $request->classId,
-
-            ]);
-            $count = 1;
-            foreach ($json as $key => $val) {
-                if ($pilots->contains('name', $val['pilotUserName'])) {
-                    $pi = $pilots->where('name', $val['pilotUserName'])->first();
-                    $this->result->create([
-                        'eventId' => $event->eventId,
-                        'pilotId' => $pi->pilotId,
-                        'position' => $count,
-                        'notes' => 'notes',
-                    ]);
-                } else {
-                    $pilot = $this->pilot->create([
-                        'name' => $val['pilotUserName'],
-                        'username' => 'username'
-                    ]);
-                    $this->result->create([
-                        'eventId' => $event->eventId,
-                        'pilotId' => $pilot->pilotId,
-                        'position' => $count,
-                        'notes' => 'notes',
-                    ]);
-                }
-                $count++;
-            }
-            $message = 'Add atleast one result!(json saved) testing purposes';
+        } else { ///if there is no row, return messsage error            
+            $message = 'Add atleast one result!';
             return back()->withInput()->with('statusDanger', $message);
         }
     }
@@ -328,7 +364,7 @@ class EventController extends Controller
         $event = $this->event->findOrFail($id);
         $classes = $this->class->fillSelect();
         $results = $this->result->byEventId($event->eventId);
-        $pilots = $this->pilot->fillSelect();        
+        $pilots = $this->pilot->fillSelect();
         return view('event.edit', [
             'pilots' => $pilots, 'results' => $results, 'event' => $event, 'classes' => $classes,
             'formCount' => count($results), 'count' => count($results)

@@ -11,6 +11,7 @@ $(function() {
     });
     $('.select2').select2();
     $('#create-message').hide();
+    $('[data-toggle="tooltip"]').tooltip();
     getInput();
     //orderList();
 

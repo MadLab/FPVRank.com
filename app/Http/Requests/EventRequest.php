@@ -32,8 +32,7 @@ class EventRequest extends FormRequest
             "name" => 'required|max:250',
             "location" => 'required|max:250',  
             "classId" => 'required|numeric',              
-            "date" => 'required|date',
-               "jsonfile"=> 'nullable|mimes:json,txt',
+            "date" => 'required|date',               
             "notes.*" => 'nullable|max:250',
         ];
     }

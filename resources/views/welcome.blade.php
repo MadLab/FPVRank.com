@@ -24,22 +24,6 @@ Rankings
 
 @endslot
 @slot('rankingbar')
-@component('components.modal')
-@slot('id')
-event_results_ranking
-@endslot
-@slot('title')
-<div id="modaltitle">Event</div>
-@endslot
-@slot('button')
-<div id="modalbutton">
-    
-</div>
-@endslot
-<div id="modalcontent2">
-    
-</div>
-@endcomponent
 <div class="form-group col-md-12">
     <label for="classId">Search by class</label>
     <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">

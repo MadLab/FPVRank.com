@@ -16,8 +16,9 @@ jsonmodal
 </div>
 @endslot
 <div id="modalcontent">
-    <form method="POST" action="{{ route('class.storejson') }}">
+    <form method="POST" action="{{ route('event.storejson') }}">
         @csrf
+        @include('event._eventform')
         @include('components._jsonform', ['rows' => 7])
     </form>
     <hr class="separator-line">
@@ -52,15 +53,7 @@ jsonmodal
                     <form method="POST" action="{{ route('event.store') }}" enctype="multipart/form-data">
                         @csrf
                         @include('event._eventform')
-                        <div class="form-group">
-                            <label for="exampleFormControlFile1">Upload JSON with results</label>
-                            <input type="file" class="form-control-file @error('jsonfile') is-invalid @enderror" id="json-file" name="jsonfile">
-                            @error('jsonfile')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
+
                         <div class="inputs-title row">
                             <div class="col-sm-12 col-md-3">
                                 Position
@@ -97,5 +90,13 @@ jsonmodal
             </div>
         </div>
     </div>
+</div>
+<div class="fixed-bottom">
+    <button data-toggle="tooltip" data-placement="top" title="Go to Top" onclick="$('html, body').animate({ scrollTop: 0 }, 500)" type="button" id="button_up" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
+            arrow_upward
+        </i></button>
+    <button data-toggle="tooltip" data-placement="top" title="Go to Bottom" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)" type="button" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
+            arrow_downward
+        </i></button>
 </div>
 @endsection

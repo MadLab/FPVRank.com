@@ -1,8 +1,4 @@
-<div class="form-group row">
-    <div class="search-bar-event col-12">
-        <input onchange="searchByText($(this).val(),$('#date1').val(),$('#date2').val())" id="search_event" class="form-control" type="text" placeholder="You can search event by name or class name">
-    </div>
-</div>
+
 <div class="form-group row">
     <label for="date" class="col-md-2 col-form-label text-md-right">From</label>
     <div class="col-8">
@@ -25,5 +21,10 @@
     <div class="col-2">
         <a onclick="clearDate(2)"><i class="material-icons">delete</i></a>
 
+    </div>
+</div>
+<div class="form-group row">
+    <div class="search-bar-event col-12">
+        <input onchange="searchByText($(this).val(),$('#date1').val(),$('#date2').val())" id="search_event" class="form-control" type="text" placeholder="You can search event by name or class name">
     </div>
 </div>

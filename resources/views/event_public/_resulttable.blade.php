@@ -11,7 +11,7 @@
             @foreach($results as $result)
             <tr>
                 <th scope="row">{{$result->position }}</th>
-                <td class="buttonstyle"><a onclick="openModalPilotInfo({{$result->pilotId}},'{{$type}}')">{{$result->name }}</a></td>
+                <td class="buttonstyle"><a href="{{route('welcome.pilot', ['pilotId' => $result->pilotId])}}">{{$result->name}}</a></td>                
                 <td>{{$result->notes}}</td>                
             </tr>
             @endforeach

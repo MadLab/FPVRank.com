@@ -5,7 +5,7 @@
     <h5 class="card-title">Date: {{$event->date}}</h5>
     <h5 class="card-title">Class: {{$event->className}}</h5>    
     <div class="content-results">
-            @include('event_public._resulttable', ['results' => $results->where('eventId','=',$event->eventId)->sortBy('position'), 'event' => $event])
+            @include('event_public._resulttable', ['results' => $results->where('eventId','=',$event->eventId)->sortBy('position')])
     </div>
   </div>  
 </div>
