@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Pilot;
+use App\CountryList;
 use App\Http\Requests\PilotRequest;
 use App\Http\Requests\JSONRequest;
 
 class PilotController extends Controller
 {
     protected $pilot;
+    protected $country;
     /**
      * Create a new controller instance.
      *
@@ -19,6 +21,7 @@ class PilotController extends Controller
     public function __construct()
     {
         $this->pilot = new Pilot();
+        $this->country = new CountryList();
     }
     /**
      * Display a listing of the resource.
@@ -28,7 +31,8 @@ class PilotController extends Controller
     public function index()
     {
         $pilots = $this->pilot->getList();
-        return view('pilot.index', ['pilots' => $pilots]);
+        $countries = $this->country->getData();
+        return view('pilot.index', ['pilots' => $pilots, 'countries' => $countries]);
     }
 
     /**
@@ -39,8 +43,12 @@ class PilotController extends Controller
     public function create()
     {
         $pilot = $this->pilot->all()->last();
+
+        $countries = $this->country->getData();
+
+        //dd($countries);
   
-        return view('pilot.create', ['lastPilotId' => isset($pilot->pilotId) ? $pilot->pilotId : null]);
+        return view('pilot.create', ['lastPilotId' => isset($pilot->pilotId) ? $pilot->pilotId : null, 'countries' => $countries ]);
     }
         /**
      * Store a newly created resource with JSON data
@@ -61,6 +69,7 @@ class PilotController extends Controller
                         $pilot = $pilots->where('pilotId','=',$val['pilotId'])->first();
                         $pilot->name = $val['name'];
                         $pilot->username = $val['username'];
+                        $pilot->country = $val['country'];
                         $pilot->save();
                     }else{
                         $this->class->create($val);

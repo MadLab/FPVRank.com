@@ -25,15 +25,18 @@ Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
         Route::get('', 'HomeController@index')->name('index'); //index rankings        
-        Route::get('/ranking/{text}', 'HomeController@searchByClass')->name('searchclass'); //rankings by class
+        Route::get('/class/{text}', 'HomeController@searchByClass')->name('searchclass'); //rankings by class
+
         Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
-        Route::get('/event-list', 'HomeController@event')->name('event');
-        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');
+
+        Route::get('/event-list', 'HomeController@event')->name('event');///event public home page
+
+        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///search event
 
         
-        Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');
+        Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');///change rankings grid
         
-        Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');
+        Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');///change events grid
         
     });
 });

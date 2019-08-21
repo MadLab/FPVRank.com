@@ -14,7 +14,7 @@ class Ranking extends Model
     protected $fillable = [
         'pilotId', 'eventId','classId', 'rating', 
          'mu', 'rd', 'sigma', 'phi', 
-        'current'
+        'current', 'country', 'totalraces'
     ];
     /**
      * The primary key associated with the table.

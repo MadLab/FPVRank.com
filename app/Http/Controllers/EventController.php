@@ -302,11 +302,11 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\EventRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(EventRequest $request)
-    {
+    {        
         //to validate if there is atleast one row of results
         $count = 0;
         foreach ($request->pilotId as $key) {

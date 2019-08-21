@@ -70,7 +70,7 @@ class Result extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function fillNavs(){
-        return $this->select('results.eventId','results.resultId', 'results.pilotId', 'results.position', 'results.notes', 'pilots.name')
+        return $this->select('results.eventId','results.resultId', 'results.pilotId', 'results.position', 'results.notes', 'pilots.name', 'pilots.country')
         ->join('pilots', 'pilots.pilotId', '=', 'results.pilotId')
         ->get();
     }

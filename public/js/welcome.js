@@ -28,7 +28,7 @@ $(function() {
     $('.select2').select2();
     $('#classId').change(function() {
         var text = $('#classId').find(":selected").val();
-        var url = '/ranking/' + text;
+        var url = '/class/' + text;
         window.location = url;
     });
     $('#search_ranking').change(function() {

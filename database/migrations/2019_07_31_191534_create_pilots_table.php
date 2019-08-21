@@ -17,6 +17,7 @@ class CreatePilotsTable extends Migration
             $table->bigIncrements('pilotId');
             $table->string('name');
             $table->string('username');
+            $table->string('country');
             $table->timestamps();
         });
     }

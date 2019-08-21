@@ -52,10 +52,10 @@ confirmRank
                         </div>
                         <div class="inputs-title row">
                             <div class="col-sm-12 col-md-3">
-                                Pilot
+                                Position
                             </div>
                             <div class="col-sm-12 col-md-3">
-                                Position
+                                Pilot
                             </div>
                             <div class="col-sm-12 col-md-3">
                                 Notes

@@ -10,13 +10,35 @@
                         <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive" />
                     </div>
                     <div class="col-sm-6 col-md-6">
-                        <h3>
-                            {{$pilot->name}}</h3>
-                        <small><cite title="San Francisco, USA">Pilot location<i class="material-icons">
-                                    location_on
-                                </i>
-                                </i></cite></small>
-                                <br>
+                        <p>
+                            <h1>
+                                {{$pilot->name}}
+                            </h1>
+                        </p>
+
+                        <p>
+                            <div>
+                                <div>Current ranking:</div>
+                            </div>
+                            @foreach($info as $val)
+                            <div>
+                                <h2>
+                                    Class: {{$val['className']}} -- Current position: #{{$val['position']}}
+                                </h2>
+                            </div>
+                            @endforeach
+                        </p>
+                        <br>
+                        <p>
+                            <h3>                                                             
+                                @foreach ($countries as $key => $country)
+                                @if($key == $pilot->country)
+                                <a href="#">{{$country}}</a>
+                                <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
+                                @endif
+                                @endforeach
+                            </h3>
+                        </p>
                         <p>
                             <i class="material-icons">account_circle</i>Username: {{$pilot->username}}
                         </p>
@@ -26,23 +48,9 @@
                         <p>
 
                             <div>
-                                <i class="material-icons">people</i>
-                                Current ranking:
-                            </div>
-                            @foreach($info as $val)
-                            <div>
-                                <h5>
-                                    Class: {{$val['className']}} ---- Current position: #{{$val['position']}}
-                                </h5>
-                            </div>
-                            @endforeach
-                        </p>
-                        <p>
-
-                            <div>
                                 <i class="material-icons">assignment</i>
 
-                                 Events attended:
+                                Events attended:
                             </div>
                             @foreach($resultsPilot as $result)
 

@@ -9,6 +9,7 @@ use App\Classes;
 use App\Event;
 use App\Pilot;
 use App\Result;
+use App\CountryList;
 use App\Exports\RankingExport;
 use Excel;
 use Illuminate\Pagination\Paginator;
@@ -20,6 +21,7 @@ class HomeController extends Controller
     protected $pilot;
     protected $event;
     protected $result;
+    protected $country;
     /**
      * Create a new controller instance.
      *
@@ -32,46 +34,17 @@ class HomeController extends Controller
         $this->pilot = new Pilot();
         $this->event = new Event();
         $this->result = new Result();
+        $this->country = new CountryList();
     }
     public function json()
     {
         //$data = $this->class->all();
         //$data = $this->pilot->all();
+        
 
-        $data = [
-            
-            [ 'pilotId' => 8, 'pilotFirstName' => 'Johnn', 'pilotLastName' => 'Solano' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 1, 'pilotFirstName' => 'Jose', 'pilotLastName' => 'Quinonez' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 4, 'pilotFirstName' => 'Robert', 'pilotLastName' => 'Gentel' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 2, 'pilotFirstName' => 'Ever', 'pilotLastName' => 'Rios' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 3, 'pilotFirstName' => 'Ricardo', 'pilotLastName' => 'Garcia' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 9, 'pilotFirstName' => 'Yoel', 'pilotLastName' => 'Zumbado' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 5, 'pilotFirstName' => 'Luis Diego', 'pilotLastName' => 'Cubero' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 10, 'pilotFirstName' => 'Juan Carlos', 'pilotLastName' => 'Cabezas' , 
-            'pilotHandle' => 'null' ],  
-            
-                        
-            [ 'pilotId' => 6, 'pilotFirstName' => 'Esteban', 'pilotLastName' => 'Carvajal' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 7, 'pilotFirstName' => 'Manuel', 'pilotLastName' => 'Solano' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 11, 'pilotFirstName' => 'Diego', 'pilotLastName' => 'Somarribas' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 12, 'pilotFirstName' => 'Arturo', 'pilotLastName' => 'Yong' , 
-            'pilotHandle' => 'null' ],  
-            [ 'pilotId' => 13, 'pilotFirstName' => 'Fernando', 'pilotLastName' => 'Borrase' , 
-            'pilotHandle' => 'null' ],  
-        ];                          
-                        
 
-        return response()->json($data, 200);
+
+        return response()->json("data", 200);
     }
     /**
      * get view with pilot
@@ -79,6 +52,7 @@ class HomeController extends Controller
     public function pilot($pilotId)
     {
         $pilot = $this->pilot->findOrFail($pilotId);
+        $countries = $this->country->getData();
         $results = $this->result->select('results.*', 'events.name as eventName')->where('results.pilotId', '=', $pilotId)->join('events', 'events.eventId', '=', 'results.eventId')->get();
         $ranking = $this->ranking->where([['pilotId', '=', $pilotId], ['current', '=', 1]])->get();
         $info = [];
@@ -94,7 +68,8 @@ class HomeController extends Controller
         }
         return view('pilotinfo', [
             'pilot' => $pilot, 'resultsPilot' => $results,
-            'info' => $info, 'type' => 'event'
+            'info' => $info, 'type' => 'event',
+            'countries' => $countries
         ]);
     }
     /**
@@ -105,8 +80,9 @@ class HomeController extends Controller
         $events = $this->event->getEventsForPublic();
         $results = $this->result->fillNavs();
         $event = $this->event->searchById($eventId);
+        $countries = $this->country->getData();
 
-        return view('event_public.index', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event]);
+        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event,'countries' => $countries]);
     }
     /**
      * Search for events in public page

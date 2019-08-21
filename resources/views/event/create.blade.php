@@ -17,8 +17,7 @@ jsonmodal
 @endslot
 <div id="modalcontent">
     <form method="POST" action="{{ route('event.storejson') }}">
-        @csrf
-        @include('event._eventform')
+        @csrf        
         @include('components._jsonform', ['rows' => 7])
     </form>
     <hr class="separator-line">

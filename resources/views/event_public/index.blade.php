@@ -7,7 +7,7 @@
 
 @endslot
 @slot('idmodal')
-event_public
+event_index
 @endslot
 @slot('bigtitle')
 Events
@@ -24,21 +24,13 @@ Events
 
 @endslot
 @slot('rankingbar')
-
+@include('event_public._searchform')
 @endslot
-<div class="row">
-    <div class="col-6">
-        @include('event_public._searchform')
-        <div id="events-content">
-            @include('event_public._eventtable')
-        </div>
-        <div class="links-table">
-            {{$events->onEachSide(1)->links()}}
-        </div>
-    </div>
-    <div class="col-6">
-        @include('event_public._resultcontent')
-    </div>
+<div id="events-content">
+    @include('event_public._eventtable')
+</div>
+<div class="links-table">
+    {{$events->onEachSide(1)->links()}}
 </div>
 @endcomponent
 
