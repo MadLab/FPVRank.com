@@ -12,7 +12,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'date','classId', 'location', 'dateRanked'
+        'name', 'date','classId', 'location', 'dateRanked', 'eventId'
     ];
       /**
      * The primary key associated with the table.

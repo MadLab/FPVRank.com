@@ -69,7 +69,7 @@ class EventController extends Controller
         foreach ($results as $result) {
             if (count($rankingCompete) == 0) { //if rankings table is empty make all pilots new to competition
                 array_push($competePilots, [
-                    'totalraces' => 1,'oldRankingId' => null, 'pilotId' => $result->pilotId,
+                    'totalraces' => 1, 'oldRankingId' => null, 'pilotId' => $result->pilotId,
                     'position' => $result->position,
                     'glicko' => new Glicko2Player()
                 ]);
@@ -78,7 +78,7 @@ class EventController extends Controller
                 if ($rankingCompete->contains('pilotId', $result->pilotId)) {
                     $val = $rankingCompete->where('pilotId', $result->pilotId)->first();
                     array_push($competePilots, [
-                        'totalraces' => $val->totalraces + 1 ,'oldRankingId' => null, 'pilotId' => $result->pilotId,
+                        'totalraces' => $val->totalraces + 1, 'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
                         'glicko' => new Glicko2Player(
                             $val->rating,
@@ -142,7 +142,7 @@ class EventController extends Controller
         ///adding data to array to update database
         foreach ($competePilots as $val) {
             array_push($insertData, array(
-                'totalraces' => $val['totalraces'],'pilotId' => $val['pilotId'],'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country ,'eventId' => $eventId,
+                'totalraces' => $val['totalraces'], 'pilotId' => $val['pilotId'], 'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country, 'eventId' => $eventId,
                 'classId' => $classId, 'rating' => $val['glicko']->rating,
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
@@ -150,7 +150,7 @@ class EventController extends Controller
         }
         foreach ($noCompetePilots as $val) {
             array_push($insertData, array(
-                'totalraces' => $val['totalraces'], 'pilotId' => $val['pilotId'],'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country, 'eventId' => $eventId,
+                'totalraces' => $val['totalraces'], 'pilotId' => $val['pilotId'], 'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country, 'eventId' => $eventId,
                 'classId' => $classId, 'rating' => $val['glicko']->rating,
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
@@ -247,53 +247,60 @@ class EventController extends Controller
      */
     public function storejson(JSONRequest $request)
     {
-        //try {
+        try {
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
                 return back()->withInput()->with('statusDanger', $message);
-            } else {    
-                //dd($json['raceEntries']);
-                $pilots = $this->pilot->all();
-                $event = $this->event->create([
+            } else {
+                $pilotData = []; //to store tyhe pilots in the database
+                $resultData = []; //to store the results in the database      
+                $eventData = [
+                    'eventId' => $json['id'],
                     'name' => $json['name'],
-                    'location' => $json['address'].",".$json['city'].'.'.$json['state'].' '.$json['country'],
+                    'location' => $json['address'] . ", " . $json['city'] . '. ' . $json['state'] . ' - ' . $json['country'],
                     'date' => $json['startDate'],
                     'classId' => 1,
-                ]);
+                ];
+                $pilots = $this->pilot->all();
+                
                 $count = 1;
-                foreach ($json['raceEntries'] as $key => $val) {                    
+                foreach ($json['raceEntries'] as $key => $val) {
                     if ($pilots->contains('pilotId', $val['pilotId'])) {
                         $pi = $pilots->where('pilotId', $val['pilotId'])->first();
-                        $this->result->create([
-                            'eventId' => $event->eventId,
+                        array_push($resultData, array(
+                            'eventId' => $json['id'],
                             'pilotId' => $pi->pilotId,
                             'position' => $count,
                             'notes' => null,
-                        ]);
+                        ));
                     } else {
-                        $pilot = $this->pilot->create([
+                        array_push($pilotData, array(
                             'pilotId' => $val['pilotId'],
-                            'name' => $val['pilotFirstName'].' '.$val['pilotLastName'],
+                            'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
                             'username' => $val['pilotUserName'],
-                            'country' => $val['pilotCountry'],
-                        ]);
-                        $this->result->create([
-                            'eventId' => $event->eventId,
-                            'pilotId' => $pilot->pilotId,
+                            'country' => isset($val['pilotCountry']) ? $val['pilotCountry'] : 'CR',
+                        ));
+
+                        array_push($resultData, array(
+                            'eventId' => $json['id'],
+                            'pilotId' => $val['pilotId'],
                             'position' => $count,
                             'notes' => null,
-                        ]);
+                        ));
                     }
                     $count++;
-                }           
+                }
+                $event = $this->event->create($eventData);
+                Pilot::insert($pilotData);
+                Result::insert($resultData);
                 $message = 'Event have been saved succesfully!';
                 return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
             }
-        /*} catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
             return back()->withInput()->with('statusDanger', $message);
-        }*/
+        }
     }
 
     /**
@@ -303,7 +310,7 @@ class EventController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(EventRequest $request)
-    {        
+    {
         //to validate if there is atleast one row of results
         $count = 0;
         foreach ($request->pilotId as $key) {
