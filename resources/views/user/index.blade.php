@@ -23,6 +23,9 @@ Users
 @slot('rankingbar')
 
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('searchBar')
 <div class="search-bar">
     <input id="search_user" class="form-control" type="text" placeholder="You can search by '#', Name or Email">

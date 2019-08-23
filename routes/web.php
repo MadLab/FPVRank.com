@@ -25,7 +25,7 @@ Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
         Route::get('', 'HomeController@index')->name('index'); //index rankings        
-        Route::get('/class/{text}', 'HomeController@searchByClass')->name('searchclass'); //rankings by class
+        Route::get('/class/{classId}/{country}', 'HomeController@searchByClass')->name('searchclasscountry'); //rankings by class and country
 
         Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
 

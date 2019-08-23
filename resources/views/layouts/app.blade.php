@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @include('layouts.scripts')
-    @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclass' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent')
+    @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclasscountry' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent')
     <script src="{{ asset('js/welcome.js') }}" defer></script>
     @endif
     <!-- Fonts -->

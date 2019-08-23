@@ -50,6 +50,8 @@ class EventController extends Controller
         $systemconstant = Config::get('glickoValues.systemconstant');
         $volatility = Config::get('glickoValues.volatility');
 
+        $pilots = $this->pilot->all(); ///to get the pilot info
+
         $results = $this->result->byEventId($eventId);
         foreach ($results as $val) {
             array_push($pilotsResults, $val->pilotId); //to get the pilots that did compete
@@ -63,10 +65,11 @@ class EventController extends Controller
         $rankingCompete = $this->ranking->getCurrentRanking($classId, $pilotsResults);
         $rankingNoCompete = $this->ranking->getCurrentRanking($classId, $pilotsNotInResults);
 
+
         foreach ($results as $result) {
             if (count($rankingCompete) == 0) { //if rankings table is empty make all pilots new to competition
                 array_push($competePilots, [
-                    'oldRankingId' => null, 'pilotId' => $result->pilotId,
+                    'totalraces' => 1,'oldRankingId' => null, 'pilotId' => $result->pilotId,
                     'position' => $result->position,
                     'glicko' => new Glicko2Player()
                 ]);
@@ -75,7 +78,7 @@ class EventController extends Controller
                 if ($rankingCompete->contains('pilotId', $result->pilotId)) {
                     $val = $rankingCompete->where('pilotId', $result->pilotId)->first();
                     array_push($competePilots, [
-                        'oldRankingId' => null, 'pilotId' => $result->pilotId,
+                        'totalraces' => $val->totalraces + 1 ,'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
                         'glicko' => new Glicko2Player(
                             $val->rating,
@@ -91,7 +94,7 @@ class EventController extends Controller
                     $val->save();
                 } else { //if the pilot doesnt have ranking it means new pilot
                     array_push($competePilots, [
-                        'oldRankingId' => null, 'pilotId' => $result->pilotId,
+                        'totalraces' => 1, 'oldRankingId' => null, 'pilotId' => $result->pilotId,
                         'position' => $result->position,
                         'glicko' => new Glicko2Player()
                     ]);
@@ -101,7 +104,7 @@ class EventController extends Controller
         //get the current ranking for the pilots that didnt compete, to update their ranking
         foreach ($rankingNoCompete as $val) {
             array_push($noCompetePilots, [
-                'oldRankingId' => 'null', 'pilotId' => $val->pilotId,
+                'totalraces' => $val->totalraces + 1, 'oldRankingId' => 'null', 'pilotId' => $val->pilotId,
                 'position' => 0,
                 'glicko' => new Glicko2Player(
                     $val->rating,
@@ -139,7 +142,7 @@ class EventController extends Controller
         ///adding data to array to update database
         foreach ($competePilots as $val) {
             array_push($insertData, array(
-                'pilotId' => $val['pilotId'], 'eventId' => $eventId,
+                'totalraces' => $val['totalraces'],'pilotId' => $val['pilotId'],'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country ,'eventId' => $eventId,
                 'classId' => $classId, 'rating' => $val['glicko']->rating,
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
@@ -147,7 +150,7 @@ class EventController extends Controller
         }
         foreach ($noCompetePilots as $val) {
             array_push($insertData, array(
-                'pilotId' => $val['pilotId'], 'eventId' => $eventId,
+                'totalraces' => $val['totalraces'], 'pilotId' => $val['pilotId'],'country' => $pilots->where('pilotId', '=', $val['pilotId'])->first()->country, 'eventId' => $eventId,
                 'classId' => $classId, 'rating' => $val['glicko']->rating,
                 'mu' => $val['glicko']->mu, 'rd' => $val['glicko']->rd, 'sigma' => $val['glicko']->sigma,
                 'phi' => $val['glicko']->phi, 'created_at' => date("Y-m-d H:i:s")
@@ -155,6 +158,7 @@ class EventController extends Controller
         }
         //updating database with the new current ranking
         Ranking::insert($insertData);
+
         ///set the event as "Ranked"
         $eve = $this->event->findOrFail($eventId);
         $eve->dateRanked = date("Y-m-d H:i:s");
@@ -243,30 +247,22 @@ class EventController extends Controller
      */
     public function storejson(JSONRequest $request)
     {
-
-        try {
+        //try {
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
                 return back()->withInput()->with('statusDanger', $message);
-            } else {
-                $data = $request->validate([
-                    'name' => 'required',
-                    'location' => 'required',
-                    'classId' => 'required',
-                    'date' => 'required',
-                ]);       
-                    
-                $json = json_decode(file_get_contents($request->jsonurl), true); 
+            } else {    
+                //dd($json['raceEntries']);
                 $pilots = $this->pilot->all();
                 $event = $this->event->create([
-                    'name' => $data['name'],
-                    'location' => $data['location'],
-                    'date' => $data['date'],
-                    'classId' => $data['classId'],
+                    'name' => $json['name'],
+                    'location' => $json['address'].",".$json['city'].'.'.$json['state'].' '.$json['country'],
+                    'date' => $json['startDate'],
+                    'classId' => 1,
                 ]);
                 $count = 1;
-                foreach ($json as $key => $val) {
+                foreach ($json['raceEntries'] as $key => $val) {                    
                     if ($pilots->contains('pilotId', $val['pilotId'])) {
                         $pi = $pilots->where('pilotId', $val['pilotId'])->first();
                         $this->result->create([
@@ -279,7 +275,8 @@ class EventController extends Controller
                         $pilot = $this->pilot->create([
                             'pilotId' => $val['pilotId'],
                             'name' => $val['pilotFirstName'].' '.$val['pilotLastName'],
-                            'username' => $val['pilotHandle']
+                            'username' => $val['pilotUserName'],
+                            'country' => $val['pilotCountry'],
                         ]);
                         $this->result->create([
                             'eventId' => $event->eventId,
@@ -293,10 +290,10 @@ class EventController extends Controller
                 $message = 'Event have been saved succesfully!';
                 return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
             }
-        } catch (\Throwable $th) {
+        /*} catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
             return back()->withInput()->with('statusDanger', $message);
-        }
+        }*/
     }
 
     /**

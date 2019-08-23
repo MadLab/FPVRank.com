@@ -20,6 +20,9 @@ Events
 @slot('addButtonName')
 <a href="{{route('event.create')}}" class="add-button btn btn-success">Add events</a>
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('rankingbar')
 
 @endslot

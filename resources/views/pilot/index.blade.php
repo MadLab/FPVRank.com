@@ -17,6 +17,9 @@ Pilots
 </div>
 @endif
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('addButtonName')
 <a href="{{route('pilot.create')}}" class="add-button btn btn-success">Add pilots</a>
 @endslot

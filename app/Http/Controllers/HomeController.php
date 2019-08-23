@@ -22,6 +22,7 @@ class HomeController extends Controller
     protected $event;
     protected $result;
     protected $country;
+    protected $firstClassId; ///to get the first class and set the navigation
     /**
      * Create a new controller instance.
      *
@@ -35,6 +36,7 @@ class HomeController extends Controller
         $this->event = new Event();
         $this->result = new Result();
         $this->country = new CountryList();
+        $this->firstClassId = $this->class->all()->first()->classId;
     }
     public function json()
     {
@@ -69,7 +71,7 @@ class HomeController extends Controller
         return view('pilotinfo', [
             'pilot' => $pilot, 'resultsPilot' => $results,
             'info' => $info, 'type' => 'event',
-            'countries' => $countries
+            'countries' => $countries, 'firstClassId' => $this->firstClassId
         ]);
     }
     /**
@@ -82,7 +84,7 @@ class HomeController extends Controller
         $event = $this->event->searchById($eventId);
         $countries = $this->country->getData();
 
-        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event,'countries' => $countries]);
+        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event,'countries' => $countries, 'firstClassId' => $this->firstClassId]);
     }
     /**
      * Search for events in public page
@@ -111,7 +113,7 @@ class HomeController extends Controller
         $results = $this->result->fillNavs();
         $event = $this->event->searchById(($events->first())->eventId);
 
-        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event]);
+        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event, ]);
     }
 
     /**
@@ -122,6 +124,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $classes = $this->class->fillSelect();
+        $countries = $this->country->getData();
         $rankings = $this->ranking->getRankingByClass($classes->first()->classId)->toArray();
         //to add positions
         $position = 1;
@@ -132,7 +135,7 @@ class HomeController extends Controller
         $data = $this->paginator($rankings, $request);
 
 
-        return view('welcome', ['classes' => $classes, 'rankings' => $data]);
+        return view('welcome', ['firstClassId' => $classes->first()->classId, 'classes' => $classes, 'rankings' => $data,'countries' => $countries]);
     }
     /**
      * Paginator for arrays
@@ -189,13 +192,20 @@ class HomeController extends Controller
         return response()->view('_rankingtable', ['rankings' => $results], 200);
     }
     /**
-     * Search ranking
+     * Search ranking by class and country
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function searchByClass(Request $request, $classId)
+    public function searchByClass(Request $request, $classId, $country)
     {
-        $rankings = $this->ranking->getRankingByClass($classId)->toArray();
+        $rankings = [];
+        if($country == "all"){
+            $rankings = $this->ranking->getRankingByClass($classId)->toArray();
+        }else{
+            $rankings = $this->ranking->getRankingByClassAndCountry($classId, $country)->toArray();
+        }
+        
+        $countries = $this->country->getData();        
         //to add positions
         $position = 1;
         for ($i = 0; $i < count($rankings); $i++) {
@@ -204,7 +214,8 @@ class HomeController extends Controller
         }
         $data = $this->paginator($rankings, $request);
         $classes = $this->class->fillSelect();
-        return view('welcome', ['classes' => $classes, 'rankings' => $data, 'classId' => $classId]);
+        return view('welcome', ['classes' => $classes, 'rankings' => $data, 
+        'classId' => $classId,'selectedCountry' => $country ,'countries' => $countries, 'firstClassId' => $this->firstClassId]);
     }
     public function ranking()
     {

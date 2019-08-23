@@ -20,6 +20,9 @@ Results
 @slot('addButtonName')
 <a href="{{route('result.create')}}" class="add-button btn btn-success">Add results</a>
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('rankingbar')
 
 @endslot

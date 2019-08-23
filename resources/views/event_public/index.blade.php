@@ -20,6 +20,9 @@ Events
 @slot('addButtonName')
 
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('searchBar')
 
 @endslot

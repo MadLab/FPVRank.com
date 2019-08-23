@@ -18,7 +18,7 @@ jsonmodal
 <div id="modalcontent">
     <form method="POST" action="{{ route('pilot.storejson') }}">
         @csrf
-        @include('components._jsonform', ['rows' => 7])
+        @include('components._jsonform', ['rows' => 8])
     </form>
     <hr class="separator-line">
     <div>**If JSON contains same pilotId as in the database, data will be updated!</div>

@@ -17,6 +17,9 @@ Classes
 </div>
 @endif
 @endslot
+@slot('rankingnav')
+
+@endslot
 @slot('addButtonName')
 <a href="{{route('class.create')}}" class="add-button btn btn-success">Add classes</a>
 @endslot

@@ -27,9 +27,10 @@ $(function() {
     });
     $('.select2').select2();
     $('#classId').change(function() {
-        var text = $('#classId').find(":selected").val();
-        var url = '/class/' + text;
-        window.location = url;
+        rankingNavigate();
+    });
+    $('#country').change(function() {
+        rankingNavigate();
     });
     $('#search_ranking').change(function() {
         var text = $('#search_ranking').val();
@@ -48,6 +49,13 @@ $(function() {
         });
     });
 });
+
+function rankingNavigate() {
+    var text = $('#classId').find(":selected").val();
+    var country = $('#country').find(":selected").val();
+    var url = '/class/' + text + '/' + country;
+    window.location = url;
+}
 
 //search event
 function searchByText(text, date1, date2, action) {

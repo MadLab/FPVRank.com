@@ -119,7 +119,8 @@ class PilotController extends Controller
     public function edit($id)
     {
         $pilot = $this->pilot->findOrFail($id);
-        return view('pilot.edit', ['pilot' => $pilot]);
+        $countries = $this->country->getData();
+        return view('pilot.edit', ['pilot' => $pilot, 'countries' => $countries]);
     }
 
     /**

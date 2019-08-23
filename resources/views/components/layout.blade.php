@@ -11,11 +11,14 @@
 </div>
 @endslot
 <div id="modalcontent">
-    
+
 </div>
 @endcomponent
 
 <div class="container">
+    <div class="row">
+        {{$rankingnav}}
+    </div>
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12">
             <h1 class="text-center justify-content-center">{{$bigtitle}}</h1>

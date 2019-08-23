@@ -12,7 +12,8 @@
 <div class="form-group row">
     <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
     <div class="col-md-6">
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ !isset($pilot->name) ? old('name') : $pilot->name }}" required autocomplete="name" autofocus>
+        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" 
+        value="{{ !isset($pilot->name) ? old('name') : $pilot->name }}" required autocomplete="name" autofocus>
         @error('name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
@@ -36,7 +37,7 @@
     <div class="col-md-6">
         <select name="country" class="select2 form-control @error('country') is-invalid @enderror" id="country">
             @foreach ($countries as $key => $country)
-            <option value="{{$key}}">{{$country}}</option>
+            <option value="{{$key}}" @if(isset($pilot->country)) @if($pilot->country == $key) selected @endif @endif>{{$country}}</option>
             @endforeach
         </select>
         @error('country')

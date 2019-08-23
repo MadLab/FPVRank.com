@@ -33,7 +33,7 @@
                             <h3>                                                             
                                 @foreach ($countries as $key => $country)
                                 @if($key == $pilot->country)
-                                <a href="#">{{$country}}</a>
+                                <a href="{{route('welcome.searchclasscountry', ['classId' => $firstClassId, 'country' => $key])}}">{{$country}}</a>
                                 <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
                                 @endif
                                 @endforeach
