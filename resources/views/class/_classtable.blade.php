@@ -15,6 +15,9 @@
                 <th scope="row">{{$class->classId }}</th>
                 <td><a data-toggle="tooltip" data-placement="right" title="Edit this class" href="{{route('class.edit', ['id' => $class->classId])}}">{{$class->name }}</a></td>
                 <td>
+                    @if ($class->location == "global")
+                    Global
+                    @endif
                     @foreach ($countries as $key => $country)
                     @if($key == $class->location)
                     <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>

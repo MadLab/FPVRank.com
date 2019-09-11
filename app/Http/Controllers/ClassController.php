@@ -100,7 +100,8 @@ class ClassController extends Controller
     public function show($text)
     {
         $classes = $this->class->search($text);
-        return response()->view('class._classtable', ['classes' => $classes], 200);
+        $countries = $this->country->getData();
+        return response()->view('class._classtable', ['classes' => $classes, 'countries' => $countries], 200);
     }
 
     /**

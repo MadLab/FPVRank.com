@@ -34,7 +34,7 @@ class Pilot extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text){
-        return $this->select('pilotId','name', 'username','created_at')
+        return $this->select('pilotId','name', 'username','created_at', 'country')
         ->where('name', 'LIKE', $text.'%')->orWhere('username', 'LIKE', $text.'%')->orWhere('pilotId', '=', $text)->get();
     }
       /**

@@ -42,7 +42,7 @@ class Classes extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text){
-        return $this->select('classId','name', 'description','created_at')
+        return $this->select('classId','name', 'description','created_at', 'location')
         ->where('name', 'LIKE', $text.'%')->orWhere('classId', '=', $text)->get();
     }
     /**
