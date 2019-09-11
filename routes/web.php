@@ -24,7 +24,7 @@ Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
 ///public routes
 Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
-        Route::get('', 'HomeController@index')->name('index'); //index rankings        
+        Route::get('', 'HomeController@index')->name('index'); //index rankings
         Route::get('/class/{classId}/{country}', 'HomeController@searchByClass')->name('searchclasscountry'); //rankings by class and country
 
         Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
@@ -33,11 +33,11 @@ Route::prefix('/')->group(function () {
 
         Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///search event
 
-        
+
         Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');///change rankings grid
-        
+
         Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');///change events grid
-        
+
     });
 });
 
@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
             Route::post('store', 'PilotController@store')->name('store');
             Route::post('storejson', 'PilotController@storejson')->name('storejson');
             Route::get('edit/{id}', 'PilotController@edit')->name('edit');
-            Route::put('update/{id}', 'PilotController@update')->name('update');
+            Route::post('update/{id}', 'PilotController@update')->name('update');
         });
     });
     Route::prefix('events')->group(function () {

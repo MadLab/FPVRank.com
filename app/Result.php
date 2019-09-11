@@ -21,9 +21,9 @@ class Result extends Model
      */
     protected $primaryKey = 'resultId';
     /**
-     * 
+     *
      * Get a listing of the resource
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList()
@@ -70,7 +70,7 @@ class Result extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function fillNavs(){
-        return $this->select('results.eventId','results.resultId', 'results.pilotId', 'results.position', 'results.notes', 'pilots.name', 'pilots.country')
+        return $this->select('results.eventId','results.resultId', 'results.pilotId', 'results.position', 'results.notes', 'pilots.name', 'pilots.username', 'pilots.country')
         ->join('pilots', 'pilots.pilotId', '=', 'results.pilotId')
         ->get();
     }

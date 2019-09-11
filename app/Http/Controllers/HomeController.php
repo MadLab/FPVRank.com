@@ -12,6 +12,7 @@ use App\Result;
 use App\CountryList;
 use App\Exports\RankingExport;
 use Excel;
+use Storage;
 use Illuminate\Pagination\Paginator;
 
 class HomeController extends Controller
@@ -42,7 +43,7 @@ class HomeController extends Controller
     {
         //$data = $this->class->all();
         //$data = $this->pilot->all();
-        
+
 
 
 
@@ -53,24 +54,31 @@ class HomeController extends Controller
      */
     public function pilot($pilotId)
     {
+
+
+
         $pilot = $this->pilot->findOrFail($pilotId);
+
         $countries = $this->country->getData();
         $results = $this->result->select('results.*', 'events.name as eventName')->where('results.pilotId', '=', $pilotId)->join('events', 'events.eventId', '=', 'results.eventId')->get();
         $ranking = $this->ranking->where([['pilotId', '=', $pilotId], ['current', '=', 1]])->get();
+        //dd($ranking->toArray());
         $info = [];
         foreach ($ranking as $value) {
             $rankinginfo = $this->ranking->getRankingByClass($value->classId)->toArray();
             $position = 1;
             for ($i = 0; $i < count($rankinginfo); $i++) {
                 $rankinginfo[$i]['position'] = $position;
+
                 $position++;
             }
             $data = collect($rankinginfo)->where('pilotId', '=', $pilotId)->first();
             array_push($info, $data);
         }
+
         return view('pilotinfo', [
             'pilot' => $pilot, 'resultsPilot' => $results,
-            'info' => $info, 'type' => 'event',
+            'info' => $info, 'type' => 'event', 'rating' => "" ,
             'countries' => $countries, 'firstClassId' => $this->firstClassId
         ]);
     }
@@ -139,12 +147,12 @@ class HomeController extends Controller
     }
     /**
      * Paginator for arrays
-     * 
+     *
      * @return Collection $data
      */
     protected function paginator($array, $request)
     {
-        //paginator for array   
+        //paginator for array
         $page = isset($request->page) ? $request->page : 1; // Get the page=1 from the url
         $perPage = 100; // Number of items per page
         $offset = ($page * $perPage) - $perPage;
@@ -204,8 +212,8 @@ class HomeController extends Controller
         }else{
             $rankings = $this->ranking->getRankingByClassAndCountry($classId, $country)->toArray();
         }
-        
-        $countries = $this->country->getData();        
+
+        $countries = $this->country->getData();
         //to add positions
         $position = 1;
         for ($i = 0; $i < count($rankings); $i++) {
@@ -214,7 +222,7 @@ class HomeController extends Controller
         }
         $data = $this->paginator($rankings, $request);
         $classes = $this->class->fillSelect();
-        return view('welcome', ['classes' => $classes, 'rankings' => $data, 
+        return view('welcome', ['classes' => $classes, 'rankings' => $data,
         'classId' => $classId,'selectedCountry' => $country ,'countries' => $countries, 'firstClassId' => $this->firstClassId]);
     }
     public function ranking()

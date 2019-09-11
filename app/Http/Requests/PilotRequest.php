@@ -14,7 +14,7 @@ class PilotRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth::check()){            
+        if(Auth::check()){
             return true;
         }else{
             return false;
@@ -29,8 +29,11 @@ class PilotRequest extends FormRequest
     public function rules()
     {
         return [
+            "pilotId" => 'required',
             "name" => 'required|max:250',
-            "username" => 'required|max:250',    
+            "username" => 'required|max:250',
+            'country' => 'required',
+            'photo' => 'required|mimes:png,jpeg,jpg,jpe'
         ];
     }
 }

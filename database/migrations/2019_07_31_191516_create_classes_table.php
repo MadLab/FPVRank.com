@@ -17,6 +17,7 @@ class CreateClassesTable extends Migration
             $table->string('classId')->unique();
             $table->string('name');
             $table->string('description');
+            $table->string('location');
             $table->timestamps();
         });
     }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Auth;
 
-class ClassRequest extends FormRequest
+class PilotUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,10 +29,11 @@ class ClassRequest extends FormRequest
     public function rules()
     {
         return [
+            "pilotId" => 'required',
             "name" => 'required|max:250',
-            "description" => 'required|max:250',
-            "classId" => 'required|max:250',
-            "location" => 'required|max:6'
+            "username" => 'required|max:250',
+            'country' => 'required',
+            'photo' => 'nullable|mimes:png,jpeg,jpg,jpe'
         ];
     }
 }

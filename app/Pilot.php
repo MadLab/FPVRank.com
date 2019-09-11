@@ -12,7 +12,7 @@ class Pilot extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'username','pilotId', 'country'
+        'name', 'username','pilotId', 'country', 'imagePath', 'imageLocal'
     ];
       /**
      * The primary key associated with the table.
@@ -21,9 +21,9 @@ class Pilot extends Model
      */
     protected $primaryKey = 'pilotId';
          /**
-     * 
+     *
      * Get a listing of the resource
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){

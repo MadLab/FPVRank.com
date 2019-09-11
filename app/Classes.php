@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
-    
+
     /**
      * The table associated with the model.
-     **Model name can't be 'Class' 
+     **Model name can't be 'Class'
      * @var string
      */
     protected $table = 'classes';
@@ -26,16 +26,16 @@ class Classes extends Model
      * @var array
      */
     protected $fillable = [
-        'classId','name', 'description',
+        'classId','name', 'description', 'location',
     ];
        /**
-     * 
+     *
      * Get a listing of the resource
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
-        return $this->select('classId','name', 'description','created_at')->paginate(12);
+        return $this->select('classId','name', 'description','created_at','location')->paginate(12);
     }
      /**
      * Get a listing of the resource by name
@@ -50,6 +50,6 @@ class Classes extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function fillSelect(){
-        return $this->select('classId','name')->get();
+        return $this->select('classId','name', 'location')->get();
     }
 }

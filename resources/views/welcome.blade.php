@@ -28,7 +28,15 @@ Rankings
     <label for="classId">Search by class and country</label>
     <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">
         @foreach ($classes as $class)
-        <option value="{{$class->classId}}" @if(isset($classId)) @if($class->classId == $classId) selected @endif @endif>{{$class->name}}</option>
+        <option value="{{$class->classId}}" @if(isset($classId)) @if($class->classId == $classId) selected @endif @endif>{{$class->name}}
+            --
+            @foreach ($countries as $key => $country)
+            @if($key == $class->location)
+            <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
+            {{$country}}
+            @endif
+            @endforeach
+        </option>
         @endforeach
     </select>
     @error('classId')
@@ -40,9 +48,9 @@ Rankings
 <div class="form-group col-md-6">
     <label for="country">Countries</label>
     <select name="country" class="select2 form-control @error('country') is-invalid @enderror" id="country">
-        <option value="all" @if(isset($selectedCountry)) @if($selectedCountry == 'all') selected @endif @endif>All countries</option>
+        <option value="all" @if(isset($selectedCountry)) @if($selectedCountry=='all' ) selected @endif @endif>All countries</option>
         @foreach ($countries as $key => $country)
-        <option value="{{$key}}" @if(isset($selectedCountry)) @if($key == $selectedCountry) selected @endif @endif>{{$country}}</option>
+        <option value="{{$key}}" @if(isset($selectedCountry)) @if($key==$selectedCountry) selected @endif @endif>{{$country}}</option>
         @endforeach
     </select>
     @error('country')

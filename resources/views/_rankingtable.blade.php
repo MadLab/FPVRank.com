@@ -5,7 +5,6 @@
                 <th scope="col">#-Position</th>
                 <th scope="col">Pilot's rating</th>
                 <th scope="col">Pilot's name</th>
-                <th scope="col">Pilot's nickname</th>
                 <th scope="col">Pilot's country</th>
 
             </tr>
@@ -15,14 +14,13 @@
             <tr>
                 <th scope="row">{{$ranking["position"]}}</th>
                 <th scope="row">{{number_format($ranking["rating"],2)}}</th>
-                <td class="buttonstyle"><a href="{{route('welcome.pilot', ['pilotId' => $ranking['pilotId']])}}">{{$ranking["name"]}}</a></td>
-                <td>{{$ranking["username"]}}</td>
+                <td class="buttonstyle"><a href="{{route('welcome.pilot', ['pilotId' => $ranking['pilotId']])}}">{{$ranking["name"]}}
+                 -- {{$ranking["username"]}}</a></td>
                 @foreach ($countries as $key => $country)
                 @if($key == $ranking["country"])
                 <td>
+                <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
                 <a href="{{route('welcome.searchclasscountry', ['classId' => $firstClassId, 'country' => $key])}}">{{$country}}</a>
-                    
-                    <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
                 </td>
                 @endif
                 @endforeach

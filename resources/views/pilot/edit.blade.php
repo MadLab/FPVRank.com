@@ -7,8 +7,7 @@
             <div class="card">
                 <div class="card-header">Edit a pilot</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('pilot.update', ['id' => $pilot->pilotId]) }}">
-                        @method('PUT')
+                    <form method="POST" action="{{ route('pilot.update', ['id' => $pilot->pilotId]) }}" enctype="multipart/form-data">
                         @csrf
                         @include('pilot._pilotform')
                         @if (session('status'))
@@ -22,7 +21,7 @@
                                     Save
                                 </button>
                             </div>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>

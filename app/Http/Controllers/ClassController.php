@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes;
+use App\CountryList;
 use App\Http\Requests\ClassRequest;
 use App\Http\Requests\JSONRequest;
 
@@ -10,6 +11,7 @@ use App\Http\Requests\JSONRequest;
 class ClassController extends Controller
 {
     protected $class;
+    protected $country;
     /**
      * Create a new controller instance.
      *
@@ -18,6 +20,7 @@ class ClassController extends Controller
     public function __construct()
     {
         $this->class = new Classes();
+        $this->country = new CountryList();
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +30,8 @@ class ClassController extends Controller
     public function index()
     {
         $class = $this->class->getList();
-        return view('class.index', ['classes' => $class]);
+        $countries = $this->country->getData();
+        return view('class.index', ['classes' => $class, 'countries' => $countries]);
     }
 
     /**
@@ -38,7 +42,8 @@ class ClassController extends Controller
     public function create()
     {
         $class = $this->class->all()->last();
-        return view('class.create', ['lastClassId' => isset($class->classId) ? $class->classId : null]);
+        $countries = $this->country->getData();
+        return view('class.create', ['lastClassId' => isset($class->classId) ? $class->classId : null, 'countries' => $countries]);
     }
 
     /**
@@ -61,23 +66,22 @@ class ClassController extends Controller
     public function storejson(JSONRequest $request)
     {
         try {
-            $json = json_decode(file_get_contents($request->jsonurl), true);            
+            $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
                 return redirect()->route('class.create')->with('status', $message);
             } else {
                 $classes = $this->class->all();
                 foreach ($json as $val) {
-                    if ($classes->contains('classId', '=', $val['classId'])){
-                        $class = $classes->where('classId','=',$val['classId'])->first();
+                    if ($classes->contains('classId', '=', $val['classId'])) {
+                        $class = $classes->where('classId', '=', $val['classId'])->first();
                         $class->name = $val['name'];
                         $class->description = $val['description'];
                         $class->save();
-                    }else{
+                    } else {
                         $this->class->create($val);
                     }
-
-                }                
+                }
                 $message = 'Classes have been saved succesfully!';
                 return redirect()->route('class.create')->with('status', $message);
             }
@@ -108,7 +112,8 @@ class ClassController extends Controller
     public function edit($id)
     {
         $class = $this->class->findOrFail($id);
-        return view('class.edit', ['class' => $class]);
+        $countries = $this->country->getData();
+        return view('class.edit', ['class' => $class, 'countries' => $countries]);
     }
 
     /**
@@ -121,11 +126,16 @@ class ClassController extends Controller
     public function update(ClassRequest $request, $id)
     {
         $class = $this->class->findOrFail($id);
-        $class->fill($request->toArray());
-        $class->save();
-
-        $message = 'Class has been updated succesfully!';
+        $check = $this->class->where('classId', '=', $request->classId)->first();
+        if ($id == $request->classId || $check == null) {
+            $class->fill($request->toArray());
+            $class->save();
+            $message = 'Class has been updated succesfully!';
         return redirect()->route('class.index')->with('status', $message);
+        } else {
+            $message = 'This ID is already taken!';
+            return back()->withInput()->with('status', $message);
+        }
     }
 
     /**

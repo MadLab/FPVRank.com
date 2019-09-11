@@ -4,19 +4,27 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th scope="col">Location</th>
                 <th scope="col">Description</th>
-                <th scope="col">Created date</th>                
-                <th scope="col"> </th>
+                <th scope="col">Created date</th>
             </tr>
         </thead>
         <tbody>
             @foreach($classes as $class)
             <tr>
                 <th scope="row">{{$class->classId }}</th>
-                <td>{{$class->name }}</td>
+                <td><a data-toggle="tooltip" data-placement="right" title="Edit this class" href="{{route('class.edit', ['id' => $class->classId])}}">{{$class->name }}</a></td>
+                <td>
+                    @foreach ($countries as $key => $country)
+                    @if($key == $class->location)
+                    <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
+                    {{$country}}
+                    @endif
+                    @endforeach
+                </td>
                 <td>{{$class->description}}</td>
-                <td>{{$class->created_at }}</td>                             
-                <td><a href="{{route('class.edit', ['id' => $class->classId])}}">Edit</a></td>
+                <td>{{$class->created_at }}</td>
+
             </tr>
             @endforeach
         </tbody>

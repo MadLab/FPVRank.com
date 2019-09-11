@@ -38,7 +38,7 @@ jsonmodal
                             </button>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('pilot.store') }}">
+                    <form method="POST" action="{{ route('pilot.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group row">
                             <label for="classId" class="col-md-4 col-form-label text-md-right"><strong>Last ID</strong></label>

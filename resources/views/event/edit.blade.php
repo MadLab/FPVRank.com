@@ -58,7 +58,7 @@ confirmRank
                                 Pilot
                             </div>
                             <div class="col-sm-12 col-md-3">
-                                Notes
+                                Laps - Time
                             </div>
                             <div class="col-sm-12 col-md-3">
 

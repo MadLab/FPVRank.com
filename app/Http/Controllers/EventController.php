@@ -11,6 +11,7 @@ use App\Glicko2Player;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\JSONRequest;
 use Config;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -242,48 +243,52 @@ class EventController extends Controller
     }
     /**
      * Store a newly created resource with JSON data
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function storejson(JSONRequest $request)
     {
-        try {
+        //try {
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
                 return back()->withInput()->with('statusDanger', $message);
             } else {
                 $pilotData = []; //to store tyhe pilots in the database
-                $resultData = []; //to store the results in the database      
+                $resultData = []; //to store the results in the database
                 $eventData = [
-                    'eventId' => $json['id'],
-                    'name' => $json['name'],
-                    'location' => $json['address'] . ", " . $json['city'] . '. ' . $json['state'] . ' - ' . $json['country'],
+                    'eventId' => rand(1,1000),
+                    'name' => $json['raceName'],
+                    'location' => Str::random(10),
                     'date' => $json['startDate'],
                     'classId' => 1,
                 ];
                 $pilots = $this->pilot->all();
-                
+
                 $count = 1;
-                foreach ($json['raceEntries'] as $key => $val) {
+
+                foreach ($json['pilots'] as $key => $val) {
                     if ($pilots->contains('pilotId', $val['pilotId'])) {
                         $pi = $pilots->where('pilotId', $val['pilotId'])->first();
                         array_push($resultData, array(
-                            'eventId' => $json['id'],
+                            'eventId' => $eventData['eventId'],
                             'pilotId' => $pi->pilotId,
                             'position' => $count,
                             'notes' => null,
                         ));
                     } else {
+
                         array_push($pilotData, array(
                             'pilotId' => $val['pilotId'],
                             'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
                             'username' => $val['pilotUserName'],
-                            'country' => isset($val['pilotCountry']) ? $val['pilotCountry'] : 'CR',
+                            'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'CR',
+                            'imagePath' => $val['pilotProfilePictureUrl'],
+                            'imageLocal' => 0
                         ));
 
                         array_push($resultData, array(
-                            'eventId' => $json['id'],
+                            'eventId' => $eventData['eventId'],
                             'pilotId' => $val['pilotId'],
                             'position' => $count,
                             'notes' => null,
@@ -297,10 +302,10 @@ class EventController extends Controller
                 $message = 'Event have been saved succesfully!';
                 return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
             }
-        } catch (\Throwable $th) {
+       /* } catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
             return back()->withInput()->with('statusDanger', $message);
-        }
+        }*/
     }
 
     /**
@@ -339,7 +344,7 @@ class EventController extends Controller
             }
             $message = 'Event has been saved succesfully!';
             return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
-        } else { ///if there is no row, return messsage error            
+        } else { ///if there is no row, return messsage error
             $message = 'Add atleast one result!';
             return back()->withInput()->with('statusDanger', $message);
         }

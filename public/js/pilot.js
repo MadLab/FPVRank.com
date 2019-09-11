@@ -1,5 +1,6 @@
 /*global $*/
 $(function() {
+    $('[data-toggle="tooltip"]').tooltip();
     $('#pilot').on('hidden.bs.modal', function(e) {
         $('#search_pilot').val('');
         $('#search_pilot').focus();
