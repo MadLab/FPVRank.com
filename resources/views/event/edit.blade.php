@@ -31,7 +31,8 @@ confirmRank
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Edit an event
-                    @if (session('statusDanger'))
+                </div>
+                @if (session('statusDanger'))
                     <div class="alert alert-danger">
                         {{ session('statusDanger') }}
                     </div>
@@ -41,12 +42,18 @@ confirmRank
                         {{ session('statusSuccess') }}
                     </div>
                     @endif
-                </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}">
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Current photo</label>
+                        <div class="col-md-6">
+                            <img src="{{$event->imagePath}}" alt="" class="img-rounded img-responsive col-sm-12 col-md-12" />
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         @include('event._eventform')
+
                         <div class="row">
 
                         </div>

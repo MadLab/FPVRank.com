@@ -19,7 +19,7 @@ class CreatePilotsTable extends Migration
             $table->string('username');
             $table->string('country');
             $table->string('imagePath');
-            $table->boolean('imageLocal')->default(1); //to know if the photo is stored on this server or another
+            $table->boolean('imageLocal')->default(1); //to know if image is stored throught json or this site
             $table->timestamps();
         });
     }

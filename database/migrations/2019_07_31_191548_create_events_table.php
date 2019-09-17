@@ -20,6 +20,8 @@ class CreateEventsTable extends Migration
             $table->string('classId');
             $table->string('location');
             $table->dateTime('dateRanked')->nullable();
+            $table->string('imagePath');
+            $table->boolean('imageLocal')->default(1); //to know if image is stored throught json or this site
             $table->timestamps();
 
             $table->foreign('classId')->references('classId')->on('classes');

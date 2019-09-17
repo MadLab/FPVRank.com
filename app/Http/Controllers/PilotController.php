@@ -45,10 +45,7 @@ class PilotController extends Controller
     public function create()
     {
         $pilot = $this->pilot->all()->last();
-
         $countries = $this->country->getData();
-
-        //dd($countries);
 
         return view('pilot.create', ['lastPilotId' => isset($pilot->pilotId) ? $pilot->pilotId : null, 'countries' => $countries]);
     }
@@ -98,7 +95,7 @@ class PilotController extends Controller
      */
     public function store(PilotRequest $request)
     {
-        $a = Storage::disk('public')->put('pilotPicture',$request->file('photo'));
+        $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
         $pilot = $this->pilot->create([
             'pilotId' => $request->pilotId,
             'name' => $request->name,
@@ -134,6 +131,12 @@ class PilotController extends Controller
     {
         $pilot = $this->pilot->findOrFail($id);
         $countries = $this->country->getData();
+        if ($pilot->imageLocal == 1) {
+            $pilot->imagePath = Storage::disk('s3')->temporaryUrl(
+                $pilot->imagePath,
+                now()->addMinutes(1)
+            );
+        }
 
         return view('pilot.edit', ['pilot' => $pilot, 'countries' => $countries]);
     }
@@ -151,8 +154,8 @@ class PilotController extends Controller
         $check = $this->pilot->where('pilotId', '=', $request->pilotId)->first();
         if ($id == $request->pilotId || $check == null) {
             if($request->photo != null){
-                Storage::delete($pilot->imagePath);
-                $a = Storage::disk('public')->put('pilotPicture',$request->file('photo'));
+                Storage::disk('s3')->delete($pilot->imagePath);
+                $a = Storage::disk('s3')->put('pilotPicture',$request->file('photo'));
                 $pilot->imagePath = $a;
                 $pilot->imageLocal = 1;
             }

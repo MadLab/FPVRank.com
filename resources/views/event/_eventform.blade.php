@@ -1,8 +1,8 @@
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="name">{{ __('Name') }}</label>
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" 
-        name="name" value="{{ !isset($event->name) ? old('name') : $event->name }}" 
+        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
+        name="name" value="{{ !isset($event->name) ? old('name') : $event->name }}"
         autocomplete="name" autofocus>
         @error('name')
         <span class="invalid-feedback" role="alert">
@@ -12,7 +12,7 @@
     </div>
     <div class="form-group col-md-6">
         <label for="location">Location</label>
-        <input id="location" type="text" class="form-control @error('location') is-invalid @enderror" name="location" 
+        <input id="location" type="text" class="form-control @error('location') is-invalid @enderror" name="location"
         value="{{ !isset($event->location) ? old('location') : $event->location }}" autocomplete="location">
         @error('location')
         <span class="invalid-feedback" role="alert">
@@ -49,5 +49,16 @@
         </div>
         <input name="date" type="hidden" id="date" value="{{ !isset($event->date) ? old('date') : $event->date }}" /><br />
 
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="photo">Photo  {{(Route::currentRouteName() == 'event.edit' ? '**Empty to keep same photo' : ' ')}}</label>
+        <input name="photo" type="file" class="form-control-file @error('photo') is-invalid @enderror" id="photo">
+        @error('photo')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $photo }}</strong>
+        </span>
+        @enderror
     </div>
 </div>

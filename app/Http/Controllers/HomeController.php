@@ -43,10 +43,6 @@ class HomeController extends Controller
     {
         //$data = $this->class->all();
         //$data = $this->pilot->all();
-
-
-
-
         return response()->json("data", 200);
     }
     /**
@@ -55,21 +51,22 @@ class HomeController extends Controller
     public function pilot($pilotId)
     {
 
-
-
         $pilot = $this->pilot->findOrFail($pilotId);
-
         $countries = $this->country->getData();
         $results = $this->result->select('results.*', 'events.name as eventName')->where('results.pilotId', '=', $pilotId)->join('events', 'events.eventId', '=', 'results.eventId')->get();
         $ranking = $this->ranking->where([['pilotId', '=', $pilotId], ['current', '=', 1]])->get();
-        //dd($ranking->toArray());
+        if ($pilot->imageLocal == 1) {
+            $pilot->imagePath = Storage::disk('s3')->temporaryUrl(
+                $pilot->imagePath,
+                now()->addMinutes(1)
+            );
+        }
         $info = [];
         foreach ($ranking as $value) {
             $rankinginfo = $this->ranking->getRankingByClass($value->classId)->toArray();
             $position = 1;
             for ($i = 0; $i < count($rankinginfo); $i++) {
                 $rankinginfo[$i]['position'] = $position;
-
                 $position++;
             }
             $data = collect($rankinginfo)->where('pilotId', '=', $pilotId)->first();
@@ -78,7 +75,7 @@ class HomeController extends Controller
 
         return view('pilotinfo', [
             'pilot' => $pilot, 'resultsPilot' => $results,
-            'info' => $info, 'type' => 'event', 'rating' => "" ,
+            'info' => $info, 'type' => 'event', 'rating' => "",
             'countries' => $countries, 'firstClassId' => $this->firstClassId
         ]);
     }
@@ -92,7 +89,7 @@ class HomeController extends Controller
         $event = $this->event->searchById($eventId);
         $countries = $this->country->getData();
 
-        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event,'countries' => $countries, 'firstClassId' => $this->firstClassId]);
+        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event, 'countries' => $countries, 'firstClassId' => $this->firstClassId]);
     }
     /**
      * Search for events in public page
@@ -121,7 +118,7 @@ class HomeController extends Controller
         $results = $this->result->fillNavs();
         $event = $this->event->searchById(($events->first())->eventId);
 
-        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event, ]);
+        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event,]);
     }
 
     /**
@@ -143,7 +140,8 @@ class HomeController extends Controller
         $data = $this->paginator($rankings, $request);
 
 
-        return view('welcome', ['firstClassId' => $classes->first()->classId, 'classes' => $classes, 'rankings' => $data,'countries' => $countries]);
+        return view('welcome', ['selectedclass' => $classes->first(),'firstClassId' => $classes->first()->classId,
+        'classes' => $classes, 'rankings' => $data, 'countries' => $countries, 'selectedCountry' => 'all']);
     }
     /**
      * Paginator for arrays
@@ -207,9 +205,9 @@ class HomeController extends Controller
     public function searchByClass(Request $request, $classId, $country)
     {
         $rankings = [];
-        if($country == "all"){
+        if ($country == "all") {
             $rankings = $this->ranking->getRankingByClass($classId)->toArray();
-        }else{
+        } else {
             $rankings = $this->ranking->getRankingByClassAndCountry($classId, $country)->toArray();
         }
 
@@ -222,8 +220,11 @@ class HomeController extends Controller
         }
         $data = $this->paginator($rankings, $request);
         $classes = $this->class->fillSelect();
-        return view('welcome', ['classes' => $classes, 'rankings' => $data,
-        'classId' => $classId,'selectedCountry' => $country ,'countries' => $countries, 'firstClassId' => $this->firstClassId]);
+        return view('welcome', [
+            'selectedclass' => $classes->where('classId', '=', $classId)->first(),
+            'classes' => $classes, 'rankings' => $data,
+            'classId' => $classId, 'selectedCountry' => $country, 'countries' => $countries, 'firstClassId' => $this->firstClassId
+        ]);
     }
     public function ranking()
     {

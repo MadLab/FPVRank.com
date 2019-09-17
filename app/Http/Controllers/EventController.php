@@ -9,10 +9,11 @@ use App\Result;
 use App\Ranking;
 use App\Glicko2Player;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\EventUpdateRequest;
 use App\Http\Requests\JSONRequest;
 use Config;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Storage;
 
 class EventController extends Controller
 {
@@ -197,7 +198,7 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, $id)
+    public function update(EventUpdateRequest $request, $id)
     {
         //to validate if there is atleast one row of results
         $count = 0;
@@ -213,6 +214,12 @@ class EventController extends Controller
             $event->location = $request->location;
             $event->date = $request->date;
             $event->classId = $request->classId;
+            if($request->photo != null){
+                Storage::disk('s3')->delete($event->imagePath);
+                $a = Storage::disk('s3')->put('pilotPicture',$request->file('photo'));
+                $event->imagePath = $a;
+                $event->imageLocal = 1;
+            }
             $event->save();
 
             for ($i = 0; $i < count($request->pilotId); $i++) {
@@ -248,7 +255,7 @@ class EventController extends Controller
      */
     public function storejson(JSONRequest $request)
     {
-        //try {
+        try {
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
@@ -257,11 +264,13 @@ class EventController extends Controller
                 $pilotData = []; //to store tyhe pilots in the database
                 $resultData = []; //to store the results in the database
                 $eventData = [
-                    'eventId' => rand(1,1000),
+                    'eventId' => rand(1, 10000),
                     'name' => $json['raceName'],
-                    'location' => Str::random(10),
+                    'location' => 'null',
                     'date' => $json['startDate'],
                     'classId' => 1,
+                    'imagePath' => isset($json['eventImage']) && !empty($json['eventImage']) ? $json['eventImage'] : 'null',
+                    'imageLocal' => 0,
                 ];
                 $pilots = $this->pilot->all();
 
@@ -277,16 +286,14 @@ class EventController extends Controller
                             'notes' => null,
                         ));
                     } else {
-
                         array_push($pilotData, array(
                             'pilotId' => $val['pilotId'],
                             'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
                             'username' => $val['pilotUserName'],
-                            'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'CR',
+                            'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null',
                             'imagePath' => $val['pilotProfilePictureUrl'],
                             'imageLocal' => 0
                         ));
-
                         array_push($resultData, array(
                             'eventId' => $eventData['eventId'],
                             'pilotId' => $val['pilotId'],
@@ -299,13 +306,13 @@ class EventController extends Controller
                 $event = $this->event->create($eventData);
                 Pilot::insert($pilotData);
                 Result::insert($resultData);
-                $message = 'Event have been saved succesfully!';
+                $message = 'Event has been saved succesfully!';
                 return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
             }
-       /* } catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
             return back()->withInput()->with('statusDanger', $message);
-        }*/
+        }
     }
 
     /**
@@ -325,12 +332,13 @@ class EventController extends Controller
         }
         ///if there is a row insert the data
         if ($count != 0) {
+            $a = Storage::disk('s3')->put('eventPicture', $request->file('photo'));
             $event = $this->event->create([
                 'name' => $request->name,
                 'location' => $request->location,
                 'date' => $request->date,
                 'classId' => $request->classId,
-
+                'imagePath' => $a
             ]);
             for ($i = 0; $i < count($request->pilotId); $i++) {
                 if ($request->pilotId[$i] != "null") {
@@ -374,6 +382,12 @@ class EventController extends Controller
         $classes = $this->class->fillSelect();
         $results = $this->result->byEventId($event->eventId);
         $pilots = $this->pilot->fillSelect();
+        if ($event->imageLocal == 1) {
+            $event->imagePath = Storage::disk('s3')->temporaryUrl(
+                $event->imagePath,
+                now()->addMinutes(1)
+            );
+        }
         return view('event.edit', [
             'pilots' => $pilots, 'results' => $results, 'event' => $event, 'classes' => $classes,
             'formCount' => count($results), 'count' => count($results)

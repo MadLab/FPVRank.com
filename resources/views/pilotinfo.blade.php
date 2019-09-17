@@ -7,7 +7,7 @@
             <div class="well well-sm">
                 <div class="row">
                     <div class="col-sm-4 col-md-4">
-                        <img src="{{$pilot->imageLocal ? asset('storage/'.$pilot->imagePath) : $pilot->imagePath }}" alt="" class="img-rounded img-responsive col-sm-12 col-md-12" />
+                        <img src="{{$pilot->imagePath}}" alt="" class="img-rounded img-responsive col-sm-12 col-md-12" />
                     </div>
                     <div class="col-sm-8 col-md-8">
                         <p class="container">

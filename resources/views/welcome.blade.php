@@ -30,6 +30,9 @@ Rankings
         @foreach ($classes as $class)
         <option value="{{$class->classId}}" @if(isset($classId)) @if($class->classId == $classId) selected @endif @endif>{{$class->name}}
             --
+            @if($class->location == 'global')
+            Global
+            @endif
             @foreach ($countries as $key => $country)
             @if($key == $class->location)
             <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
@@ -61,7 +64,30 @@ Rankings
 </div>
 @endslot
 @slot('rankingbar')
+<div>
+    <h2 class="text-center justify-content-center">{{$selectedclass->name}} --
+        @if($selectedclass->location == 'global')
+        Global
+        @endif
+        @foreach ($countries as $key => $country)
+        @if($key == $selectedclass->location)
+        <span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span>
+        {{$country}}
+        @endif
+        @endforeach
 
+    </h2>
+    <h3 class="text-center justify-content-center">
+        Showing pilots from
+        {{$selectedCountry == 'all' ? 'All countries' : ''}}
+        @foreach ($countries as $key => $country)
+        @if($key == $selectedCountry)
+        {{$country}}
+        @endif
+        @endforeach
+        in this class.
+    </h3>
+</div>
 <div class="search-bar">
     <input id="search_ranking" class="form-control" type="text" placeholder="You can search by 'Position', 'Pilot's name or Nickname in the current class">
 </div>
