@@ -57,7 +57,7 @@
         <input name="photo" type="file" class="form-control-file @error('photo') is-invalid @enderror" id="photo">
         @error('photo')
         <span class="invalid-feedback" role="alert">
-            <strong>{{ $photo }}</strong>
+            <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>

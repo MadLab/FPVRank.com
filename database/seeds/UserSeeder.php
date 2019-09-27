@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         DB::table('classes')->insert([
             'classId' => '1',
             'name' => 'class',
-            'description' => 'descriprtion',
+            'description' => 'description',
             'location' => 'global',
         ]);
     }

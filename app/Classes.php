@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
+    public $incrementing = false;
 
     /**
      * The table associated with the model.

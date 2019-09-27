@@ -14,8 +14,8 @@ class CreateResultsTable extends Migration
     public function up()
     {
         Schema::create('results', function (Blueprint $table) {
-            $table->bigIncrements('resultId');            
-            $table->unsignedBigInteger('eventId');
+            $table->bigIncrements('resultId');
+            $table->bigInteger('eventId');
             $table->unsignedBigInteger('pilotId');
             $table->bigInteger('position');
             $table->string('notes')->nullable();

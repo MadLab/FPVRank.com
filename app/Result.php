@@ -12,7 +12,7 @@ class Result extends Model
      * @var array
      */
     protected $fillable = [
-        'eventId', 'pilotId', 'position', 'notes'
+        'eventId', 'pilotId', 'position', 'notes',
     ];
     /**
      * The primary key associated with the table.
