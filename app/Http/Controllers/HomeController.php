@@ -116,7 +116,8 @@ class HomeController extends Controller
     {
         $events = $this->event->getEventsForPublic();
         $results = $this->result->fillNavs();
-        $event = $this->event->searchById(($events->first())->eventId);
+        $id = count($events) != 0 ? ($events->first())->eventId : 0;
+        $event = $this->event->searchById($id);
 
         return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event,]);
     }
