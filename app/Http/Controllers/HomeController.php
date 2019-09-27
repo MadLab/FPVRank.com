@@ -140,7 +140,6 @@ class HomeController extends Controller
         }
         $data = $this->paginator($rankings, $request);
 
-
         return view('welcome', ['selectedclass' => $classes->first(),'firstClassId' => $classes->first()->classId,
         'classes' => $classes, 'rankings' => $data, 'countries' => $countries, 'selectedCountry' => 'all']);
     }

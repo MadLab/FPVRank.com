@@ -26,22 +26,16 @@ Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
         Route::get('', 'HomeController@index')->name('index'); //index rankings
         Route::get('/class/{classId}/{country}', 'HomeController@searchByClass')->name('searchclasscountry'); //rankings by class and country
-
         Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
-
         Route::get('/event-list', 'HomeController@event')->name('event');///event public home page
-
         Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///search event
-
-
         Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');///change rankings grid
-
         Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');///change events grid
-
     });
 });
 
-Auth::routes(); //for auth controller
+Auth::routes(['register' => false]); //for auth controller
+
 Route::get('home', 'AdminController@index')->name('home'); //for home view in admin
 Route::middleware('auth')->group(function () {
     Route::prefix('users')->group(function () {
