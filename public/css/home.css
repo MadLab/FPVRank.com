@@ -4,6 +4,9 @@
     .add-button {
         float: right;
     }
+    .permi-row {
+        margin-bottom: 6%;
+    }
     .label-mobile {
         display: none;
     }
@@ -54,12 +57,6 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-}
-
-small {
-    display: block;
-    line-height: 1.428571429;
-    color: #999;
 }
 
 .flex-center {

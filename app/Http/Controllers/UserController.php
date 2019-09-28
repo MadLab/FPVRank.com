@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Permission;
 use Hash;
 use DB;
 
 class UserController extends Controller
 {
     protected $user;
-    public function check(){
-        
-    }    
+    protected $permission;
+    public function check()
+    { }
     /**
      * Create a new controller instance.
      *
@@ -22,6 +23,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->user = new User();
+        $this->permission = new Permission();
         //$this->check();
     }
     /**
@@ -30,7 +32,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
+    {
         $users = $this->user->getList();
         return view('user.index', ['users' => $users]);
     }
@@ -56,11 +58,38 @@ class UserController extends Controller
         $password = $request->password;
         $password_confirm = $request->password_confirmation;
         if (strcmp($password, $password_confirm)  == 0) {
-            $this->user->create([
+            $user = $this->user->create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
+            $permiData = [
+                [
+                    'userId' => $user->userId,
+                    'edit' => isset($request->userEdit) ? 1 : 0,
+                    'create' => isset($request->userCreate) ? 1 : 0,
+                    'controller' => 'UserController'
+                ],
+                [
+                    'userId' => $user->userId,
+                    'edit' => isset($request->classEdit) ? 1 : 0,
+                    'create' => isset($request->classCreate) ? 1 : 0,
+                    'controller' => 'ClassController'
+                ],
+                [
+                    'userId' => $user->userId,
+                    'edit' => isset($request->pilotEdit) ? 1 : 0,
+                    'create' => isset($request->pilotCreate) ? 1 : 0,
+                    'controller' => 'PilotController'
+                ],
+                [
+                    'userId' => $user->userId,
+                    'edit' => isset($request->eventEdit) ? 1 : 0,
+                    'create' => isset($request->eventCreate) ? 1 : 0,
+                    'controller' => 'EventController'
+                ],
+            ];
+            Permission::insert($permiData);
             $message = 'User has been saved succesfully!';
             return redirect()->route('user.index')->with('status', $message);
         } else {
@@ -91,7 +120,9 @@ class UserController extends Controller
     {
         $user = $this->user->findOrFail($id);
 
-        return view('user.edit', ['user' => $user]);
+        $permissions = $this->permission->getAllByUser($user->userId);
+
+        return view('user.edit', ['user' => $user, 'permissions' => $permissions]);
     }
 
     /**
@@ -105,31 +136,84 @@ class UserController extends Controller
     {
         $password = $request->password;
         $password_confirm = $request->password_confirmation;
-        
-        if(isset($password)){
+        $permiData = [
+            [
+                'userId' => $id,
+                'edit' => isset($request->userEdit) ? 1 : 0,
+                'create' => isset($request->userCreate) ? 1 : 0,
+                'controller' => 'UserController'
+            ],
+            [
+                'userId' => $id,
+                'edit' => isset($request->classEdit) ? 1 : 0,
+                'create' => isset($request->classCreate) ? 1 : 0,
+                'controller' => 'ClassController'
+            ],
+            [
+                'userId' => $id,
+                'edit' => isset($request->pilotEdit) ? 1 : 0,
+                'create' => isset($request->pilotCreate) ? 1 : 0,
+                'controller' => 'PilotController'
+            ],
+            [
+                'userId' => $id,
+                'edit' => isset($request->eventEdit) ? 1 : 0,
+                'create' => isset($request->eventCreate) ? 1 : 0,
+                'controller' => 'EventController'
+            ],
+        ];
+        if (isset($password)) {
             if (strcmp($password, $password_confirm)  == 0) {
                 $user = $this->user->findOrFail($id);
                 $user->name = $request->name;
                 $user->email = $request->email;
                 $user->password = Hash::make($request->password);
                 $user->save();
-                
+
+                $this->updatePermissions($permiData, $user->userId);
+
                 $message = 'User has been updated succesfully!';
                 return redirect()->route('user.index')->with('status', $message);
             } else {
                 $message = 'Passwords don\'t match!';
                 return back()->withInput()->with('status', $message);
             }
-        }else{
+        } else {
             $user = $this->user->findOrFail($id);
-                $user->name = $request->name;
-                $user->email = $request->email;                
-                $user->save();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
 
-                $message = 'User has been updated succesfully!';
-                return redirect()->route('user.index')->with('status', $message);
+            $this->updatePermissions($permiData, $user->userId);
+
+            $message = 'User has been updated succesfully!';
+            return redirect()->route('user.index')->with('status', $message);
         }
-        
+    }
+
+    private function updatePermissions($permiData, $userId)
+    {
+        $permissions = $this->permission->where('userId', '=', $userId)->get();
+
+        $userCtrl = $permissions->where('controller', '=', 'UserController')->first();
+        $userCtrl->create = $permiData[0]['create'];
+        $userCtrl->edit = $permiData[0]['edit'];
+        $userCtrl->save();
+
+        $classCtrl = $permissions->where('controller', '=', 'ClassController')->first();
+        $classCtrl->create = $permiData[1]['create'];
+        $classCtrl->edit = $permiData[1]['edit'];
+        $classCtrl->save();
+
+        $pilotCtrl = $permissions->where('controller', '=', 'PilotController')->first();
+        $pilotCtrl->create = $permiData[2]['create'];
+        $pilotCtrl->edit = $permiData[2]['edit'];
+        $pilotCtrl->save();
+
+        $eventCtrl = $permissions->where('controller', '=', 'EventController')->first();
+        $eventCtrl->create = $permiData[3]['create'];
+        $eventCtrl->edit = $permiData[3]['edit'];
+        $eventCtrl->save();
     }
 
     /**

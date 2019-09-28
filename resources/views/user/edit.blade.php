@@ -11,18 +11,22 @@
                         @method('PUT')
                         @csrf
                         @include('user._userform')
+                        <div class="dropdown-divider"></div>
+                        <h3 class="text-center">Permissions</h3>
+                        @include('user._permiform')
                         @if (session('status'))
                         <div class="alert alert-danger">
                             {{ session('status') }}
                         </div>
                         @endif
+                        <br>
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-success">
                                     Save
                                 </button>
                             </div>
-                        </div>                        
+                        </div>
                     </form>
                 </div>
             </div>

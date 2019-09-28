@@ -21,6 +21,18 @@ class UserSeeder extends Seeder
             'email' => 'robert@madlab.com',
             'password' => Hash::make('secret'),
         ]);
+        //permissions
+        $ctrl = [0 => 'UserController', 1 => 'ClassController', 2 => 'PilotController', 3 => 'EventController'];
+        for ($i=1; $i < 3; $i++) {
+            for ($a=0; $a < 4; $a++) {
+                DB::table('permissions')->insert([
+                    'userId' => $i,
+                    'edit' => 1,
+                    'create' => 1,
+                    'controller' => $ctrl[$a]
+                ]);
+            }
+        }
         DB::table('classes')->insert([
             'classId' => '1',
             'name' => 'class',

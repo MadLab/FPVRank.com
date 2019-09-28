@@ -37,7 +37,7 @@ Route::prefix('/')->group(function () {
 Auth::routes(['register' => false]); //for auth controller
 
 Route::get('home', 'AdminController@index')->name('home'); //for home view in admin
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'permission'])->group(function () {
     Route::prefix('users')->group(function () {
         Route::name('user.')->group(function () {
             Route::get('/', 'UserController@index')->name('index');
