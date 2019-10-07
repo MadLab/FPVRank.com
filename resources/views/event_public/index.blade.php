@@ -1,33 +1,27 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-
-@component('components.layout')
-@slot('modalButton')
-
-@endslot
-@slot('idmodal')
-event_index
-@endslot
-@slot('bigtitle')
+@slot('pageTitle')
 Events
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
 @endslot
-@slot('addButtonName')
+
+@slot('pageCover')
 
 @endslot
-@slot('rankingnav')
+
+@slot('imageCover')
 
 @endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('floatingButton')
+
+@endslot
+
 @slot('searchBar')
-
-@endslot
-@slot('rankingbar')
-@include('event_public._searchform')
+<input onchange="searchByText($(this).val(),$('#date1').val(),$('#date2').val())" id="search_event" class="form-control" type="text" placeholder="You can search events by name or class name">
 @endslot
 <div id="events-content">
     @include('event_public._eventtable')
@@ -36,6 +30,3 @@ Events
     {{$events->onEachSide(1)->links()}}
 </div>
 @endcomponent
-
-
-@endsection

@@ -1,45 +1,34 @@
-<div class="form-group row">
-    <label for="classId" class="col-md-4 col-form-label text-md-right">ID</label>
-    <div class="col-md-6">
-        <input id="classId" type="text" class="form-control @error('classId') is-invalid @enderror"
-        name="classId" value="{{ !isset($class->classId) ? old('classId') : $class->classId }}" required
-        autocomplete="name" autofocus>
+<div class="row">
+    <div class="form-group col-6">
+        <label for="classId">ID<span class="badge badge-danger">Required</span></label>
+        <input name="classId" type="text" class="form-control @error('classId') is-invalid @enderror" id="classId" placeholder="" required="" value="{{ !isset($class->classId) ? old('classId') : $class->classId }}">
         @error('classId')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-group row">
-    <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-    <div class="col-md-6">
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-        name="name" value="{{ !isset($class->name) ? old('name') : $class->name }}" required autocomplete="name" autofocus>
+    <div class="form-group col-6">
+        <label for="name">Name<span class="badge badge-danger">Required</span></label>
+        <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="" required="" value="{{ !isset($class->name) ? old('name') : $class->name }}">
         @error('name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-group row">
-    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
-    <div class="col-md-6">
-        <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
-        name="description"
-        value="{{ !isset($class->description) ? old('description') : $class->description }}" required autocomplete="email">
+    <div class="form-group col-6">
+        <label for="description">Description<span class="badge badge-danger">Required</span></label>
+        <input name="description" type="text" class="form-control @error('description') is-invalid @enderror" id="name" placeholder="" required="" value="{{ !isset($class->description) ? old('description') : $class->description }}">
         @error('description')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-group row">
-    <label class="col-md-4 col-form-label text-md-right" for="location">Location</label>
-    <div class="col-md-6">
-        <select name="location" class="select2 form-control @error('location') is-invalid @enderror" id="location">
+    <div class="form-group col-6">
+        <label class="control-label" for="location">Location<span class="badge badge-danger">Required</span></label>
+        <select name="location" id="location" class="form-control @error('location') is-invalid @enderror" data-toggle="select2" data-allow-clear="false">
             <option value="global">Global</option>
             @foreach ($countries as $key => $country)
             <option value="{{$key}}" @if(isset($class->location)) @if($class->location == $key) selected @endif @endif>{{$country}}</option>

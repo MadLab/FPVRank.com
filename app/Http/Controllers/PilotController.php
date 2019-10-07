@@ -71,6 +71,7 @@ class PilotController extends Controller
                         $pilot->country = $val['country'];
                         $pilot->imagePath = $val['imagePath'];
                         $pilot->imageLocal = 0;
+                        $pilot->created_at = date("Y-m-d H:i:s");
                         $pilot->save();
                     } else {
                         $pi = $this->pilot->create($val);
@@ -79,11 +80,11 @@ class PilotController extends Controller
                     }
                 }
                 $message = 'Pilots have been saved succesfully!';
-                return redirect()->route('pilot.create')->with('status', $message);
+                return redirect()->route('pilot.create')->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
-            return redirect()->route('pilot.create')->with('status', $message);
+            return redirect()->route('pilot.create')->with('status', $message)->with('type', 'danger');
         }
     }
 
@@ -105,7 +106,7 @@ class PilotController extends Controller
         ]);
 
         $message = 'Pilot has been saved succesfully!';
-        return redirect()->route('pilot.create')->with('status', $message);
+        return redirect()->route('pilot.create')->with('status', $message)->with('type', 'success');
     }
 
     /**
@@ -162,10 +163,10 @@ class PilotController extends Controller
             $pilot->fill($request->toArray());
             $pilot->save();
             $message = 'Pilot has been updated succesfully!';
-            return redirect()->route('pilot.index')->with('status', $message);
+            return redirect()->route('pilot.index')->with('status', $message)->with('type', 'success');
         } else {
             $message = 'This ID is already taken!';
-            return back()->withInput()->with('status', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
 

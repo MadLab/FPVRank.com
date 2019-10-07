@@ -1,6 +1,6 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered bg-white">
-        <thead class="thead-dark">
+    <table class="table table-striped table-bordered">
+        <thead>
             <tr>
                 <th scope="col">Position</th>
                 <th scope="col">Name</th>

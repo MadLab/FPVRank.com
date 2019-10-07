@@ -1,36 +1,45 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Edit a user</div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('user.update', ['id' => $user->userId]) }}">
-                        @method('PUT')
-                        @csrf
-                        @include('user._userform')
-                        <div class="dropdown-divider"></div>
-                        <h3 class="text-center">Permissions</h3>
-                        @include('user._permiform')
-                        @if (session('status'))
-                        <div class="alert alert-danger">
-                            {{ session('status') }}
-                        </div>
-                        @endif
-                        <br>
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+@slot('pageTitle')
+Edit user
+@endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+@endslot
+
+@slot('searchBar')
+
+@endslot
+<div id="labels" class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('user.update', ['id' => $user->userId]) }}">
+            @method('PUT')
+            @csrf
+            <fieldset>
+                <legend>User info</legend>
+                @include('user._userform')
+            </fieldset>
+            <hr class="mb-4">
+            <fieldset>
+                <legend>Permissions</legend>
+                @include('user._permiform')
+            </fieldset>
+            <hr class="mb-4">
+            <button class="btn btn-success btn-lg btn-block" type="submit">Save</button>
+        </form>
     </div>
 </div>
-@endsection
+@endcomponent

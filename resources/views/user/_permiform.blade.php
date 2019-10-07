@@ -15,10 +15,10 @@ UserController
 userCreate
 @endslot
 @slot('createValue')
-{{$permissions->where('controller', '=', 'UserController')->first()->create}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'UserController')->first()->create : '0'}}
 @endslot
 @slot('editValue')
-{{$permissions->where('controller', '=', 'UserController')->first()->edit}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'UserController')->first()->edit : '0'}}
 @endslot
 @slot('editName')
 userEdit
@@ -33,10 +33,10 @@ ClassController
 classCreate
 @endslot
 @slot('createValue')
-{{$permissions->where('controller', '=', 'ClassController')->first()->create}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'ClassController')->first()->create : '0'}}
 @endslot
 @slot('editValue')
-{{$permissions->where('controller', '=', 'ClassController')->first()->edit}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'ClassController')->first()->edit : '0'}}
 @endslot
 @slot('editName')
 classEdit
@@ -51,10 +51,10 @@ PilotController
 pilotCreate
 @endslot
 @slot('createValue')
-{{$permissions->where('controller', '=', 'PilotController')->first()->create}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'PilotController')->first()->create : '0'}}
 @endslot
 @slot('editValue')
-{{$permissions->where('controller', '=', 'PilotController')->first()->edit}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'PilotController')->first()->edit : '0'}}
 @endslot
 @slot('editName')
 pilotEdit
@@ -69,10 +69,10 @@ EventController
 eventCreate
 @endslot
 @slot('createValue')
-{{$permissions->where('controller', '=', 'EventController')->first()->create}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'EventController')->first()->create : '0'}}
 @endslot
 @slot('editValue')
-{{$permissions->where('controller', '=', 'EventController')->first()->edit}}
+{{isset($permissions) ? $permissions->where('controller', '=', 'EventController')->first()->edit : '0'}}
 @endslot
 @slot('editName')
 eventEdit

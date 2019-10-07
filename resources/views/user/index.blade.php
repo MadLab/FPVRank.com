@@ -1,42 +1,53 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Users
+@endslot
 
-@component('components.layout')
-@slot('modalButton')
+@slot('pageTitle2')
 
 @endslot
-@slot('idmodal')
+
+@slot('pageCover')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('floatingButton')
+<a href="{{route('user.create')}}">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new user"><span class="fa fa-plus"></span>
+    </button>
+</a>
+@endslot
+
+@slot('searchBar')
+<input id="search_user" class="form-control" type="text" placeholder="You can search users by '#', Name or Email">
+@endslot
+@component('components.modal')
+@slot('id')
 user
 @endslot
-@slot('bigtitle')
-Users
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
+@slot('title')
+<div id="modaltitle"></div>
 @endslot
-@slot('addButtonName')
-<a href="{{route('user.create')}}" class="add-button btn btn-success">Add user</a>
-@endslot
-@slot('rankingbar')
+@slot('button')
+<div id="modalbutton">
 
+</div>
 @endslot
-@slot('rankingnav')
+<div id="modalcontent">
 
-@endslot
-@slot('searchBar')
-<div class="search-bar">
-    <input id="search_user" class="form-control" type="text" placeholder="You can search by '#', Name or Email">
-</div>
-@endslot
-<div>
-    @include('user._usertable')
-</div>
-<div class="links-table">
-    {{$users->onEachSide(1)->links()}}
 </div>
 @endcomponent
-
-@endsection
+<div class="card">
+    <div class="card-body">
+        @include('user._usertable')
+        <div class="links-table">
+            {{$users->onEachSide(1)->links()}}
+        </div>
+    </div>
+</div>
+@endcomponent

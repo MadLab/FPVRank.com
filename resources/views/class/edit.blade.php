@@ -1,32 +1,40 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Edit a class</div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('class.update', ['id' => $class->classId]) }}">
-                        @method('PUT')
-                        @csrf
-                        @include('class._classform')
-                        @if (session('status'))
-                        <div class="alert alert-danger">
-                            {{ session('status') }}
-                        </div>
-                        @endif
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                            </div>
-                        </div>                        
-                    </form>
-                </div>
-            </div>
-        </div>
+@slot('pageTitle')
+Edit class
+@endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+@endslot
+
+@slot('searchBar')
+
+@endslot
+<div id="labels" class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('class.update', ['id' => $class->classId]) }}">
+            @method('PUT')
+            @csrf
+            <fieldset>
+                <legend>Class info</legend>
+                @include('class._classform')
+            </fieldset>
+            <hr class="mb-4">
+            <button class="btn btn-success btn-lg btn-block" type="submit">Save</button>
+        </form>
     </div>
 </div>
-@endsection
+@endcomponent

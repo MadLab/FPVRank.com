@@ -13,7 +13,7 @@
 <div class="container">
   <div class="row">
     <h3>404 page not found</h3>
-    <a class="btn" href="/home">Go back</a>    
+    <a class="btn" href="/home">Go back</a>
   </div>
 </div>
 <!-- Scripts -->

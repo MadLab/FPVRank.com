@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 
+        'name', 'email', 'password', 'created_at'
     ];
       /**
      * The primary key associated with the table.
@@ -43,9 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     /**
-     * 
+     *
      * Get a listing of the resource
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
@@ -58,5 +58,13 @@ class User extends Authenticatable
     public function search($text){
         return $this->select('userId','name', 'email','created_at')
         ->where('users.name', 'LIKE', $text.'%')->orWhere('userId', '=', $text)->orWhere('email', 'LIKE', $text.'%')->get();
+    }
+
+      /**
+     * Get a listing of the resource for the dashboard
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillTableDashboard($take){
+        return $this->select('userId','name', 'email','created_at')->orderBy('created_at', 'asc')->take($take)->get();
     }
 }

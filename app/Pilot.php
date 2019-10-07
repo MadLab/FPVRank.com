@@ -12,7 +12,7 @@ class Pilot extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'username','pilotId', 'country', 'imagePath', 'imageLocal'
+        'name', 'username','pilotId', 'country', 'imagePath', 'imageLocal', 'created_at'
     ];
       /**
      * The primary key associated with the table.
@@ -50,6 +50,13 @@ class Pilot extends Model
      */
     public function showInfo($pilotId){
         return $this->select('pilots.name','pilots.username')->get();
+    }
+    /**
+     * Get a listing of the resource for the dashboard
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillTableDashboard($take){
+        return $this->select('pilotId','name', 'username','created_at','country')->orderBy('created_at', 'asc')->take($take)->get();
     }
 
 }

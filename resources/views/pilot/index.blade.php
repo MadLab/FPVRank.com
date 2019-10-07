@@ -1,42 +1,53 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Pilots
+@endslot
 
-@component('components.layout')
-@slot('modalButton')
+@slot('pageTitle2')
 
 @endslot
-@slot('idmodal')
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+<a href="{{route('pilot.create')}}">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new pilot"><span class="fa fa-plus"></span>
+    </button>
+</a>
+@endslot
+
+@slot('searchBar')
+<input id="search_pilot" class="form-control" type="text" placeholder="You can search pilots by '#', Name or Username">
+@endslot
+@component('components.modal')
+@slot('id')
 pilot
 @endslot
-@slot('bigtitle')
-Pilots
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
+@slot('title')
+<div id="modaltitle"></div>
 @endslot
-@slot('rankingnav')
+@slot('button')
+<div id="modalbutton">
 
+</div>
 @endslot
-@slot('addButtonName')
-<a href="{{route('pilot.create')}}" class="add-button btn btn-success">Add pilots</a>
-@endslot
-@slot('rankingbar')
+<div id="modalcontent">
 
-@endslot
-@slot('searchBar')
-<div class="search-bar">
-    <input id="search_pilot" class="form-control" type="text" placeholder="You can search by '#', Name or Username">
-</div>
-@endslot
-<div>
-    @include('pilot._pilottable')
-</div>
-<div class="links-table">
-    {{$pilots->onEachSide(1)->links()}}
 </div>
 @endcomponent
-
-@endsection
+<div class="card">
+    <div class="card-body">
+        @include('pilot._pilottable')
+        <div class="links-table">
+            {{$pilots->onEachSide(1)->links()}}
+        </div>
+    </div>
+</div>
+@endcomponent

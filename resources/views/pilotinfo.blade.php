@@ -1,102 +1,134 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <div class="row">
-                    <div class="col-sm-4 col-md-4">
-                        <img src="{{$pilot->imagePath}}" alt="" class="img-rounded img-responsive col-sm-12 col-md-12" />
-                    </div>
-                    <div class="col-sm-8 col-md-8">
-                        <p class="container">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h1>
-                                        @foreach ($countries as $key => $country)
-                                        @if($key == $pilot->country)
-                                        <a href="{{route('welcome.searchclasscountry', ['classId' => $firstClassId, 'country' => $key])}}"><span class="label label-default"><span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span> </a>
-                                        @endif
-                                        @endforeach
-                                        {{$pilot->name}} -- {{$pilot->username}}
-                                    </h1>
-                                </div>
-                            </div>
-                        </p>
-                        <p>
+@slot('pageTitle')
 
-                            <h2>Times competed: {{count($resultsPilot)}}</h2>
+@endslot
 
-                        </p>
-                        <br>
-                        <p class="container">
-                            <div class="row">
-                                <div class="col-4">
-                                    <h1>Class</h1>
-                                </div>
-                                <div class="col-4">
-                                    <h1>Position</h1>
-                                </div>
-                                <div class="col-4">
-                                    <h1>Rating</h1>
-                                </div>
-                            </div>
-                            @foreach($info as $val)
-                            <div class="row">
-                                <div class="col-4">
-                                    <h1>{{$val['className']}}</h1>
-                                </div>
-                                <div class="col-4">
-                                    <h1>#{{$val['position']}}</h1>
-                                </div>
-                                <div class="col-4">
-                                    <h1>{{number_format($val['rating'], 2)}}</h1>
-                                </div>
-                            </div>
-                            @endforeach
-                        </p>
-                        <br>
+@slot('pageTitle2')
 
+@endslot
 
-                        <p class="container">
-                            <h2>
-                                Events attended:
-                            </h2>
-                        </p>
-                        <p class="container">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h1>Event</h1>
-                                </div>
-                                <div class="col-3">
-                                    <h1>Position</h1>
-                                </div>
-                            </div>
-                            @foreach($resultsPilot as $result)
-                            <div class="row">
-                                <div class="col-9">
-                                    <h3>
-                                        <a href="{{route('welcome.getevent', ['eventId' => $result->eventId])}}">
-                                            {{$result->eventName}}
-                                        </a>
-                                    </h3>
-                                </div>
-                                <div class="col-3">
-                                    <h3>
-                                        <a href="{{route('welcome.getevent', ['eventId' => $result->eventId])}}">
-                                            #{{$result->position}}
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            @endforeach
-                        </p>
+@slot('imageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+@endslot
+
+@slot('pageCover')
+<header class="page-cover">
+    <div class="text-center">
+        <a href="#" class="user-avatar user-avatar-xxl"><img src="{{$pilot->imagePath}}" alt=""></a>
+        <h2 class="h2 mt-2 mb-0">
+            @foreach ($countries as $key => $country)
+            @if($key == $pilot->country)
+            <a href="{{route('welcome.searchclasscountry', ['classId' => $firstClassId, 'country' => $key])}}"><span class="label label-default">
+                    <span class="flag-icon flag-icon-{{strtolower($key)}}"></span></span> </a>
+            @endif
+            @endforeach
+            {{$pilot->name}} -- {{$pilot->username}}
+        </h2>
+        <div class="my-1">
+
+        </div>
+        <p class="text-muted"> </p>
+        <h3> Times competed: {{count($resultsPilot)}} </h3>
+    </div>
+</header>
+<nav class="page-navs">
+
+</nav>
+@endslot
+
+@slot('searchBar')
+
+@endslot
+
+<div class="section-block">
+
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-fluid">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <span class="mr-auto">Pilot rankings</span>
+                    <div class="card-header-control">
+
                     </div>
                 </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="min-width:260px"> Class </th>
+                            <th class="text-center"> Position </th>
+                            <th class="text-center" style="min-width:142px"> Rating </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($info as $val)
+                        <tr>
+                            <td class="align-middle text-left">
+                                <a href="{{route('welcome.searchclasscountry', ['classId' => $val['classId'], 'country' => 'all'])}}">
+                                    {{$val['className']}}
+                                </a>
+                            </td>
+                            <td class="align-middle text-center"> #{{$val['position']}} </td>
+                            <td class="align-middle text-center"> {{number_format($val['rating'], 2)}} </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card card-fluid">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <span class="mr-auto"> Events attended </span>
+                    <div class="card-header-control">
+
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="min-width:259px"> Event </th>
+                            <th> Position </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($resultsPilot as $result)
+                        <tr>
+                            <td class="align-middle text-truncate">
+                                <a href="{{route('welcome.getevent', ['eventId' => $result->eventId])}}">
+                                    {{$result->eventName}}
+                                </a>
+                            </td>
+                            <td class="align-middle">
+                                <a href="{{route('welcome.getevent', ['eventId' => $result->eventId])}}">
+                                    #{{$result->position}}
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+
             </div>
         </div>
     </div>
 </div>
-
-@endsection
+@endcomponent

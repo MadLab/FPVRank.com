@@ -1,31 +1,17 @@
 /*global $*/
-$(function() {
-    $('#date1').datepicker({
-            format: 'yyyy-mm-dd'
-        })
-        .on('changeDate', function(ev) {
-            text = $('#search_event').val();
-            date1 = $('#date1').val();
-            date2 = $('#date2').val();
-            searchByText(text, date1, date2);
-        });
-    $('#date2').datepicker({
-            format: 'yyyy-mm-dd'
-        })
-        .on('changeDate', function(ev) {
-            text = $('#search_event').val();
-            date1 = $('#date1').val();
-            date2 = $('#date2').val();
-            searchByText(text, date1, date2);
-        });
-    $('.form_datetime').datetimepicker({
-        language: 'en',
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: true,
-
+$(document).on('theme:init', () => {
+    $('#date1').change(function() {
+        text = $('#search_event').val();
+        date1 = $('#date1').val();
+        date2 = $('#date2').val();
+        searchByText(text, date1, date2);
     });
-    $('.select2').select2();
+    $('#date2').change(function() {
+        text = $('#search_event').val();
+        date1 = $('#date1').val();
+        date2 = $('#date2').val();
+        searchByText(text, date1, date2);
+    });
     $('#classId').change(function() {
         rankingNavigate();
     });
@@ -38,7 +24,8 @@ $(function() {
             text = null;
         }
         var classId = $('#classId').find(":selected").val();
-        $.ajax('/search/' + text + '/' + classId, {
+        var country = $('#country').find(":selected").val();
+        $.ajax('/search/' + text + '/' + classId + '/' + country, {
             method: 'GET',
             dataType: 'html',
             success: function(response, status, data) {
@@ -58,10 +45,7 @@ function rankingNavigate() {
 }
 
 //search event
-function searchByText(text, date1, date2, action) {
-    if (typeof action == "undefined") {
-        action = function() {};
-    }
+function searchByText(text, date1, date2) {
     if (text == "") { text = null; }
     if (date1 == "") { date1 = null; }
     if (date2 == "") { date2 = null; }
@@ -73,12 +57,6 @@ function searchByText(text, date1, date2, action) {
                 $('#events-content').html(response);
             },
             error: function(response, data) {},
-            complete: function(status, data) {
-                action();
-            }
+            complete: function(status, data) {}
         });
-}
-
-function clearDate(id) {
-    $('#date' + id).val("");
 }

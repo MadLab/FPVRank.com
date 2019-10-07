@@ -15,11 +15,13 @@ class UserSeeder extends Seeder
             'name' => 'andy',
             'email' => 'andy.cr.002@gmail.com',
             'password' => Hash::make('secret'),
+            'created_at' => date("Y-m-d H:i:s"),
         ]);
         DB::table('users')->insert([
             'name' => 'robert',
             'email' => 'robert@madlab.com',
             'password' => Hash::make('secret'),
+            'created_at' => date("Y-m-d H:i:s"),
         ]);
         //permissions
         $ctrl = [0 => 'UserController', 1 => 'ClassController', 2 => 'PilotController', 3 => 'EventController'];
@@ -38,6 +40,7 @@ class UserSeeder extends Seeder
             'name' => 'class',
             'description' => 'description',
             'location' => 'global',
+            'created_at' => date("Y-m-d H:i:s"),
         ]);
     }
 }

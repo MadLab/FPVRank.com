@@ -84,12 +84,18 @@ class HomeController extends Controller
      */
     public function getEvent($eventId)
     {
-        $events = $this->event->getEventsForPublic();
         $results = $this->result->fillNavs();
         $event = $this->event->searchById($eventId);
         $countries = $this->country->getData();
 
-        return view('event_public.event', ['eventId' => $eventId, 'events' => $events, 'results' => $results, 'event' =>  $event, 'countries' => $countries, 'firstClassId' => $this->firstClassId]);
+        if ($event->imageLocal == 1) {
+            $event->imagePath = Storage::disk('s3')->temporaryUrl(
+                $event->imagePath,
+                now()->addMinutes(1)
+            );
+        }
+
+        return view('event_public.event', ['eventId' => $eventId, 'results' => $results, 'event' =>  $event, 'countries' => $countries, 'firstClassId' => $this->firstClassId]);
     }
     /**
      * Search for events in public page
@@ -115,11 +121,8 @@ class HomeController extends Controller
     public function event()
     {
         $events = $this->event->getEventsForPublic();
-        $results = $this->result->fillNavs();
-        $id = count($events) != 0 ? ($events->first())->eventId : 0;
-        $event = $this->event->searchById($id);
 
-        return view('event_public.index', ['events' => $events, 'results' => $results, 'event' =>  $event,]);
+        return view('event_public.index', ['events' => $events,]);
     }
 
     /**
@@ -170,7 +173,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function searchRankings(Request $request, $text, $classId)
+    public function searchRankings(Request $request, $text, $classId, $country)
     {
         $rankings = $this->ranking->getRankingByClass($classId)->toArray();
         $data = [];
@@ -185,7 +188,7 @@ class HomeController extends Controller
         } else if ($text == 'null') {
             $data = $rankings;
         } else {
-            $search = $this->ranking->searchRankings($classId, $text)->toArray();
+            $search = $this->ranking->searchRankings($classId, $text, $country)->toArray();
             for ($i = 0; $i < count($rankings); $i++) {
                 for ($a = 0; $a < count($search); $a++) {
                     if ($rankings[$i]['pilotId'] == $search[$a]['pilotId']) {
@@ -195,7 +198,9 @@ class HomeController extends Controller
             }
         }
         $results = $this->paginator($data, $request);
-        return response()->view('_rankingtable', ['rankings' => $results], 200);
+        $countries = $this->country->getData();
+        $classes = $this->class->fillSelect();
+        return response()->view('_rankingtable', ['rankings' => $results, 'countries' => $countries, 'firstClassId' => $classes->first()->classId], 200);
     }
     /**
      * Search ranking by class and country

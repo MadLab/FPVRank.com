@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Permission;
 use Hash;
+use Session;
 use DB;
 
 class UserController extends Controller
@@ -91,10 +92,10 @@ class UserController extends Controller
             ];
             Permission::insert($permiData);
             $message = 'User has been saved succesfully!';
-            return redirect()->route('user.index')->with('status', $message);
+            return redirect()->route('user.index')->with('status', $message)->with('type', 'success');
         } else {
             $message = 'Passwords don\'t match!';
-            return back()->withInput()->with('status', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
 
@@ -173,10 +174,10 @@ class UserController extends Controller
                 $this->updatePermissions($permiData, $user->userId);
 
                 $message = 'User has been updated succesfully!';
-                return redirect()->route('user.index')->with('status', $message);
+                return redirect()->route('user.index')->with('status', $message)->with('type', 'success');
             } else {
                 $message = 'Passwords don\'t match!';
-                return back()->withInput()->with('status', $message);
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
             }
         } else {
             $user = $this->user->findOrFail($id);
@@ -187,7 +188,7 @@ class UserController extends Controller
             $this->updatePermissions($permiData, $user->userId);
 
             $message = 'User has been updated succesfully!';
-            return redirect()->route('user.index')->with('status', $message);
+            return redirect()->route('user.index')->with('status', $message)->with('type', 'success');
         }
     }
 

@@ -167,7 +167,7 @@ class EventController extends Controller
         $eve->save();
 
         $message = 'Event has been ranked succesfully!';
-        return redirect()->route('event.edit', ['id' => $eventId])->with('statusSuccess', $message);
+        return redirect()->route('event.edit', ['id' => $eventId])->with('status', $message)->with('type', 'success');
     }
     /**
      * Display a listing of the resource.
@@ -242,10 +242,10 @@ class EventController extends Controller
             }
 
             $message = 'Event has been updated succesfully!';
-            return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
+            return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
         } else { ///if there is no row, return messsage error
             $message = 'Add atleast one result!';
-            return back()->withInput()->with('statusDanger', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
     /**
@@ -259,7 +259,7 @@ class EventController extends Controller
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
-                return back()->withInput()->with('statusDanger', $message);
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
             } else {
                 $pilotData = []; //to store the pilots in the database
                 $resultData = []; //to store the results in the database
@@ -291,8 +291,9 @@ class EventController extends Controller
                             'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
                             'username' => $val['pilotUserName'],
                             'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null',
-                            'imagePath' => isset($json['pilotProfilePictureUrl']) && !empty($json['pilotProfilePictureUrl']) ? $json['pilotProfilePictureUrl'] : 'null',
-                            'imageLocal' => 0
+                            'imagePath' => isset($val['pilotProfilePictureUrl']) && !empty($val['pilotProfilePictureUrl']) ? $val['pilotProfilePictureUrl'] : 'null',
+                            'imageLocal' => 0,
+                            'created_at' => date("Y-m-d H:i:s"),
                         ));
                         array_push($resultData, array(
                             'eventId' => $eventData['eventId'],
@@ -307,11 +308,11 @@ class EventController extends Controller
                 $event = $this->event->create($eventData);
                 Result::insert($resultData);
                 $message = 'Event has been saved succesfully!';
-                return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
+                return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
             $message = 'ID must be unique or invalid JSON format, please enter a valid JSON URL!';
-            return back()->withInput()->with('statusDanger', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
 
@@ -333,7 +334,8 @@ class EventController extends Controller
         ///if there is a row insert the data
         if ($count != 0) {
             $a = Storage::disk('s3')->put('eventPicture', $request->file('photo'));
-            $nextEventId = $this->event->select('eventId')->orderBy('eventId', 'asc')->get()->last()->eventId + 1;
+            $lastEvent = $this->event->select('eventId')->orderBy('eventId', 'asc')->get()->last();
+            $nextEventId = $lastEvent == null ? 1 : $lastEvent->eventId + 1;
             $event = $this->event->create([
                 'eventId' => $nextEventId,
                 'name' => $request->name,
@@ -353,10 +355,10 @@ class EventController extends Controller
                 }
             }
             $message = 'Event has been saved succesfully!';
-            return redirect()->route('event.edit', ['id' => $event->eventId])->with('statusSuccess', $message);
+            return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
         } else { ///if there is no row, return messsage error
             $message = 'Add atleast one result!';
-            return back()->withInput()->with('statusDanger', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
 

@@ -1,6 +1,29 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Create class
+@endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span data-toggle="tooltip" data-placement="top" title="Upload classes with JSON" class="fa fa-file-import"></span>
+</button>
+@endslot
+
+@slot('searchBar')
+
+@endslot
 @component('components.modal')
 @slot('id')
 jsonmodal
@@ -24,47 +47,23 @@ jsonmodal
     <div>**If JSON contains same classId as in the database, data will be updated!</div>
 </div>
 @endcomponent
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Create a class</div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-right"></label>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#jsonmodal">
-                                Submit JSON
-                            </button>
-                        </div>
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('class.store') }}">
+            @csrf
+            <fieldset>
+                <legend>Class info</legend>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label>Last ID</label>
+                        <input class="form-control" type="text" class="form-control" value="{{isset($lastClassId) ? $lastClassId : ' '}}" readonly>
                     </div>
-
-
-                    <form method="POST" action="{{ route('class.store') }}">
-                        @csrf
-                        <div class="form-group row">
-                            <label for="classId" class="col-md-4 col-form-label text-md-right"><strong>Last ID</strong></label>
-                            <div class="col-md-6">
-                                <input class="form-control" type="text" class="form-control" value="{{isset($lastClassId) ? $lastClassId : ' '}}" readonly>
-                            </div>
-                        </div>
-                        @include('class._classform')
-                        @if (session('status'))
-                        <div class="alert alert-info">
-                            {{ session('status') }}
-                        </div>
-                        @endif
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
-            </div>
-        </div>
+                @include('class._classform')
+            </fieldset>
+            <hr class="mb-4">
+            <button class="btn btn-success btn-lg btn-block" type="submit">Save</button>
+        </form>
     </div>
 </div>
-@endsection
+@endcomponent

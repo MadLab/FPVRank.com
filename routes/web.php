@@ -27,9 +27,9 @@ Route::prefix('/')->group(function () {
         Route::get('', 'HomeController@index')->name('index'); //index rankings
         Route::get('/class/{classId}/{country}', 'HomeController@searchByClass')->name('searchclasscountry'); //rankings by class and country
         Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
-        Route::get('/event-list', 'HomeController@event')->name('event');///event public home page
-        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///search event
-        Route::get('/search/{text}/{classId}', 'HomeController@searchRankings')->name('search');///change rankings grid
+        Route::get('/event-list', 'HomeController@event')->name('event');///event public home page *event List
+        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///open event info page by eventId
+        Route::get('/search/{text}/{classId}/{country}', 'HomeController@searchRankings')->name('search');///change rankings grid
         Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');///change events grid
     });
 });
@@ -37,6 +37,9 @@ Route::prefix('/')->group(function () {
 Auth::routes(['register' => false]); //for auth controller
 
 Route::get('home', 'AdminController@index')->name('home'); //for home view in admin
+Route::get('profile', 'AdminController@editProfile')->name('profile.edit'); //show view for edit profile
+Route::put('profile', 'AdminController@updateProfile')->name('profile.update'); //editprofile
+
 Route::middleware(['auth', 'permission'])->group(function () {
     Route::prefix('users')->group(function () {
         Route::name('user.')->group(function () {
@@ -84,12 +87,6 @@ Route::middleware(['auth', 'permission'])->group(function () {
     });
     Route::prefix('results')->group(function () {
         Route::name('result.')->group(function () {
-            //Route::get('/', 'ResultController@index')->name('index');
-            //Route::get('show/{text}', 'ResultController@show')->name('show');
-            //Route::get('create', 'ResultController@create')->name('create');
-            //Route::post('store', 'ResultController@store')->name('store');
-            //Route::get('edit/{id}', 'ResultController@edit')->name('edit');
-            //Route::put('update/{id}', 'ResultController@update')->name('update');
             Route::get('inputs/{count}', 'ResultController@inputs')->name('inputs');
         });
     });

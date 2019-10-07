@@ -1,36 +1,53 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-
-@component('components.layout')
-@slot('modalButton')
+@slot('pageTitle')
 
 @endslot
-@slot('idmodal')
-event_selected
+
+@slot('imageCover')
+<header class="page-cover">
+    <img class="cover-img" src="{{$event->imagePath}}" alt="Event Image">
+</header>
+@endslot()
+
+@slot('pageCover')
+<header class="page-title-bar">
+    <div class="row align-items-center">
+        <div class="col-auto">
+
+        </div>
+        <div class="col">
+            <h3 class="page-title"> {{$event->name}} </h3>
+            <p class="text-muted">
+                <i class="fas fa-map-marker-alt mr-1"></i> <span>Location: {{$event->location}}</span> <i class="fa fa-clock ml-3 mr-1"></i><span>Date: {{$event->date}}</span> <i class="fa fa-dot-circle ml-3 mr-1"></i><span>Class: {{$event->className}}</span>
+            </p>
+        </div>
+        <div class="col-auto">
+
+        </div>
+    </div>
+</header>
 @endslot
-@slot('bigtitle')
-{{$event->name}}
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
-@endslot
-@slot('addButtonName')
+
+@slot('pageTitle2')
 
 @endslot
-@slot('rankingnav')
+
+@slot('floatingButton')
 
 @endslot
+
 @slot('searchBar')
 
 @endslot
-@slot('rankingbar')
+<div class="section-block">
 
-@endslot
-@include('event_public._resultcontent')
+</div>
+<div class="card">
+    <div class="card-body">
+        @include('event_public._resulttable', ['results' => $results->where('eventId','=',$event->eventId)->sortBy('position')])
+    </div>
+</div>
+
+
 @endcomponent
-
-
-@endsection

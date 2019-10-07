@@ -1,42 +1,53 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Classes
+@endslot
 
-@component('components.layout')
-@slot('modalButton')
+@slot('pageTitle2')
 
 @endslot
-@slot('idmodal')
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+<a href="{{route('class.create')}}">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new class"><span class="fa fa-plus"></span>
+    </button>
+</a>
+@endslot
+
+@slot('searchBar')
+<input id="search_class" class="form-control" type="text" placeholder="You can search classes by '#' or Name">
+@endslot
+@component('components.modal')
+@slot('id')
 classes
 @endslot
-@slot('bigtitle')
-Classes
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
+@slot('title')
+<div id="modaltitle"></div>
 @endslot
-@slot('rankingnav')
+@slot('button')
+<div id="modalbutton">
 
+</div>
 @endslot
-@slot('addButtonName')
-<a href="{{route('class.create')}}" class="add-button btn btn-success">Add classes</a>
-@endslot
-@slot('rankingbar')
+<div id="modalcontent">
 
-@endslot
-@slot('searchBar')
-<div class="search-bar">
-    <input id="search_class" class="form-control" type="text" placeholder="You can search by '#' or Name">
-</div>
-@endslot
-<div>
-    @include('class._classtable')
-</div>
-<div class="links-table">
-    {{$classes->onEachSide(1)->links()}}
 </div>
 @endcomponent
-
-@endsection
+<div class="card">
+    <div class="card-body">
+        @include('class._classtable')
+        <div class="links-table">
+            {{$classes->onEachSide(1)->links()}}
+        </div>
+    </div>
+</div>
+@endcomponent

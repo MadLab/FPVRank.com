@@ -1,5 +1,5 @@
 /*global $*/
-$(function() {
+$(document).on('theme:init', () => {
     $('#user').on('hidden.bs.modal', function(e) {
         $('#search_user').val('');
         $('#search_user').focus();

@@ -1,9 +1,5 @@
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
-    <script src="{{ asset('js/bootstrap-datepicker.js') }}" defer></script>
-    <script src="{{ asset('js/bootstrap-datetimepicker.js') }}" defer></script>
-    <script src="{{ asset('js/locales/bootstrap-datetimepicker.es.js') }}" defer></script>
+
     @if(Auth::check())
     @switch(Route::currentRouteName())
     @case('user.index')
@@ -18,6 +14,9 @@
     @case('pilot.create')
     <script src="{{ asset('js/pilot_create.js') }}" defer></script>
     @break
+    @case('pilot.edit')
+    <script src="{{ asset('js/pilot_create.js') }}" defer></script>
+    @break
     @case('pilot.index')
     <script src="{{ asset('js/pilot.js') }}" defer></script>
     @break
@@ -30,7 +29,10 @@
     @case('event.index')
     <script src="{{ asset('js/event.js') }}" defer></script>
     @break
+
     @default
-    
+
+    @break
+
     @endswitch
     @endif

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Auth;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class EventUpdateRequest extends FormRequest
@@ -31,7 +33,7 @@ class EventUpdateRequest extends FormRequest
             "name" => 'required|max:250',
             "location" => 'required|max:250',
             "classId" => 'required|numeric',
-            "date" => 'required|date',
+            "date" => 'required',
             "notes.*" => 'nullable|max:250',
             'photo' => 'nullable|mimes:png,jpeg,jpg,jpe'
         ];

@@ -1,24 +1,95 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="flex-center position-ref full-height">
-                <div class="content">
-                    <div class="title m-b-md">
-                        FPV Rank
-                    </div>
+@slot('pageTitle')
+Dashboard
+@endslot
 
-                    <div class="links">
-                        <a href="{{route('user.index')}}">Users</a>
-                        <a href="{{route('class.index')}}">Classes</a>
-                        <a href="{{route('pilot.index')}}">Pilots</a>
-                        <a href="{{route('event.index')}}">Events</a>                                            
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+@slot('pageTitle2')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+@endslot
+
+@slot('searchBar')
+<input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+@endslot
+
+<div class="section-block">
+
 </div>
-@endsection
+<div class="row">
+    @component('components.dashboardtable')
+    @slot('tableContent')
+    @include('user._usertable')
+    @endslot
+    @slot('routeList')
+    {{route('user.index')}}
+    @endslot
+    @slot('routeCreate')
+    {{route('user.create')}}
+    @endslot
+    @slot('tableTitle')
+    Users
+    @endslot
+    @endcomponent
+
+    @component('components.dashboardtable')
+    @slot('tableContent')
+    @include('class._classtable')
+    @endslot
+    @slot('routeList')
+    {{route('class.index')}}
+    @endslot
+    @slot('routeCreate')
+    {{route('class.create')}}
+    @endslot
+    @slot('tableTitle')
+    Classes
+    @endslot
+    @endcomponent
+
+    @component('components.dashboardtable')
+    @slot('tableContent')
+    @include('pilot._pilottable')
+    @endslot
+    @slot('routeList')
+    {{route('pilot.index')}}
+    @endslot
+    @slot('routeCreate')
+    {{route('pilot.create')}}
+    @endslot
+    @slot('tableTitle')
+    Pilots
+    @endslot
+    @endcomponent
+
+    @component('components.dashboardtable')
+    @slot('tableContent')
+    @include('event._eventtable')
+    @endslot
+    @slot('routeList')
+    {{route('event.index')}}
+    @endslot
+    @slot('routeCreate')
+    {{route('event.create')}}
+    @endslot
+    @slot('tableTitle')
+    Events
+    @endslot
+    @endcomponent
+</div>
+
+
+
+
+@endcomponent

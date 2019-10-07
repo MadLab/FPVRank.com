@@ -1,59 +1,47 @@
-<div class="form-group row">
-    <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-    <div class="col-md-6">
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-        name="name" value="{{ !isset($user->name) ? old('name') : $user->name }}" required autocomplete="name" autofocus>
+<div class="row">
+    <div class="form-group col-6">
+        <label for="name">Name<span class="badge badge-danger">Required</span></label>
+        <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="" required="" value="{{ !isset($user->name) ? old('name') : $user->name }}">
         @error('name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-group row">
-    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-    <div class="col-md-6">
-        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-        name="email"
-        value="{{ !isset($user->email) ? old('email') : $user->email }}" required autocomplete="email">
+    <div class="form-group col-6">
+        <label for="email">E-mail Address <span class="badge badge-danger">Required</span></label>
+        <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email" placeholder="" required="" value="{{ !isset($user->email) ? old('email') : $user->email }}">
         @error('email')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-@if(Route::currentRouteName() == 'user.edit')
-<div>
-    **Empty if you want to keep same password
-</div>
-@endif
-<div class="form-group row">
-    <label for="password" class="col-md-4 col-form-label text-md-right">@if(Route::currentRouteName() == 'user.edit')
-    **
-    @endif{{ __('Password') }}</label>
-    <div class="col-md-6">
-        <input id="password" type="password"
-        class="form-control @error('password') is-invalid @enderror"
-        name="password" autocomplete="new-password">
+    <div class="form-group col-6">
+        <label class="d-flex justify-content-between" for="password"><span>@if(Route::currentRouteName() == 'user.edit')
+                **
+                @endif{{ __('Password') }}</span> <a href="#password" data-toggle="password"><i class="fa fa-eye fa-fw"></i> <span>Show</span></a></label>
+        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
         @error('password')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-group row">
-    <label for="password-confirm" class="col-md-4 col-form-label text-md-right">@if(Route::currentRouteName() == 'user.edit')
-    **
-    @endif{{ __('Confirm Password') }}</label>
-    <div class="col-md-6">
-        <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
-        name="password_confirmation" autocomplete="new-password">
+    <div class="form-group col-6">
+        <label class="d-flex justify-content-between" for="password-confirm"><span>@if(Route::currentRouteName() == 'user.edit')
+                **
+                @endif{{ __('Confirm Password') }}</span> <a href="#password-confirm" data-toggle="password"><i class="fa fa-eye fa-fw"></i> <span>Show</span></a></label>
+        <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password-confirm" name="password_confirmation">
         @error('password_confirmation')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
+    @if(Route::currentRouteName() == 'user.edit')
+    <div>
+        **Empty if you want to keep same password
+    </div>
+    @endif
 </div>

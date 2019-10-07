@@ -1,114 +1,115 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+       <!doctype html>
+       <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+       <head>
+           <!-- Required meta tags -->
+           <meta charset="utf-8">
+           <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+           <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+           <!-- BEGIN PLUGINS STYLES -->
+           <!-- plugins styles goes here -->
+           <link rel="stylesheet" href="{{asset('assets/fontawesome/all.css')}}">
+           <link rel="stylesheet" href="{{asset('assets/openiconic/css/open-iconic-bootstrap.min.css')}}">
+           <link rel="stylesheet" href="{{asset('assets/vendor/select2/css/select2.min.css')}}">
+           <link rel="stylesheet" href="{{asset('assets/vendor/flatpickr/flatpickr.min.css')}}">
+           <!-- END PLUGINS STYLES -->
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+           <!-- BEGIN THEME STYLES -->
+           <link rel="stylesheet" href="{{asset('assets/stylesheets/theme.min.css')}}" data-skin="default">
+           <link rel="stylesheet" href="{{asset('assets/stylesheets/theme-dark.min.css')}}" data-skin="dark">
 
-    @include('layouts.scripts')
-    @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclasscountry' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent')
-    <script src="{{ asset('js/welcome.js') }}" defer></script>
-    @endif
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+           <link rel="stylesheet" href="{{asset('assets/stylesheets/custom.min.css')}}">
+           <!-- Disable unused skin immediately -->
+           <script>
+               var skin = localStorage.getItem('skin') || 'default';
+               var unusedLink = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+               unusedLink.setAttribute('rel', '');
+               unusedLink.setAttribute('disabled', true);
+           </script>
+           <!-- END THEME STYLES -->
 
-    <link href="{{ asset('css/bootstrap-datetimepicker.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/home.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/flag-icon.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+           <!-- BEGIN PAGE LEVEL STYLES -->
+           <!-- styles for specific page goes here -->
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css" rel="stylesheet" />
+           <link href="{{ asset('css/flag-icon.css') }}" rel="stylesheet">
 
-</head>
+           <!-- END PAGE LEVEL STYLES -->
 
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="#">
+           <title>Fpvrank.com</title>
+       </head>
 
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+       <body>
+           <div class="app">
+               <header class="app-header app-header-dark">
+                   @include('layouts._header', ['searchBar' => $searchBar])
+               </header>
+               <aside class="app-aside app-aside-light app-aside-expand-md">
+                   @include('layouts._aside')
+               </aside>
+               <main class="app-main">
+                   <div class="wrapper">
+                       <div class="page">
+                           {{$imageCover}}
+                           <div class="page-inner pt2">
+                               {{$floatingButton}}
+                               <header class="page-title-bar">
+                                   <!-- page title stuff goes here -->
+                                   <h1 class="page-title">{{$pageTitle}}</h1>
+                                   <h3 class="page-title">{{$pageTitle2}}</h3>
+                                   @if(Route::currentRouteName() == 'home')
+                                   <div class="d-flex flex-column flex-md-row">
+                                       <p class="lead">
+                                           <span class="font-weight-bold">Hi, {{Auth::user()->name}}.</span>
+                                       </p>
+                                   </div>
+                                   @endif
+                               </header>
+                               {{$pageCover}}
+                               <!-- /.page-title-bar -->
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('welcome.index') }}">Rankings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('welcome.event') }}">Events</a>
-                        </li>
-                    </ul>
+                               <!-- .page-section -->
+                               <div class="page-section">
+                                   @if (session('status'))
+                                   <div class="alert alert-{{session('type')}}" role="alert">
+                                       {{ session('status') }}
+                                   </div>
+                                   @endif
+                                   <!-- page content goes here -->
+                                   {{$slot}}
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        @if(Route::currentRouteName() != 'home')
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('user.index')}}">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('class.index')}}">Classes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('pilot.index')}}">Pilots</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('event.index')}}">Events</a>
-                        </li>
-                        @endif
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </main>
+           </div>
+           <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+           <!-- BEGIN BASE JS -->
+           <script src="{{asset('assets/vendor/jquery/jquery.min.js')}}"></script>
+           <script src="{{asset('assets/vendor/bootstrap/js/popper.min.js')}}"></script>
+           <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+           <!-- END BASE JS -->
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
+           <!-- BEGIN PLUGINS JS -->
+           <script src="{{asset('assets/vendor/stacked-menu/stacked-menu.min.js')}}"></script>
+           <script src="{{asset('assets/vendor/select2/js/select2.full.min.js')}}"></script>
+           <script src="{{asset('assets/vendor/flatpickr/flatpickr.min.js')}}"></script>
+           <!-- END PLUGINS JS -->
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+           <!-- BEGIN THEME JS -->
+           <script src="{{asset('assets/javascript/theme.min.js')}}"></script>
+           <!-- END THEME JS -->
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
-</body>
+           <!-- BEGIN PAGE LEVEL JS -->
+           <!-- your js for specific page goes here -->
 
-</html>
+           @include('layouts.scripts')
+           @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclasscountry' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent')
+           <script src="{{ asset('js/welcome.js') }}" defer></script>
+           @endif
+           <!-- END PAGE LEVEL JS -->
+       </body>
+
+       </html>

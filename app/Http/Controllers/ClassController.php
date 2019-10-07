@@ -56,7 +56,7 @@ class ClassController extends Controller
     {
         $this->class->create($request->toArray());
         $message = 'Class has been saved succesfully!';
-        return redirect()->route('class.create')->with('status', $message);
+        return redirect()->route('class.create')->with('status', $message)->with('type', 'success');
     }
     /**
      * Store a newly created resource with JSON data
@@ -69,7 +69,7 @@ class ClassController extends Controller
             $json = json_decode(file_get_contents($request->jsonurl), true);
             if ($json == null) {
                 $message = 'Please enter a valid JSON URL!';
-                return redirect()->route('class.create')->with('status', $message);
+                return redirect()->route('class.create')->with('status', $message)->with('type', 'danger');
             } else {
                 $classes = $this->class->all();
                 foreach ($json as $val) {
@@ -77,17 +77,18 @@ class ClassController extends Controller
                         $class = $classes->where('classId', '=', $val['classId'])->first();
                         $class->name = $val['name'];
                         $class->description = $val['description'];
+                        $class->created_at = date("Y-m-d H:i:s");
                         $class->save();
                     } else {
                         $this->class->create($val);
                     }
                 }
                 $message = 'Classes have been saved succesfully!';
-                return redirect()->route('class.create')->with('status', $message);
+                return redirect()->route('class.create')->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
             $message = 'Please enter a valid JSON URL!';
-            return redirect()->route('class.create')->with('status', $message);
+            return redirect()->route('class.create')->with('status', $message)->with('type', 'danger');
         }
     }
 
@@ -132,10 +133,10 @@ class ClassController extends Controller
             $class->fill($request->toArray());
             $class->save();
             $message = 'Class has been updated succesfully!';
-        return redirect()->route('class.index')->with('status', $message);
+        return redirect()->route('class.index')->with('status', $message)->with('type', 'success');
         } else {
             $message = 'This ID is already taken!';
-            return back()->withInput()->with('status', $message);
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
 

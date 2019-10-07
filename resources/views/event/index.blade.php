@@ -1,43 +1,53 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Events
+@endslot
 
-@component('components.layout')
-@slot('modalButton')
+@slot('pageTitle2')
 
 @endslot
-@slot('idmodal')
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+<a href="{{route('event.create')}}">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new event"><span class="fa fa-plus"></span>
+    </button>
+</a>
+@endslot
+
+@slot('searchBar')
+<input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+@endslot
+@component('components.modal')
+@slot('id')
 event
 @endslot
-@slot('bigtitle')
-Events
-@if (session('status'))
-<div class="alert alert-success">
-    {{ session('status') }}
-</div>
-@endif
+@slot('title')
+<div id="modaltitle"></div>
 @endslot
-@slot('addButtonName')
-<a href="{{route('event.create')}}" class="add-button btn btn-success">Add events</a>
-@endslot
-@slot('rankingnav')
+@slot('button')
+<div id="modalbutton">
 
+</div>
 @endslot
-@slot('rankingbar')
+<div id="modalcontent">
 
-@endslot
-@slot('searchBar')
-<div class="search-bar">
-    <input id="search_event" class="form-control" type="text" 
-    placeholder="You can search by '#', Name or Class">
-</div>
-@endslot
-<div>
-    @include('event._eventtable')
-</div>
-<div class="links-table">
-    {{$events->onEachSide(1)->links()}}
 </div>
 @endcomponent
-
-@endsection
+<div class="card">
+    <div class="card-body">
+        @include('event._eventtable')
+        <div class="links-table">
+            {{$events->onEachSide(1)->links()}}
+        </div>
+    </div>
+</div>
+@endcomponent

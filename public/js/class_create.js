@@ -1,6 +1,5 @@
 /*global $*/
-$(function() {
-    $('.select2').select2();
+$(document).on('theme:init', () => {
     var data = [{
         "classId": "class id",
         "name": "class name",

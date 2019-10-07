@@ -1,6 +1,5 @@
 /*global $*/
-$(function() {
-    $('[data-toggle="tooltip"]').tooltip();
+$(document).on('theme:init', () => {
     $('#pilot').on('hidden.bs.modal', function(e) {
         $('#search_pilot').val('');
         $('#search_pilot').focus();

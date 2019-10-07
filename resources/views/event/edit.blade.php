@@ -1,12 +1,42 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Edit event
+@endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+<button id="bottom-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Bottom" class="fa fa-arrow-down"></span>
+</button>
+
+<button id="top-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Top" class="fa fa-arrow-up"></span>
+</button>
+
+@endslot
+
+@slot('searchBar')
+
+@endslot
 @component('components.modal')
 @slot('id')
 confirmRank
 @endslot
 @slot('title')
-<div id="modaltitle">Ranking event</div>
+<div id="modaltitle">
+    Ranking event
+</div>
 @endslot
 @slot('button')
 <div id="modalbutton">
@@ -25,88 +55,74 @@ confirmRank
     @endif
 </div>
 @endcomponent
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Edit an event
-                </div>
-                @if (session('statusDanger'))
-                    <div class="alert alert-danger">
-                        {{ session('statusDanger') }}
-                    </div>
-                    @endif
-                    @if (session('statusSuccess'))
-                    <div class="alert alert-success">
-                        {{ session('statusSuccess') }}
-                    </div>
-                    @endif
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-md-4 col-form-label text-md-right">Current photo</label>
-                        <div class="col-md-6">
-                            <img src="{{$event->imagePath}}" alt="" class="img-rounded img-responsive col-sm-12 col-md-12" />
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}" enctype="multipart/form-data">
+            @method('PUT')
+            @csrf
+            <fieldset>
+                <legend>Event info</legend>
+                @include('event._eventform')
+                <div class="row justify-content-md-center">
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="card card-figure">
+                            <figure class="figure">
+                                <img id="currentImage" class="img-fluid" src="{{$event->imagePath}}" alt="Current Image">
+                                <figcaption class="figure-caption">
+                                    <h6 class="figure-title text-center">Current photo</h6>
+                                    <p class="text-muted mb-0"></p>
+                                </figcaption>
+                            </figure>
                         </div>
                     </div>
-                    <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}" enctype="multipart/form-data">
-                        @method('PUT')
-                        @csrf
-                        @include('event._eventform')
-
-                        <div class="row">
-
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="card card-figure">
+                            <figure class="figure">
+                                <img id="selectedImage" class="img-fluid" src="#" alt="Selected Image">
+                                <figcaption class="figure-caption">
+                                    <h6 class="figure-title text-center">Selected photo</h6>
+                                    <p class="text-muted mb-0"></p>
+                                </figcaption>
+                            </figure>
                         </div>
-                        <div class="inputs-title row">
-                            <div class="col-sm-12 col-md-3">
-                                Position
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                                Pilot
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                                Laps - Time
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-
-                            </div>
-                        </div>
-                        <input type="hidden" value="{{!isset($formCount) ? 0 : $formCount}}" id="form-count">
-                        <div name="results" id="result-form-content">
-                            @foreach($results as $result)
-                            @include('event._inputs')
-                            @endforeach
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#confirmRank">
-                                    Rank event
-                                </button>
-                            </div>
-                            <div class="col-md-4">
-                                <a onclick="getInput()" class="btn btn-primary text-white">
-                                    Add 10 rows
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="fixed-bottom">
-                    <button data-toggle="tooltip" data-placement="top" title="Go to Top" onclick="$('html, body').animate({ scrollTop: 0 }, 500)" type="button" id="button_up" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
-                            arrow_upward
-                        </i></button>
-                    <button data-toggle="tooltip" data-placement="top" title="Go to Bottom" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)" type="button" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
-                            arrow_downward
-                        </i></button>
+            </fieldset>
+            <hr class="mb-4">
+            <fieldset>
+                <legend>Results info</legend>
+                <div class="inputs-title row">
+                    <div class="col-sm-12 col-md-3">
+                        Position
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        Pilot
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        Laps - Time
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+
+                    </div>
                 </div>
-            </div>
-        </div>
+                <input type="hidden" value="{{!isset($formCount) ? 0 : $formCount}}" id="form-count">
+                <div name="results" id="result-form-content">
+                    @foreach($results as $result)
+                    @include('event._inputs')
+                    @endforeach
+                </div>
+            </fieldset>
+            <hr class="mb-4">
+
+            <button class="btn btn-primary btn-lg btn-block" type="button" onclick="getInput()">Add 10 rows</button>
+
+            <button class="btn btn-success btn-lg btn-block" type="submit">Save</button>
+
+            <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#confirmRank">
+                Rank event
+            </button>
+
+        </form>
     </div>
 </div>
-
-@endsection
+@endcomponent

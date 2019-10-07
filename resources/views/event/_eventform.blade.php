@@ -1,31 +1,26 @@
-<div class="form-row">
-    <div class="form-group col-md-6">
-        <label for="name">{{ __('Name') }}</label>
-        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-        name="name" value="{{ !isset($event->name) ? old('name') : $event->name }}"
-        autocomplete="name" autofocus>
+<div class="row">
+    <div class="form-group col-6">
+        <label for="name">Name<span class="badge badge-danger">Required</span></label>
+        <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="name" placeholder="" required="" value="{{ !isset($event->name) ? old('name') : $event->name }}">
         @error('name')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-    <div class="form-group col-md-6">
-        <label for="location">Location</label>
-        <input id="location" type="text" class="form-control @error('location') is-invalid @enderror" name="location"
-        value="{{ !isset($event->location) ? old('location') : $event->location }}" autocomplete="location">
+    <div class="form-group col-6">
+        <label for="location">Location<span class="badge badge-danger">Required</span></label>
+        <input name="location" type="text" class="form-control @error('location') is-invalid @enderror" id="location" placeholder="" required="" value="{{ !isset($event->location) ? old('location') : $event->location }}">
         @error('location')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>
         @enderror
     </div>
-</div>
-<div class="form-row">
-    <div class="form-group col-md-6">
-        <label for="classId">Class</label>
-        <select name="classId" class="select2 form-control @error('classId') is-invalid @enderror" id="classId">
-            @foreach ($classes as $class)
+    <div class="form-group col-6">
+        <label class="control-label" for="classId">Class<span class="badge badge-danger">Required</span></label>
+        <select name="classId" id="classId" class="form-control @error('classId') is-invalid @enderror" data-toggle="select2" data-allow-clear="false">
+        @foreach ($classes as $class)
             <option value="{{$class->classId}}" @if(isset($event->classId)) @if($class->classId == $event->classId) selected @endif @endif>{{$class->name}}</option>
             @endforeach
         </select>
@@ -35,26 +30,23 @@
         </span>
         @enderror
     </div>
-    <div class="form-group col-md-6">
-        <label for="date">Date</label>
-        <div class="input-group date form_datetime" data-date-format="dd MM yyyy - HH:ii p" data-link-field="date">
-            <input class="form-control @error('date') is-invalid @enderror" size="16" type="text" value="{{ !isset($event->date) ? old('date') : $event->date }}" readonly>
-            @error('date')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-            @enderror
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-        </div>
-        <input name="date" type="hidden" id="date" value="{{ !isset($event->date) ? old('date') : $event->date }}" /><br />
-
+    <div class="form-group col-6">
+        <label class="control-label" for="date">Date<span class="badge badge-danger">Required</span></label>
+        <input value="{{ !isset($event->date) ? old('date') : $event->date }}" name="date" id="date" type="text" class="form-control @error('date') is-invalid @enderror"
+        data-toggle="flatpickr" data-enable-time="true" data-date-format="Y-m-d H:i:s" readonly>
+        @error('date')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
     </div>
-</div>
-<div class="form-row">
-    <div class="form-group col-md-6">
-        <label for="photo">Photo  {{(Route::currentRouteName() == 'event.edit' ? '**Empty to keep same photo' : ' ')}}</label>
-        <input name="photo" type="file" class="form-control-file @error('photo') is-invalid @enderror" id="photo">
+    <div class="form-group col-12">
+        <label for="dropzone">Photo {{(Route::currentRouteName() == 'event.edit' ? '**Empty to keep same photo' : ' ')}}
+            <span class="badge badge-danger">{{(Route::currentRouteName() == 'event.edit' ? 'Optional' : 'Required')}}</span></label>
+        <div id="dropzone" class="fileinput-dropzone">
+            <span>Drop files or click to upload.</span> <!-- The file input field used as target for the file upload widget -->
+            <input name="photo" type="file" class="form-control-file @error('photo') is-invalid @enderror" id="fileupload-dropzone">
+        </div>
         @error('photo')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

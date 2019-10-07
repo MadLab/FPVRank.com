@@ -1,6 +1,38 @@
-@extends('layouts.app')
+@component('layouts.app')
 
-@section('content')
+@slot('pageTitle')
+Create event
+@endslot
+
+@slot('pageTitle2')
+
+@endslot
+
+@slot('imageCover')
+
+@endslot
+
+@slot('pageCover')
+
+@endslot
+
+@slot('floatingButton')
+
+<button id="bottom-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Bottom"
+class="fa fa-arrow-down"></span>
+</button>
+
+<button id="top-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Top" class="fa fa-arrow-up"></span>
+</button>
+
+<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span data-toggle="tooltip" data-placement="top" title="Upload event with JSON" class="fa fa-file-import"></span>
+</button>
+
+@endslot
+
+@slot('searchBar')
+
+@endslot
 @component('components.modal')
 @slot('id')
 jsonmodal
@@ -24,78 +56,56 @@ jsonmodal
 
 </div>
 @endcomponent
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Create an event
-                    @if (session('statusDanger'))
-                    <div class="alert alert-danger">
-                        {{ session('statusDanger') }}
+<div class="card">
+    <div class="card-body">
+        <form method="POST" action="{{ route('event.store') }}" enctype="multipart/form-data">
+            @csrf
+            <fieldset>
+                <legend>Event info</legend>
+                @include('event._eventform')
+                <div class="row justify-content-md-center">
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="card card-figure">
+                            <figure class="figure">
+                                <img id="selectedImage" class="img-fluid" src="#" alt="Selected Image">
+                                <figcaption class="figure-caption">
+                                    <h6 class="figure-title text-center">Selected photo</h6>
+                                    <p class="text-muted mb-0"></p>
+                                </figcaption>
+                            </figure>
+                        </div>
                     </div>
-                    @endif
-                    @if (session('statusSuccess'))
-                    <div class="alert alert-success">
-                        {{ session('statusSuccess') }}
-                    </div>
-                    @endif
                 </div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right"></label>
-                        <div class="col-md-6">
-                            <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#jsonmodal">
-                                Submit JSON
-                            </button>
-                        </div>
+            </fieldset>
+            <hr class="mb-4">
+            <fieldset>
+                <legend>Results info</legend>
+                <div class="inputs-title row">
+                    <div class="col-sm-12 col-md-3">
+                        Position
                     </div>
-                    <form method="POST" action="{{ route('event.store') }}" enctype="multipart/form-data">
-                        @csrf
-                        @include('event._eventform')
+                    <div class="col-sm-12 col-md-3">
+                        Pilot
+                    </div>
+                    <div class="col-sm-12 col-md-3">
+                        Laps - Time
+                    </div>
+                    <div class="col-sm-12 col-md-3">
 
-                        <div class="inputs-title row">
-                            <div class="col-sm-12 col-md-3">
-                                Position
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                                Pilot
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-                                Laps - Time
-                            </div>
-                            <div class="col-sm-12 col-md-3">
-
-                            </div>
-                        </div>
-                        <input type="hidden" value="0" id="form-count">
-                        <div name="results" id="result-form-content">
-
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-success">
-                                    Save
-                                </button>
-                            </div>
-
-                            <div class="col-md-6">
-                                <a onclick="getInput()" class="btn btn-primary text-white">
-                                    Add 10 rows
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <input type="hidden" value="0" id="form-count">
+                <div name="results" id="result-form-content">
+
+                </div>
+            </fieldset>
+            <hr class="mb-4">
+
+            <button class="btn btn-primary btn-lg btn-block" type="button" onclick="getInput()">Add 10 rows</button>
+
+            <button class="btn btn-success btn-lg btn-block" type="submit">Save</button>
+
+        </form>
     </div>
 </div>
-<div class="fixed-bottom">
-    <button data-toggle="tooltip" data-placement="top" title="Go to Top" onclick="$('html, body').animate({ scrollTop: 0 }, 500)" type="button" id="button_up" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
-            arrow_upward
-        </i></button>
-    <button data-toggle="tooltip" data-placement="top" title="Go to Bottom" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)" type="button" class="rounded-circle btn btn-primary float-right navpage-button"><i class="material-icons">
-            arrow_downward
-        </i></button>
-</div>
-@endsection
+@endcomponent

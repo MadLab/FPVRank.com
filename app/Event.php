@@ -55,7 +55,7 @@ class Event extends Model
         return $this->select('classId')->where('eventId','=',$eventId)->first();
     }
     public function searchById($eventId){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location', 'events.eventId','events.name', 'events.date','events.imagePath','events.imageLocal',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->where('events.eventId', '=',$eventId)->get()->first();
     }
@@ -89,6 +89,15 @@ class Event extends Model
 
         ->orderBy('date', 'desc')
         ->get();
+    }
+
+       /**
+     * Get a listing of the resource for the dashboard
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillTableDashboard($take){
+        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')->orderBy('events.created_at', 'asc')->take($take)->get();
     }
 
 }
