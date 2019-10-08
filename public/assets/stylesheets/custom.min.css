@@ -4,6 +4,10 @@
     .label-mobile {
         display: none;
     }
+    #search_public {
+        margin-top: -1.6%;
+        margin-left: 1.6%;
+    }
 }
 
 
@@ -39,4 +43,8 @@ body {
 
 #bottom-button {
     margin-right: 8%;
+}
+
+a:hover {
+    cursor: pointer;
 }

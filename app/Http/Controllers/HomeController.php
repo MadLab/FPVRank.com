@@ -39,12 +39,6 @@ class HomeController extends Controller
         $this->country = new CountryList();
         $this->firstClassId = $this->class->all()->first()->classId;
     }
-    public function json()
-    {
-        //$data = $this->class->all();
-        //$data = $this->pilot->all();
-        return response()->json("data", 200);
-    }
     /**
      * get view with pilot
      */
@@ -143,8 +137,10 @@ class HomeController extends Controller
         }
         $data = $this->paginator($rankings, $request);
 
-        return view('welcome', ['selectedclass' => $classes->first(),'firstClassId' => $classes->first()->classId,
-        'classes' => $classes, 'rankings' => $data, 'countries' => $countries, 'selectedCountry' => 'all']);
+        return view('welcome', [
+            'selectedclass' => $classes->first(), 'firstClassId' => $classes->first()->classId,
+            'classes' => $classes, 'rankings' => $data, 'countries' => $countries, 'selectedCountry' => 'all'
+        ]);
     }
     /**
      * Paginator for arrays
@@ -231,9 +227,33 @@ class HomeController extends Controller
             'classId' => $classId, 'selectedCountry' => $country, 'countries' => $countries, 'firstClassId' => $this->firstClassId
         ]);
     }
-    public function ranking()
-    {
-        return Excel::download(new RankingExport, 'rankings.xlsx');
-        //return response()->json($rankings);
+
+     /**
+     * search pilots by name
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function fillAutoCompletePilots(){
+        $data = [];
+        $pilots = $this->pilot->fillAutoComplete();
+
+        foreach($pilots as $pilot){
+            $data[] = $pilot->name.' - '.$pilot->username;
+        }
+        return response($data);
     }
+     /**
+     * search pilots by name
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function searchPilotsByName($text){
+        $name = strtok($text, '-');
+        $pilot = $this->pilot->where('name', '=', $name)->get()->first();
+        return redirect()->route('welcome.pilot', ['pilotId' => $pilot->pilotId]);
+    }
+
+
+
+
 }

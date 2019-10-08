@@ -24,7 +24,7 @@ Events
 @endslot
 
 @slot('searchBar')
-<input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+
 @endslot
 @component('components.modal')
 @slot('id')
@@ -44,6 +44,16 @@ event
 @endcomponent
 <div class="card">
     <div class="card-body">
+        <div class="form-group">
+            <div class="input-group input-group-alt">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                    </div>
+                    <input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+                </div>
+            </div>
+        </div>
         @include('event._eventtable')
         <div class="links-table">
             {{$events->onEachSide(1)->links()}}

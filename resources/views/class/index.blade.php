@@ -24,7 +24,7 @@ Classes
 @endslot
 
 @slot('searchBar')
-<input id="search_class" class="form-control" type="text" placeholder="You can search classes by '#' or Name">
+
 @endslot
 @component('components.modal')
 @slot('id')
@@ -44,6 +44,16 @@ classes
 @endcomponent
 <div class="card">
     <div class="card-body">
+        <div class="form-group">
+            <div class="input-group input-group-alt">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                    </div>
+                    <input id="search_class" class="form-control" type="text" placeholder="You can search classes by '#' or Name">
+                </div>
+            </div>
+        </div>
         @include('class._classtable')
         <div class="links-table">
             {{$classes->onEachSide(1)->links()}}

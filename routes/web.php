@@ -15,24 +15,24 @@ try {
     die('Database error, please contact developers.    ' . $e->getMessage());
 }
 
-//get json for testing
-Route::get('/json', 'HomeController@json')->name('json');
-///get excel with current rankings
-Route::get('/ranking', 'HomeController@ranking')->name('welcome.ranking');
-
-
 ///public routes
+
 Route::prefix('/')->group(function () {
     Route::name('welcome.')->group(function () {
         Route::get('', 'HomeController@index')->name('index'); //index rankings
         Route::get('/class/{classId}/{country}', 'HomeController@searchByClass')->name('searchclasscountry'); //rankings by class and country
-        Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot');//show the pilot info
-        Route::get('/event-list', 'HomeController@event')->name('event');///event public home page *event List
-        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent');///open event info page by eventId
-        Route::get('/search/{text}/{classId}/{country}', 'HomeController@searchRankings')->name('search');///change rankings grid
-        Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo');///change events grid
+        Route::get('/pilot/{pilotId}', 'HomeController@pilot')->name('pilot'); //show the pilot info
+        Route::get('/event-list', 'HomeController@event')->name('event'); ///event public home page *event List
+        Route::get('/event-list/{eventId}', 'HomeController@getEvent')->name('getevent'); ///open event info page by eventId
+        Route::get('/search/{text}/{classId}/{country}', 'HomeController@searchRankings')->name('search'); ///change rankings grid
+        Route::get('/events-info/{text}/{date1}/{date2}', 'HomeController@eventinfo')->name('eventinfo'); ///change events grid
+
+        Route::get('/pilots-autocomplete', 'HomeController@fillAutoCompletePilots')->name('autocompletepilots'); ///change events grid
+        Route::get('/search-pilots/{text}', 'HomeController@searchPilotsByName')->name('searchpilotsbyname'); ///change events grid
+
     });
 });
+
 
 Auth::routes(['register' => false]); //for auth controller
 

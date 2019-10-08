@@ -111,8 +111,5 @@
          <!-- /.stacked-menu -->
      </section>
      <!-- /.aside-menu -->
-     <footer class="aside-footer p-3">
-         <button class="btn btn-light btn-block text-primary" data-toggle="skin">Night mode<i class="fas fa-moon ml-1"></i></button>
-     </footer>
  </div>
  <!-- /.aside-content -->

@@ -13,6 +13,7 @@
            <link rel="stylesheet" href="{{asset('assets/openiconic/css/open-iconic-bootstrap.min.css')}}">
            <link rel="stylesheet" href="{{asset('assets/vendor/select2/css/select2.min.css')}}">
            <link rel="stylesheet" href="{{asset('assets/vendor/flatpickr/flatpickr.min.css')}}">
+
            <!-- END PLUGINS STYLES -->
 
            <!-- BEGIN THEME STYLES -->
@@ -20,11 +21,9 @@
            <link rel="stylesheet" href="{{asset('assets/stylesheets/theme-dark.min.css')}}" data-skin="dark">
 
            <link rel="stylesheet" href="{{asset('assets/stylesheets/custom.min.css')}}">
-           <!-- Disable unused skin immediately -->
            <script>
                var skin = localStorage.getItem('skin') || 'default';
                var unusedLink = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
-
                unusedLink.setAttribute('rel', '');
                unusedLink.setAttribute('disabled', true);
            </script>
@@ -93,9 +92,11 @@
            <!-- END BASE JS -->
 
            <!-- BEGIN PLUGINS JS -->
+           <script src="{{asset('assets/vendor/pace/pace.min.js')}}"></script>
            <script src="{{asset('assets/vendor/stacked-menu/stacked-menu.min.js')}}"></script>
            <script src="{{asset('assets/vendor/select2/js/select2.full.min.js')}}"></script>
            <script src="{{asset('assets/vendor/flatpickr/flatpickr.min.js')}}"></script>
+           <script src="{{asset('assets/vendor/typeahead.js/typeahead.bundle.min.js')}}"></script>
            <!-- END PLUGINS JS -->
 
            <!-- BEGIN THEME JS -->
@@ -104,9 +105,8 @@
 
            <!-- BEGIN PAGE LEVEL JS -->
            <!-- your js for specific page goes here -->
-
            @include('layouts.scripts')
-           @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclasscountry' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent')
+           @if(Route::currentRouteName() == 'welcome.index' || Route::currentRouteName() == 'welcome.searchclasscountry' || Route::currentRouteName() == 'welcome.event' || Route::currentRouteName() == 'welcome.getevent' || Route::currentRouteName() == 'welcome.pilot')
            <script src="{{ asset('js/welcome.js') }}" defer></script>
            @endif
            <!-- END PAGE LEVEL JS -->

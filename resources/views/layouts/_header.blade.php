@@ -26,27 +26,13 @@
           <!-- .top-bar-item -->
           <div class="top-bar-item top-bar-item-full">
               <!-- .top-bar-search -->
-              <div class="top-bar-search">
-                  <div class="input-group input-group-search">
-                      <div class="input-group-prepend">
-                          <span class="input-group-text">
-                              <span class="oi oi-magnifying-glass"></span>
-                          </span>
-                      </div>
-                      {{$searchBar}}
-                  </div>
-              </div>
+              {{$searchBar}}
               <!-- /.top-bar-search -->
           </div>
           <!-- /.top-bar-item -->
 
           <!-- .top-bar-item -->
           <div class="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
-              @if(Route::currentRouteName() == 'welcome.event')
-              <ul class="header-nav nav">
-                  @include('event_public._searchform')
-              </ul>
-              @endif
               @guest
               <!-- .nav -->
               <ul class="header-nav nav">

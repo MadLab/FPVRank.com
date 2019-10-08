@@ -1,7 +1,7 @@
 @component('layouts.app')
 
 @slot('pageTitle')
-Edit user
+Edit profile
 @endslot
 
 @slot('pageTitle2')
@@ -29,7 +29,7 @@ Edit user
             @method('PUT')
             @csrf
             <fieldset>
-                <legend>User info</legend>
+                <legend>info</legend>
                 @include('user._userform')
             </fieldset>
             <hr class="mb-4">

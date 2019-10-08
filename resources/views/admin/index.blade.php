@@ -21,7 +21,7 @@ Dashboard
 @endslot
 
 @slot('searchBar')
-<input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+
 @endslot
 
 <div class="section-block">

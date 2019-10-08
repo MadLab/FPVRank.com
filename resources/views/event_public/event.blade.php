@@ -6,7 +6,7 @@
 
 @slot('imageCover')
 <header class="page-cover">
-    <img class="cover-img" src="{{$event->imagePath}}" alt="Event Image">
+    <img class="cover-img" src="{{$event->imagePath}}" alt="Event Image" onerror="this.src='{{asset('/events.jpg')}}';">
 </header>
 @endslot()
 
@@ -38,6 +38,16 @@
 @endslot
 
 @slot('searchBar')
+<div class="top-bar-search">
+    <div class="input-group input-group-search">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <span class="oi oi-magnifying-glass"></span>
+            </span>
+        </div>
+        <input id="search_public" type="text" class="form-control" aria-label="Search" placeholder="Search pilots by name or username">
+    </div>
+</div>
 
 @endslot
 <div class="section-block">

@@ -21,12 +21,27 @@ Events
 @endslot
 
 @slot('searchBar')
-<input onchange="searchByText($(this).val(),$('#date1').val(),$('#date2').val())" id="search_event" class="form-control" type="text" placeholder="You can search events by name or class name">
-@endslot
-<div id="events-content">
-    @include('event_public._eventtable')
+<div class="top-bar-search">
+    <div class="input-group input-group-search">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <span class="oi oi-magnifying-glass"></span>
+            </span>
+        </div>
+        <input id="search_public" type="text" class="form-control" aria-label="Search" placeholder="Search pilots by name or username">
+    </div>
 </div>
-<div class="links-table">
-    {{$events->onEachSide(1)->links()}}
+@endslot
+<div class="card card-fluid">
+
+    <div class="card-body">
+        @include('event_public._searchform')
+        <div id="events-content">
+        @include('event_public._eventtable')
+        </div>
+        <div class="links-table">
+            {{$events->onEachSide(1)->links()}}
+        </div>
+    </div>
 </div>
 @endcomponent

@@ -24,7 +24,7 @@ Users
 @endslot
 
 @slot('searchBar')
-<input id="search_user" class="form-control" type="text" placeholder="You can search users by '#', Name or Email">
+
 @endslot
 @component('components.modal')
 @slot('id')
@@ -44,6 +44,16 @@ user
 @endcomponent
 <div class="card">
     <div class="card-body">
+        <div class="form-group">
+            <div class="input-group input-group-alt">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
+                    </div>
+                    <input id="search_user" class="form-control" type="text" placeholder="You can search users by '#', Name or Email">
+                </div>
+            </div>
+        </div>
         @include('user._usertable')
         <div class="links-table">
             {{$users->onEachSide(1)->links()}}

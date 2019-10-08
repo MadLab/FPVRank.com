@@ -59,4 +59,14 @@ class Pilot extends Model
         return $this->select('pilotId','name', 'username','created_at','country')->orderBy('created_at', 'asc')->take($take)->get();
     }
 
+     /**
+     * Get a listing of the resource for the public pilot search
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function fillAutoComplete(){
+        return $this->select('name', 'username')->orderBy('name', 'asc')->get();
+    }
+
+
+
 }
