@@ -19,7 +19,8 @@
          <div id="dropdown-aside" class="dropdown-aside collapse">
              <!-- dropdown-items -->
              <div class="pb-3">
-                 <a class="dropdown-item" href="#"><span class="dropdown-icon oi oi-person"></span> Profile</a>
+                 <a class="dropdown-item" href="{{route('profile.edit')}}"><span
+                         class="dropdown-icon oi oi-person"></span> Profile</a>
                  <div class="dropdown-divider"></div>
                  <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

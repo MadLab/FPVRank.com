@@ -17,8 +17,9 @@ Classes
 @endslot
 
 @slot('floatingButton')
-<a href="{{route('class.create')}}">
-    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new class"><span class="fa fa-plus"></span>
+<a href="{{route('class.create')}}" class="btn-floated">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top"
+        title="Add new class"><span class="fa fa-plus"></span>
     </button>
 </a>
 @endslot
@@ -50,7 +51,8 @@ classes
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
                     </div>
-                    <input id="search_class" class="form-control" type="text" placeholder="You can search classes by '#' or Name">
+                    <input id="search_class" class="form-control" type="text"
+                        placeholder="You can search classes by '#' or Name">
                 </div>
             </div>
         </div>

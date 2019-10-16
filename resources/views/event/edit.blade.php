@@ -18,10 +18,14 @@ Edit event
 
 @slot('floatingButton')
 
-<button id="bottom-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Bottom" class="fa fa-arrow-down"></span>
+<button id="bottom-button-edit" class="btn btn-info btn-floated" type="button"
+    onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip"
+        data-placement="top" title="Go to Bottom" class="fa fa-arrow-down"></span>
 </button>
 
-<button id="top-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Top" class="fa fa-arrow-up"></span>
+<button id="top-button-edit" class="btn btn-info btn-floated" type="button"
+    onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top"
+        title="Go to Top" class="fa fa-arrow-up"></span>
 </button>
 
 @endslot
@@ -41,7 +45,8 @@ confirmRank
 @slot('button')
 <div id="modalbutton">
     @if ($event->dateRanked == null)
-    <a href="{{ route('event.rank', ['eventId' => $event->eventId, 'classId' => $event->classId]) }}" class="btn btn-info text-white">
+    <a href="{{ route('event.rank', ['eventId' => $event->eventId, 'classId' => $event->classId]) }}"
+        class="btn btn-info text-white">
         Rank event
     </a>
     @endif
@@ -57,7 +62,8 @@ confirmRank
 @endcomponent
 <div class="card">
     <div class="card-body">
-        <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('event.update', ['id' => $event->eventId]) }}"
+            enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <fieldset>
@@ -67,7 +73,8 @@ confirmRank
                     <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="card card-figure">
                             <figure class="figure">
-                                <img id="currentImage" class="img-fluid" src="{{$event->imagePath}}" alt="Current Image">
+                                <img id="currentImage" class="img-fluid" src="{{$event->imagePath}}"
+                                    alt="Current Image">
                                 <figcaption class="figure-caption">
                                     <h6 class="figure-title text-center">Current photo</h6>
                                     <p class="text-muted mb-0"></p>

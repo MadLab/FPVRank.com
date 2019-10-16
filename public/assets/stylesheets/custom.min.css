@@ -8,8 +8,21 @@
         margin-top: -1.6%;
         margin-left: 1.6%;
     }
-}
+    .search-group {
+        margin-right: -1%;
+        /*padding-left: -10%;*/
+    }
+    #top-button {
+        margin-right: 4%;
+    }
 
+    #bottom-button {
+        margin-right: 8%;
+    }
+    .searchMobile {
+        display: none;
+    }
+}
 
 /* Smartphones (portrait and landscape) */
 
@@ -26,8 +39,27 @@
         padding-bottom: 5%;
         margin-bottom: 3%;
     }
+    #search_public {
+        margin-top: -9.5%;
+        margin-left: 6%;
+    }
+    #top-button {
+        margin-right: 17%;
+    }
+    #bottom-button {
+        margin-right: 34%;
+    }
+    #bottom-button-edit {
+        margin-right: 18%;
+    }
+    .searchDesktop {
+        display: none;
+    }
+    .btn-floated {
+        margin-bottom: -15%;
+        z-index: 100;
+    }
 }
-
 
 /* All devices */
 
@@ -37,14 +69,6 @@ body {
     width: 100%;
 }
 
-#top-button {
-    margin-right: 4%;
-}
-
-#bottom-button {
-    margin-right: 8%;
-}
-
-a:hover {
+a :hover {
     cursor: pointer;
 }

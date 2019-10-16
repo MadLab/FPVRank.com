@@ -28,7 +28,8 @@ Events
                 <span class="oi oi-magnifying-glass"></span>
             </span>
         </div>
-        <input id="search_public" type="text" class="form-control" aria-label="Search" placeholder="Search pilots by name or username">
+        <input id="search_public" type="text" class="form-control" aria-label="Search"
+            placeholder="Search pilots by name or username">
     </div>
 </div>
 @endslot
@@ -37,7 +38,7 @@ Events
     <div class="card-body">
         @include('event_public._searchform')
         <div id="events-content">
-        @include('event_public._eventtable')
+            @include('event_public._eventtable')
         </div>
         <div class="links-table">
             {{$events->onEachSide(1)->links()}}

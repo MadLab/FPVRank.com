@@ -17,7 +17,8 @@ Create class
 @endslot
 
 @slot('floatingButton')
-<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span data-toggle="tooltip" data-placement="top" title="Upload classes with JSON" class="fa fa-file-import"></span>
+<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span
+        data-toggle="tooltip" data-placement="top" title="Upload classes with JSON" class="fa fa-file-import"></span>
 </button>
 @endslot
 
@@ -54,9 +55,10 @@ jsonmodal
             <fieldset>
                 <legend>Class info</legend>
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-sm-12 col-lg-6">
                         <label>Last ID</label>
-                        <input class="form-control" type="text" class="form-control" value="{{isset($lastClassId) ? $lastClassId : ' '}}" readonly>
+                        <input class="form-control" type="text" class="form-control"
+                            value="{{isset($lastClassId) ? $lastClassId : ' '}}" readonly>
                     </div>
                 </div>
                 @include('class._classform')

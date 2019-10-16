@@ -17,8 +17,9 @@ Pilots
 @endslot
 
 @slot('floatingButton')
-<a href="{{route('pilot.create')}}">
-    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new pilot"><span class="fa fa-plus"></span>
+<a href="{{route('pilot.create')}}" class="btn-floated">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top"
+        title="Add new pilot"><span class="fa fa-plus"></span>
     </button>
 </a>
 @endslot
@@ -50,7 +51,8 @@ pilot
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
                     </div>
-                    <input id="search_pilot" class="form-control" type="text" placeholder="You can search pilots by '#', Name or Username">
+                    <input id="search_pilot" class="form-control" type="text"
+                        placeholder="You can search pilots by '#', Name or Username">
                 </div>
             </div>
         </div>

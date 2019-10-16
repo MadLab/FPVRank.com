@@ -17,10 +17,12 @@ Users
 @endslot
 
 @slot('floatingButton')
-<a href="{{route('user.create')}}">
-    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new user"><span class="fa fa-plus"></span>
+<a href="{{route('user.create')}}" class="btn-floated">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top"
+        title="Add new user"><span class="fa fa-plus"></span>
     </button>
 </a>
+
 @endslot
 
 @slot('searchBar')
@@ -50,7 +52,8 @@ user
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
                     </div>
-                    <input id="search_user" class="form-control" type="text" placeholder="You can search users by '#', Name or Email">
+                    <input id="search_user" class="form-control" type="text"
+                        placeholder="You can search users by '#', Name or Email">
                 </div>
             </div>
         </div>

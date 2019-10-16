@@ -17,8 +17,9 @@ Events
 @endslot
 
 @slot('floatingButton')
-<a href="{{route('event.create')}}">
-    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top" title="Add new event"><span class="fa fa-plus"></span>
+<a href="{{route('event.create')}}" class="btn-floated">
+    <button type="button" class="btn btn-success btn-floated" data-toggle="tooltip" data-placement="top"
+        title="Add new event"><span class="fa fa-plus"></span>
     </button>
 </a>
 @endslot
@@ -50,7 +51,8 @@ event
                     <div class="input-group-prepend">
                         <span class="input-group-text"><span class="oi oi-magnifying-glass"></span></span>
                     </div>
-                    <input id="search_event" class="form-control" type="text" placeholder="You can search events by '#', Name or Class">
+                    <input id="search_event" class="form-control" type="text"
+                        placeholder="You can search events by '#', Name or Class">
                 </div>
             </div>
         </div>

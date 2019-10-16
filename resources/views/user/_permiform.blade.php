@@ -1,9 +1,11 @@
 <div class="form-group row">
-    <label class="col-md-4 col-form-label text-md-right"> </label>
-    <div class="col-md-3 text-center">
+    <div class="col-4 text-center">
+        <label>Controller</label>
+    </div>
+    <div class="col-4 text-center">
         <label>Create data</label>
     </div>
-    <div class="col-md-3 text-center">
+    <div class="col-4 text-center">
         <label>Edit data</label>
     </div>
 </div>

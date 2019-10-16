@@ -18,14 +18,18 @@ Create event
 
 @slot('floatingButton')
 
-<button id="bottom-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Bottom"
-class="fa fa-arrow-down"></span>
+<button id="bottom-button" class="btn btn-info btn-floated" type="button"
+    onclick="$('html, body').animate({ scrollTop: $(document).height() }, 500)"><span data-toggle="tooltip"
+        data-placement="top" title="Go to Bottom" class="fa fa-arrow-down"></span>
 </button>
 
-<button id="top-button" class="btn btn-info btn-floated" type="button" onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top" title="Go to Top" class="fa fa-arrow-up"></span>
+<button id="top-button" class="btn btn-info btn-floated" type="button"
+    onclick="$('html, body').animate({ scrollTop: 0 }, 500)"><span data-toggle="tooltip" data-placement="top"
+        title="Go to Top" class="fa fa-arrow-up"></span>
 </button>
 
-<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span data-toggle="tooltip" data-placement="top" title="Upload event with JSON" class="fa fa-file-import"></span>
+<button class="btn btn-primary btn-floated" type="button" data-toggle="modal" data-target="#jsonmodal"><span
+        data-toggle="tooltip" data-placement="top" title="Upload event with JSON" class="fa fa-file-import"></span>
 </button>
 
 @endslot
