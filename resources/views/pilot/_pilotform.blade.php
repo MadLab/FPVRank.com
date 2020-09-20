@@ -30,9 +30,10 @@
         @enderror
     </div>
     <div class="form-group col-sm-12 col-lg-6">
-        <label class="control-label" for="country">Country<span class="badge badge-danger">Required</span></label>
+        <label class="control-label" for="country">Country<span class="badge badge-danger">Optional</span></label>
         <select name="country" id="country" class="form-control @error('country') is-invalid @enderror"
             data-toggle="select2" data-allow-clear="false">
+            <option value="null">Select a country</option>
             @foreach ($countries as $key => $country)
             <option value="{{$key}}" @if(isset($pilot->country)) @if($pilot->country == $key) selected @endif
                 @endif>{{$country}}</option>
@@ -47,7 +48,7 @@
     <div class="form-group col-12">
         <label for="dropzone">Photo {{(Route::currentRouteName() == 'pilot.edit' ? '**Empty to keep same photo' : ' ')}}
             <span
-                class="badge badge-danger">{{(Route::currentRouteName() == 'pilot.edit' ? 'Optional' : 'Required')}}</span></label>
+                class="badge badge-danger">{{(Route::currentRouteName() == 'pilot.edit' ? 'Optional' : 'Optional')}}</span></label>
         <div id="dropzone" class="fileinput-dropzone">
             <span>Drop files or click to upload.</span>
             <!-- The file input field used as target for the file upload widget -->

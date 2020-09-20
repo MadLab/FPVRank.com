@@ -96,7 +96,10 @@ class PilotController extends Controller
      */
     public function store(PilotRequest $request)
     {
-        $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
+        $a = null;
+        if($request->file('photo') != null){
+            $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
+        }        
         $pilot = $this->pilot->create([
             'pilotId' => $request->pilotId,
             'name' => $request->name,

@@ -49,7 +49,7 @@ class HomeController extends Controller
         $countries = $this->country->getData();
         $results = $this->result->select('results.*', 'events.name as eventName')->where('results.pilotId', '=', $pilotId)->join('events', 'events.eventId', '=', 'results.eventId')->get();
         $ranking = $this->ranking->where([['pilotId', '=', $pilotId], ['current', '=', 1]])->get();
-        if ($pilot->imageLocal == 1) {
+        if ($pilot->imageLocal == 1 && $pilot->imagePath != null) {
             $pilot->imagePath = Storage::disk('s3')->temporaryUrl(
                 $pilot->imagePath,
                 now()->addMinutes(1)
@@ -82,7 +82,7 @@ class HomeController extends Controller
         $event = $this->event->searchById($eventId);
         $countries = $this->country->getData();
 
-        if ($event->imageLocal == 1) {
+        if ($event->imageLocal == 1 && $event->imagePath != null) {
             $event->imagePath = Storage::disk('s3')->temporaryUrl(
                 $event->imagePath,
                 now()->addMinutes(1)

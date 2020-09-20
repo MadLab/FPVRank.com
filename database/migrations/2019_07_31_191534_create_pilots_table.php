@@ -17,8 +17,8 @@ class CreatePilotsTable extends Migration
             $table->bigIncrements('pilotId');
             $table->string('name');
             $table->string('username');
-            $table->string('country');
-            $table->string('imagePath');
+            $table->string('country')->nullable();
+            $table->string('imagePath')->nullable();
             $table->boolean('imageLocal')->default(1); //to know if image is stored throught json or this site
             $table->timestamps();
         });

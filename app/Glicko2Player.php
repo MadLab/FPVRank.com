@@ -1,5 +1,7 @@
 <?php
 
+use App\GlickoValue;
+
 namespace App;
 
 class Glicko2Player {
@@ -9,33 +11,38 @@ class Glicko2Player {
 	public $mu;
 	public $phi;
 	public $tau;
-	private $pi2 = 9.8696044;
+	//private $pi2 = 9.8696044;
 	var $M = array();
-	function __construct($rating = 1500, $rd = 350, $volatility = 0.06, $mu = null, $phi = null, $sigma = null, $systemconstant = 0.75) {
+	
+
+	function settings(){return GlickoValue::select('*')->get()->last();}
+
+	function __construct() {
+		$settings = $this->settings();
 		// Step 1
-		$this->rating = $rating;
-		$this->rd = $rd;
+		$this->rating = $settings->rating;
+		$this->rd = $settings->rd;
 		// volatility
-		if (is_null($sigma)) {
-			$this->sigma = $volatility;
+		if (is_null($settings->sigma)) {
+			$this->sigma = $settings->volatility;
 		} else {
-			$this->sigma = $sigma;
+			$this->sigma = $settings->sigma;
 		}
 		// System Constant
-		$this->tau = $systemconstant;
+		$this->tau = $settings->systemconstant;
 		// Step 2
 		// Rating
-		if (is_null($mu)) {
+		if (is_null($settings->mu)) {
 			$this->mu = ( $this->rating - 1500 ) / 173.7178;
 		} else {
-			$this->mu = $mu;
+			$this->mu = $settings->mu;
 		}
 		// Rating Deviation
-		if (is_null($phi)) {
+		if (is_null($settings->phi)) {
 			$this->phi = $this->rd / 173.7178;
 		} else {
-			$this->phi = $phi;
-		}
+			$this->phi = $settings->phi;
+		}		
 	}
 	function AddWin($OtherPlayer) {
 		$this->M[] = $OtherPlayer->MatchElement(1);
@@ -109,7 +116,8 @@ class Glicko2Player {
 		return array( 'r' => ( 173.7178 * $mu_p ) + 1500, 'RD' => 173.7178 * $phi_p, 'mu' => $mu_p, 'phi' => $phi_p, 'sigma' => $sigma_p );
 	}
 	function g($phi) {
-		return 1.0 / ( sqrt( 1.0 + ( 3.0 * $phi * $phi) / ( $this->pi2 ) ) );
+		$settings = $this->settings();		
+		return 1.0 / ( sqrt( 1.0 + ( 3.0 * $phi * $phi) / ( $settings->pi2 ) ) );
 	}
 	function E($mu, $mu_j, $phi_j) {
 		return 1.0 / ( 1.0 + exp( -$this->g($phi_j) * ( $mu - $mu_j ) ) );

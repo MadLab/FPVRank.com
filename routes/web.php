@@ -73,6 +73,12 @@ Route::middleware(['auth', 'permission'])->group(function () {
             Route::post('update/{id}', 'PilotController@update')->name('update');
         });
     });
+    Route::prefix('glicko')->group(function () {
+        Route::name('glicko.')->group(function () {
+            Route::get('/', 'GlickoValueController@index')->name('index');            
+            Route::post('store', 'GlickoValueController@store')->name('store');
+        });
+    });
     Route::prefix('events')->group(function () {
         Route::name('event.')->group(function () {
             Route::get('/', 'EventController@index')->name('index');
@@ -83,6 +89,9 @@ Route::middleware(['auth', 'permission'])->group(function () {
             Route::get('edit/{id}', 'EventController@edit')->name('edit');
             Route::put('update/{id}', 'EventController@update')->name('update');
             Route::get('rank/{eventId}/{classId}', 'EventController@rank')->name('rank');
+            
+            Route::get('rerankevents', 'EventController@reRankEvents')->name('reRankEvents');
+
         });
     });
     Route::prefix('results')->group(function () {

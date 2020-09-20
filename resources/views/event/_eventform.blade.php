@@ -48,7 +48,7 @@
     <div class="form-group col-12">
         <label for="dropzone">Photo {{(Route::currentRouteName() == 'event.edit' ? '**Empty to keep same photo' : ' ')}}
             <span
-                class="badge badge-danger">{{(Route::currentRouteName() == 'event.edit' ? 'Optional' : 'Required')}}</span></label>
+                class="badge badge-danger">{{(Route::currentRouteName() == 'event.edit' ? 'Optional' : 'Optional')}}</span></label>
         <div id="dropzone" class="fileinput-dropzone">
             <span>Drop files or click to upload.</span>
             <!-- The file input field used as target for the file upload widget -->

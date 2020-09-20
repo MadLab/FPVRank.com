@@ -42,5 +42,13 @@ class UserSeeder extends Seeder
             'location' => 'global',
             'created_at' => date("Y-m-d H:i:s"),
         ]);
+        
+        DB::table('glicko_values')->insert([
+            'rating' => '1500',
+            'rd' => '350',
+            'volatility' => '0.06',            
+            'systemconstant' => '0.75',
+            'pi2' => '9.8696044',            
+        ]);
     }
 }

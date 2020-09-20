@@ -43,6 +43,13 @@ event
 
 </div>
 @endcomponent
+
+<a href="#" onclick="if(confirm('Do you really want to rank again?')){ window.location = '/events/rerankevents' }" class="">
+    Rank Events again
+</a>
+
+<br/>
+
 <div class="card">
     <div class="card-body">
         <div class="form-group">

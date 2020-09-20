@@ -103,6 +103,12 @@
                          <span class="menu-text">Events</span>
                      </a>
                  </li>
+                 <li class="menu-item">
+                     <a href="{{route('glicko.index')}}" class="menu-link">
+                         <span class="menu-icon fa fa-cog"></span>
+                         <span class="menu-text">Glicko Default Values</span>
+                     </a>
+                 </li>
                  <!-- /.menu-item -->
              </ul>
              <!-- /.menu -->

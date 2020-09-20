@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Auth;
 
-class PilotUpdateRequest extends FormRequest
+class GlickoValuesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,11 +13,7 @@ class PilotUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        if(Auth::check()){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
     }
 
     /**
@@ -29,11 +24,14 @@ class PilotUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "pilotId" => 'required',
-            "name" => 'required|max:250',
-            "username" => 'required|max:250',
-            'country' => 'nullable',
-            'photo' => 'nullable|mimes:png,jpeg,jpg,jpe'
+            'rating' => 'required',
+            'rd' => 'required',
+            'volatility' => 'required',
+            'mu' => 'nullable',
+            'phi' => 'nullable',
+            'sigma' => 'nullable',
+            'systemconstant' => 'required',
+            'pi2' => 'required',            
         ];
     }
 }

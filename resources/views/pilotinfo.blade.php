@@ -19,7 +19,11 @@
 @slot('pageCover')
 <header class="page-cover">
     <div class="text-center">
-        <a href="#" class="user-avatar user-avatar-xxl"><img src="{{$pilot->imagePath}}" alt=""></a>
+        <a href="#" class="user-avatar user-avatar-xxl">
+            @if($pilot->imagePath != null)
+            <img src="{{$pilot->imagePath}}" alt="">
+            @endif
+        </a>
         <h2 class="h2 mt-2 mb-0">
             @foreach ($countries as $key => $country)
             @if($key == $pilot->country)

@@ -34,7 +34,7 @@ class EventRequest extends FormRequest
             "classId" => 'required|numeric',
             "date" => 'required',
             "notes.*" => 'nullable|max:250',
-            'photo' => 'required|mimes:png,jpeg,jpg,jpe'
+            'photo' => 'nullable|mimes:png,jpeg,jpg,jpe'
         ];
     }
 }

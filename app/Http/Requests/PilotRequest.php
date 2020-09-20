@@ -32,8 +32,8 @@ class PilotRequest extends FormRequest
             "pilotId" => 'required',
             "name" => 'required|max:250',
             "username" => 'required|max:250',
-            'country' => 'required',
-            'photo' => 'required|mimes:png,jpeg,jpg,jpe'
+            'country' => 'nullable',
+            'photo' => 'nullable|mimes:png,jpeg,jpg,jpe'
         ];
     }
 }
