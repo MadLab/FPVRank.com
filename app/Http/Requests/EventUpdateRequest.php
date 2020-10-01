@@ -30,6 +30,7 @@ class EventUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            "multigpId" => 'nullable',
             "name" => 'required|max:250',
             "location" => 'required|max:250',
             "classId" => 'required|numeric',

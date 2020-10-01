@@ -15,6 +15,7 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->bigInteger('eventId')->unique();
+            $table->string('multigpId')->nullable()->unique();
             $table->string('name');
             $table->dateTime('date');
             $table->string('classId');

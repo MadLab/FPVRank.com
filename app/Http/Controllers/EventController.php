@@ -15,6 +15,7 @@ use App\Http\Requests\JSONRequest;
 use Config;
 use Illuminate\Http\Request;
 use Storage;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -54,7 +55,7 @@ class EventController extends Controller
 
         $systemconstant = $default->systemconstant;  //Config::get('glickoValues.systemconstant');
         $volatility = $default->volatility; //Config::get('glickoValues.volatility');
-        
+
         $pilots = $this->pilot->all(); ///to get the pilot info
 
         $results = $this->result->byEventId($eventId);
@@ -177,7 +178,7 @@ class EventController extends Controller
      * to rank all events again
      * 
      */
-        /**
+    /**
      * Do the rankings for the event
      * * @param  int  $eventId
      */
@@ -195,7 +196,7 @@ class EventController extends Controller
 
         $systemconstant = $default->systemconstant;  //Config::get('glickoValues.systemconstant');
         $volatility = $default->volatility; //Config::get('glickoValues.volatility');
-        
+
         $pilots = $this->pilot->all(); ///to get the pilot info
 
         $results = $this->result->byEventId($eventId);
@@ -308,8 +309,8 @@ class EventController extends Controller
         ///set the event as "Ranked"
         $eve = $this->event->findOrFail($eventId);
         $eve->dateRanked = date("Y-m-d H:i:s");
-        $eve->save();     
-        
+        $eve->save();
+
         return true;
     }
     /**
@@ -343,52 +344,74 @@ class EventController extends Controller
      */
     public function update(EventUpdateRequest $request, $id)
     {
-        //to validate if there is atleast one row of results
-        $count = 0;
-        foreach ($request->pilotId as $key) {
-            if ($key != 'null') {
-                $count++;
-            }
-        }
-        ///if there is a row insert the data
-        if ($count != 0) {
-            $event = $this->event->findOrFail($id);
-            $event->name = $request->name;
-            $event->location = $request->location;
-            $event->date = $request->date;
-            $event->classId = $request->classId;
-            if ($request->photo != null) {
-                Storage::disk('s3')->delete($event->imagePath);
-                $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
-                $event->imagePath = $a;
-                $event->imageLocal = 1;
-            }
-            $event->save();
+        try {
+            try {
+                //$validaFecha = Carbon::now($request->date);
 
-            for ($i = 0; $i < count($request->pilotId); $i++) {
-                if ($request->pilotId[$i] != "null") {
-                    if ($request->resultId[$i] != "null") {
-                        $result = $this->result->findOrFail($request->resultId[$i]);
-                        $result->pilotId = $request->pilotId[$i];
-                        $result->position = $request->position[$i];
-                        $result->notes = $request->notes[$i];
-                        $result->save();
-                    } else {
-                        $this->result->create([
-                            'eventId' => $event->eventId,
-                            'pilotId' => $request->pilotId[$i],
-                            'position' => $request->position[$i],
-                            'notes' => $request->notes[$i],
-                        ]);
-                    }
+                if (Carbon::createFromFormat('Y-m-d H:i', $request->date) !== false) {
+                    $validaFecha = Carbon::createFromFormat('Y-m-d H:i', $request->date);
+                    $request->date = $validaFecha->format('Y-m-d H:i');
+                }
+            } catch (\Throwable $th) {
+                $message = 'Please select a valid date!';
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            }
+            //to validate if there is atleast one row of results
+            $count = 0;
+            foreach ($request->pilotId as $key) {
+                if ($key != 'null') {
+                    $count++;
                 }
             }
+            ///if there is a row insert the data
+            if ($count != 0) {
+                $event = $this->event->findOrFail($id);
+                $event->name = $request->name;
+                $event->location = $request->location;
+                $event->date = $request->date;
+                $event->multigpId = $request->multigpId;
+                $event->classId = $request->classId;
+                if ($request->photo != null) {
+                    Storage::disk('s3')->delete($event->imagePath);
+                    $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
+                    $event->imagePath = $a;
+                    $event->imageLocal = 1;
+                }
+                $event->save();
 
-            $message = 'Event has been updated succesfully!';
-            return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
-        } else { ///if there is no row, return messsage error
-            $message = 'Add atleast one result!';
-            return back()->withInput()->with('status', $message)->with('type', 'danger');
+                for ($i = 0; $i < count($request->pilotId); $i++) {
+                    if ($request->pilotId[$i] != "null") {
+                        if ($request->resultId[$i] != "null") {
+                            $result = $this->result->findOrFail($request->resultId[$i]);
+                            $result->pilotId = $request->pilotId[$i];
+                            $result->position = $request->position[$i];
+                            $result->notes = $request->notes[$i];
+                            $result->save();
+                        } else {
+                            $this->result->create([
+                                'eventId' => $event->eventId,
+                                'pilotId' => $request->pilotId[$i],
+                                'position' => $request->position[$i],
+                                'notes' => $request->notes[$i],
+                            ]);
+                        }
+                    }
+                }
+
+                $message = 'Event has been updated succesfully!';
+                return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
+            } else { ///if there is no row, return messsage error
+                $message = 'Add atleast one result!';
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            }
+        } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                $message = 'Multigp ID already taken!';
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            } else {
+                $message = 'An error has ocurred! ' . $th->getMessage();
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            }
         }
     }
     /**
@@ -398,63 +421,100 @@ class EventController extends Controller
      */
     public function storejson(JSONRequest $request)
     {
+        set_time_limit(600);
         try {
-            $json = json_decode(file_get_contents($request->jsonurl), true);
-            if ($json == null) {
+            $jsonDecoded = json_decode(file_get_contents($request->jsonurl), true);
+            if ($jsonDecoded == null) {
                 $message = 'Please enter a valid JSON URL!';
                 return back()->withInput()->with('status', $message)->with('type', 'danger');
             } else {
-                $pilotData = []; //to store the pilots in the database
-                $resultData = []; //to store the results in the database
-                $eventData = [
-                    'eventId' => isset($json['pilots'][0]['raceId']) && !empty($json['pilots'][0]['raceId']) ? $json['pilots'][0]['raceId'] : rand(1, 10000),
-                    'name' => isset($json['raceName']) && !empty($json['raceName']) ? $json['raceName'] : 'null',
-                    'location' => 'null',
-                    'date' => isset($json['startDate']) && !empty($json['startDate']) ? $json['startDate'] : 'null',
-                    'classId' => 1,
-                    'imagePath' => isset($json['eventImage']) && !empty($json['eventImage']) ? $json['eventImage'] : 'null',
-                    'imageLocal' => 0,
-                ];
-                $pilots = $this->pilot->all();
+                foreach ($jsonDecoded as $json) {
+                    $eventsDB = $this->event->all();
+                    if (!$eventsDB->contains('multigpId', $json['multigpId'])) {
+                        $pilotData = []; //to store the pilots in the database
+                        $resultData = []; //to store the results in the database
 
-                $count = 1;
+                        $lastEvent = $this->event->select('eventId')->orderBy('eventId', 'asc')->get()->last();
+                        $nextEventId = $lastEvent == null ? 1 : $lastEvent->eventId + 1;
 
-                foreach ($json['pilots'] as $key => $val) {
-                    if ($pilots->contains('pilotId', $val['pilotId'])) {
-                        $pi = $pilots->where('pilotId', $val['pilotId'])->first();
-                        array_push($resultData, array(
-                            'eventId' => $eventData['eventId'],
-                            'pilotId' => $pi->pilotId,
-                            'position' => $count,
-                            'notes' => 'null',
-                        ));
-                    } else {
-                        array_push($pilotData, array(
-                            'pilotId' => $val['pilotId'],
-                            'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
-                            'username' => $val['pilotUserName'],
-                            'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null',
-                            'imagePath' => isset($val['pilotProfilePictureUrl']) && !empty($val['pilotProfilePictureUrl']) ? $val['pilotProfilePictureUrl'] : 'null',
+                        $eventData = [
+                            'eventId' => $nextEventId,
+                            'multigpId' => isset($json['multigpId']) && !empty($json['multigpId']) ? $json['multigpId'] : null,
+                            'name' => isset($json['raceName']) && !empty($json['raceName']) ? $json['raceName'] : 'null',
+                            'location' => 'null',
+                            'date' => isset($json['startDate']) && !empty($json['startDate']) ? $json['startDate'] : 'null',
+                            'classId' => 1,
+                            'imagePath' => isset($json['eventImage']) && !empty($json['eventImage']) ? $json['eventImage'] : 'null',
                             'imageLocal' => 0,
-                            'created_at' => date("Y-m-d H:i:s"),
-                        ));
-                        array_push($resultData, array(
-                            'eventId' => $eventData['eventId'],
-                            'pilotId' => $val['pilotId'],
-                            'position' => $count,
-                            'notes' => 'null',
-                        ));
+                        ];
+                        $pilots = $this->pilot->all();
+
+                        $count = 1;
+
+                        foreach ($json['pilots'] as $key => $val) {
+                            if ($pilots->contains('pilotId', $val['pilotId'])) {
+                                $pi = $pilots->where('pilotId', $val['pilotId'])->first();
+
+                                $pi->multigpId = $val['multigpId'];
+                                $pi->name = $val['pilotFirstName'] . ' ' . $val['pilotLastName'];
+                                $pi->username = $val['pilotUserName'];
+                                $pi->country = isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null';
+                                $pi->imagePath = isset($val['pilotProfilePictureUrl']) && !empty($val['pilotProfilePictureUrl']) ? $val['pilotProfilePictureUrl'] : 'null';
+                                $pi->imageLocal = 0;
+                                $pi->save();
+
+                                array_push($resultData, array(
+                                    'eventId' => $eventData['eventId'],
+                                    'pilotId' => $pi->pilotId,
+                                    'position' => $count,
+                                    'notes' => 'null',
+                                ));
+                            } else if ($pilots->contains('multigpId', $val['multigpId'])) {
+                                $pi = $pilots->where('multigpId', $val['multigpId'])->first();
+                                $pi->pilotId = $val['pilotId'];
+                                $pi->name = $val['pilotFirstName'] . ' ' . $val['pilotLastName'];
+                                $pi->username = $val['pilotUserName'];
+                                $pi->country = isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null';
+                                $pi->imagePath = isset($val['pilotProfilePictureUrl']) && !empty($val['pilotProfilePictureUrl']) ? $val['pilotProfilePictureUrl'] : 'null';
+                                $pi->imageLocal = 0;
+                                $pi->save();
+
+                                array_push($resultData, array(
+                                    'eventId' => $eventData['eventId'],
+                                    'pilotId' => $pi->pilotId,
+                                    'position' => $count,
+                                    'notes' => 'null',
+                                ));
+                            } else {
+                                array_push($pilotData, array(
+                                    'multigpId' => $val['multigpId'],
+                                    'pilotId' => $val['pilotId'],
+                                    'name' => $val['pilotFirstName'] . ' ' . $val['pilotLastName'],
+                                    'username' => $val['pilotUserName'],
+                                    'country' => isset($val['pilotCountry']) && !empty($val['pilotCountry']) ? $val['pilotCountry'] : 'null',
+                                    'imagePath' => isset($val['pilotProfilePictureUrl']) && !empty($val['pilotProfilePictureUrl']) ? $val['pilotProfilePictureUrl'] : 'null',
+                                    'imageLocal' => 0,
+                                    'created_at' => date("Y-m-d H:i:s"),
+                                ));
+                                array_push($resultData, array(
+                                    'eventId' => $eventData['eventId'],
+                                    'pilotId' => $val['pilotId'],
+                                    'position' => $count,
+                                    'notes' => 'null',
+                                ));
+                            }
+                            $count++;
+                        }
+                        Pilot::insert($pilotData);
+                        $event = $this->event->create($eventData);
+                        Result::insert($resultData);
                     }
-                    $count++;
                 }
-                Pilot::insert($pilotData);
-                $event = $this->event->create($eventData);
-                Result::insert($resultData);
                 $message = 'Event has been saved succesfully!';
                 return redirect()->route('event.edit', ['id' => $event->eventId])->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
-            $message = 'ID must be unique or invalid JSON format, please enter a valid JSON URL!';
+            $message = 'An error has ocurred! ' . $th->getMessage();
             return back()->withInput()->with('status', $message)->with('type', 'danger');
         }
     }
@@ -467,6 +527,18 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
+        try {
+            //$validaFecha = Carbon::now($request->date);
+
+            if (Carbon::createFromFormat('Y-m-d H:i', $request->date) !== false) {
+                $validaFecha = Carbon::createFromFormat('Y-m-d H:i', $request->date);
+                $request->date = $validaFecha->format('Y-m-d H:i');
+            }
+        } catch (\Throwable $th) {
+            $message = 'Please select a valid date!';
+            return back()->withInput()->with('status', $message)->with('type', 'danger');
+        }
+
         //to validate if there is atleast one row of results
         $count = 0;
         foreach ($request->pilotId as $key) {
@@ -479,12 +551,13 @@ class EventController extends Controller
             $a = null;
             if ($request->file('photo') != null) {
                 $a = Storage::disk('s3')->put('eventPicture', $request->file('photo'));
-            }            
+            }
             $lastEvent = $this->event->select('eventId')->orderBy('eventId', 'asc')->get()->last();
             $nextEventId = $lastEvent == null ? 1 : $lastEvent->eventId + 1;
             $event = $this->event->create([
                 'eventId' => $nextEventId,
                 'name' => $request->name,
+                'multigpId' => $request->multigpId,
                 'location' => $request->location,
                 'date' => $request->date,
                 'classId' => $request->classId,
@@ -544,17 +617,19 @@ class EventController extends Controller
         ]);
     }
 
-    public function reRankEvents(){
+    public function reRankEvents()
+    {
+        set_time_limit(0);
         Ranking::truncate();
         $events = $this->event->all();
-        
+
         foreach ($events as $key) {
             $key->dateRanked = null;
             $key->save();
-            
-            $va = $this->rankAgain($key->eventId, $key->classId);            
+
+            $va = $this->rankAgain($key->eventId, $key->classId);
         }
-                        
+
         $message = 'All events have been ranked succesfully!';
         return redirect()->route('event.index')->with('status', $message)->with('type', 'success');
     }

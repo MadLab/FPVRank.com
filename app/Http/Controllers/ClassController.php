@@ -87,7 +87,7 @@ class ClassController extends Controller
                 return redirect()->route('class.create')->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
-            $message = 'Please enter a valid JSON URL!';
+            $message = 'An error has ocurred! '.$th->getMessage();            
             return redirect()->route('class.create')->with('status', $message)->with('type', 'danger');
         }
     }

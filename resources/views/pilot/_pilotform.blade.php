@@ -1,9 +1,9 @@
 <div class="row">
     <div class="form-group col-sm-12 col-lg-6">
-        <label for="pilotId">ID<span class="badge badge-danger">Required</span></label>
-        <input name="pilotId" type="text" class="form-control @error('pilotId') is-invalid @enderror" id="pilotId"
-            placeholder="" required="" value="{{ !isset($pilot->pilotId) ? old('pilotId') : $pilot->pilotId }}">
-        @error('pilotId')
+        <label for="multigpId">Multigp ID<span class="badge badge-danger">Optional</span></label>
+        <input name="multigpId" type="text" class="form-control @error('multigpId') is-invalid @enderror" id="multigpId"
+            placeholder="" value="{{ !isset($pilot->multigpId) ? old('multigpId') : $pilot->multigpId }}">
+        @error('multigpId')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>
         </span>

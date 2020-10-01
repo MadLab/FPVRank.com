@@ -15,6 +15,7 @@ class CreatePilotsTable extends Migration
     {
         Schema::create('pilots', function (Blueprint $table) {
             $table->bigIncrements('pilotId');
+            $table->string('multigpId')->nullable()->unique();
             $table->string('name');
             $table->string('username');
             $table->string('country')->nullable();

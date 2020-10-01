@@ -1,13 +1,14 @@
 /*global $*/
 $(function() {
     var data = [{
-        "pilotId": "pilot id",
+        "multigpId": "multigp id", 
         "name": "pilot name",
         "username": "pilot username",
-        "country": "pilot country",
-        "imagePath": "pilot image",
-    }, ];
+        "country": "US",
+        "imagePath": "pilot image"
+    } ];
     var textedJson = JSON.stringify(data, undefined, 4);
+    //textedJson = textedJson + '\n **multigpId is nullable';
     $('#myTextarea').text(textedJson);
     $("#fileupload-dropzone").change(function() {
         readURL(this);

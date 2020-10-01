@@ -4,6 +4,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
+                <th scope="col">Multigp ID</th>
                 <th scope="col">Country</th>
                 <th scope="col">Created date</th>
                 <th scope="col"></th>
@@ -14,6 +15,7 @@
             <tr>
                 <th scope="row">{{$pilot->pilotId }}</th>
                 <td>{{$pilot->name }} -- {{$pilot->username}}</td>
+                <td>{{$pilot->multigpId}}</td>
                 <td>
                     @foreach ($countries as $key => $country)
                     @if($key == $pilot->country)

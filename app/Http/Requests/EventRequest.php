@@ -29,6 +29,7 @@ class EventRequest extends FormRequest
     public function rules()
     {
         return [
+            "multigpId" => 'nullable|unique:pilots',
             "name" => 'required|max:250',
             "location" => 'required|max:250',
             "classId" => 'required|numeric',

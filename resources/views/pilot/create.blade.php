@@ -45,7 +45,7 @@ jsonmodal
         @include('components._jsonform', ['rows' => 8])
     </form>
     <hr class="separator-line">
-    <div>**If JSON contains same pilotId as in the database, data will be updated!</div>
+    <div>**If JSON contains same multigpId as in the database, data will be updated!</div>
 </div>
 @endcomponent
 <div class="card">
@@ -53,14 +53,7 @@ jsonmodal
         <form method="POST" action="{{ route('pilot.store') }}" enctype="multipart/form-data">
             @csrf
             <fieldset>
-                <legend>Pilot info</legend>
-                <div class="row">
-                    <div class="form-group col-sm-12 col-lg-6">
-                        <label>Last ID</label>
-                        <input type="text" class="form-control" value="{{isset($lastPilotId) ? $lastPilotId : ' '}}"
-                            readonly>
-                    </div>
-                </div>
+                <legend>Pilot info</legend>                
                 @include('pilot._pilotform')
                 <div class="row justify-content-md-center">
                     <div class="col-xl-3 col-lg-4 col-sm-6">

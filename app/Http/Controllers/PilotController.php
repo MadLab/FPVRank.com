@@ -64,8 +64,8 @@ class PilotController extends Controller
             } else {
                 $pilots = $this->pilot->all();
                 foreach ($json as $val) {
-                    if ($pilots->contains('pilotId', '=', $val['pilotId'])) {
-                        $pilot = $pilots->where('pilotId', '=', $val['pilotId'])->first();
+                    if ($pilots->contains('multigpId', '=', $val['multigpId'])) {
+                        $pilot = $pilots->where('multigpId', '=', $val['multigpId'])->first();
                         $pilot->name = $val['name'];
                         $pilot->username = $val['username'];
                         $pilot->country = $val['country'];
@@ -83,7 +83,7 @@ class PilotController extends Controller
                 return redirect()->route('pilot.create')->with('status', $message)->with('type', 'success');
             }
         } catch (\Throwable $th) {
-            $message = 'Please enter a valid JSON URL!';
+            $message = 'An error has ocurred! '.$th->getMessage();            
             return redirect()->route('pilot.create')->with('status', $message)->with('type', 'danger');
         }
     }
@@ -97,11 +97,12 @@ class PilotController extends Controller
     public function store(PilotRequest $request)
     {
         $a = null;
-        if($request->file('photo') != null){
+        if ($request->file('photo') != null) {
             $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
-        }        
+        }
         $pilot = $this->pilot->create([
             'pilotId' => $request->pilotId,
+            'multigpId' => $request->multigpId,
             'name' => $request->name,
             'username' => $request->username,
             'country' => $request->country,
@@ -135,7 +136,7 @@ class PilotController extends Controller
     {
         $pilot = $this->pilot->findOrFail($id);
         $countries = $this->country->getData();
-        if ($pilot->imageLocal == 1) {
+        if ($pilot->imageLocal == 1 && $pilot->imagePath != null) {
             $pilot->imagePath = Storage::disk('s3')->temporaryUrl(
                 $pilot->imagePath,
                 now()->addMinutes(1)
@@ -154,22 +155,32 @@ class PilotController extends Controller
      */
     public function update(PilotUpdateRequest $request, $id)
     {
-        $pilot = $this->pilot->findOrFail($id);
-        $check = $this->pilot->where('pilotId', '=', $request->pilotId)->first();
-        if ($id == $request->pilotId || $check == null) {
-            if($request->photo != null){
-                Storage::disk('s3')->delete($pilot->imagePath);
-                $a = Storage::disk('s3')->put('pilotPicture',$request->file('photo'));
-                $pilot->imagePath = $a;
-                $pilot->imageLocal = 1;
+        try {
+            $pilot = $this->pilot->findOrFail($id);
+            $check = $this->pilot->where('pilotId', '=', $request->pilotId)->first();
+            if ($id == $request->pilotId || $check == null) {
+                if ($request->photo != null) {
+                    Storage::disk('s3')->delete($pilot->imagePath);
+                    $a = Storage::disk('s3')->put('pilotPicture', $request->file('photo'));
+                    $pilot->imagePath = $a;
+                    $pilot->imageLocal = 1;
+                }
+                $pilot->fill($request->toArray());
+                $pilot->save();
+                $message = 'Pilot has been updated succesfully!';
+                return redirect()->route('pilot.index')->with('status', $message)->with('type', 'success');
+            } else {
+                $message = 'This ID is already taken!';
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
             }
-            $pilot->fill($request->toArray());
-            $pilot->save();
-            $message = 'Pilot has been updated succesfully!';
-            return redirect()->route('pilot.index')->with('status', $message)->with('type', 'success');
-        } else {
-            $message = 'This ID is already taken!';
-            return back()->withInput()->with('status', $message)->with('type', 'danger');
+        } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                $message = 'Multigp ID already taken!';
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            } else {
+                $message = 'An error has ocurred! '.$th->getMessage();
+                return back()->withInput()->with('status', $message)->with('type', 'danger');
+            }
         }
     }
 

@@ -4,8 +4,8 @@ $(document).on('theme:init', () => {
         "classId": "class id",
         "name": "class name",
         "description": "class description",
-        "location": "US",
-    }, ];
+        "location": "US"
+    } ];
     var textedJson = JSON.stringify(data, undefined, 4);
     $('#myTextarea').text(textedJson);
 });

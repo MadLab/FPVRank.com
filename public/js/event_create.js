@@ -1,10 +1,30 @@
 /*global $*/
 $(document).on('theme:init', () => {
 
+    var data = [ {
+        "raceName": "World Cup 1 - Track 3",        
+        "startDate": "2018-08-11 18:00:00",
+        "multigpId": "00111",                
+        "pilots": [
+          {                        
+            "multigpId": "14744",   
+            "pilotId": "2525",                     
+            "pilotUserName": "FAZED",
+            "pilotFirstName": "Matt",
+            "pilotLastName": "Loven",
+            "pilotCountry": "US",            
+            "pilotProfilePictureUrl": "https:\/\/s3.amazonaws.com\/\/profileImage-16.jpg",            
+          }
+        ]}
+    ];
+    var textedJson = JSON.stringify(data, undefined, 4);
+    $('#myTextarea').text(textedJson);
+
     $("#fileupload-dropzone").change(function() {
         readURL(this);
     });
     getInput();
+    $('#date').mask('0000-00-00 00:00');    
     //orderList();
 });
 

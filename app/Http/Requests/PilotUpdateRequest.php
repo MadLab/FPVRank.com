@@ -29,7 +29,8 @@ class PilotUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "pilotId" => 'required',
+            "multigpId" => 'nullable',
+            "pilotId" => 'nullable',
             "name" => 'required|max:250',
             "username" => 'required|max:250',
             'country' => 'nullable',

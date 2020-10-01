@@ -1,5 +1,16 @@
 <div class="row">
     <div class="form-group col-sm-12 col-lg-6">
+        <label for="multigpId">Multigp ID<span class="badge badge-danger">Optional</span></label>
+        <input name="multigpId" type="text" class="form-control @error('multigpId') is-invalid @enderror" id="multigpId"
+            placeholder="" value="{{ !isset($event->multigpId) ? old('multigpId') : $event->multigpId }}">
+        @error('multigpId')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+        @enderror
+    </div>
+
+    <div class="form-group col-sm-12 col-lg-6">
         <label for="name">Name<span class="badge badge-danger">Required</span></label>
         <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="name" placeholder=""
             required="" value="{{ !isset($event->name) ? old('name') : $event->name }}">
@@ -38,7 +49,7 @@
         <label class="control-label" for="date">Date<span class="badge badge-danger">Required</span></label>
         <input value="{{ !isset($event->date) ? old('date') : $event->date }}" name="date" id="date" type="text"
             class="form-control @error('date') is-invalid @enderror" data-toggle="flatpickr" data-enable-time="true"
-            data-date-format="Y-m-d H:i:s" readonly>
+            data-date-format="Y-m-d H:i" data-allow-input="true" autocomplete="off">
         @error('date')
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

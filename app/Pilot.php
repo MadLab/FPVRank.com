@@ -12,7 +12,7 @@ class Pilot extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'username','pilotId', 'country', 'imagePath', 'imageLocal', 'created_at'
+        'name', 'username', 'country', 'imagePath', 'imageLocal', 'created_at','multigpId','pilotId'
     ];
       /**
      * The primary key associated with the table.
@@ -27,7 +27,7 @@ class Pilot extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
-        return $this->select('pilotId','name', 'username','created_at','country')->paginate(12);
+        return $this->select('pilotId','name', 'username','created_at','country', 'multigpId')->paginate(12);
     }
      /**
      * Get a listing of the resource by name

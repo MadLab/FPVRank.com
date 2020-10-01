@@ -13,7 +13,7 @@ class Event extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'date','classId', 'location', 'dateRanked', 'eventId', 'imagePath', 'imageLocal'
+        'name', 'date','classId', 'location', 'dateRanked', 'eventId', 'imagePath', 'imageLocal', 'multigpId'
     ];
       /**
      * The primary key associated with the table.
@@ -28,15 +28,15 @@ class Event extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getList(){
-        return $this->select('events.eventId','events.name', 'events.date','classes.name as classId','events.location')
-        ->join('classes', 'classes.classId', '=', 'events.classId')->paginate(12);
+        return $this->select('events.multigpId','events.eventId','events.name', 'events.date','classes.name as classId','events.location')
+        ->join('classes', 'classes.classId', '=', 'events.classId')->orderBy('events.date', 'desc')->paginate(12);
     }
      /**
      * Get a listing of the resource by name
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function search($text){
-        return $this->select('events.eventId','events.name', 'events.date','classes.name as classId','events.location')
+        return $this->select('events.multigpId','events.eventId','events.name', 'events.date','classes.name as classId','events.location')
         ->join('classes', 'classes.classId', '=', 'events.classId')->where('events.name', 'LIKE', $text.'%')
         ->orWhere('classes.name', 'LIKE', $text.'%')->orWhere('events.eventId', '=', $text)->get();
     }
@@ -55,7 +55,7 @@ class Event extends Model
         return $this->select('classId')->where('eventId','=',$eventId)->first();
     }
     public function searchById($eventId){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date','events.imagePath','events.imageLocal',
+        return $this->select('events.location','events.multigpId', 'events.eventId','events.name', 'events.date','events.imagePath','events.imageLocal',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->where('events.eventId', '=',$eventId)->get()->first();
     }
@@ -64,18 +64,18 @@ class Event extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getEventsForPublic(){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location','events.multigpId', 'events.eventId','events.name', 'events.date',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->orderBy('date', 'desc')->paginate(20);
     }
     public function searchByNameOrClassName($text){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location','events.multigpId', 'events.eventId','events.name', 'events.date',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->where('events.name', 'LIKE', $text.'%')->orWhere('classes.name', 'LIKE', $text.'%')
         ->orderBy('date', 'desc')->get();
     }
     public function searchByNameOrClassNameWithDate($text,$date1,$date2){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location','events.multigpId', 'events.eventId','events.name', 'events.date',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
         ->where('events.name', 'LIKE', $text.'%')->orWhere('classes.name', 'LIKE', $text.'%')->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
@@ -83,7 +83,7 @@ class Event extends Model
         ->get();
     }
     public function searchBetweenDate($date1,$date2){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location','events.multigpId', 'events.eventId','events.name', 'events.date',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')
         ->whereBetween('events.date', [date('Y-m-d h:m:s', strtotime($date1)), date('Y-m-d', strtotime($date2))])
 
@@ -96,7 +96,7 @@ class Event extends Model
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function fillTableDashboard($take){
-        return $this->select('events.location', 'events.eventId','events.name', 'events.date',
+        return $this->select('events.location', 'events.multigpId','events.eventId','events.name', 'events.date',
         'classes.name as className')->join('classes', 'events.classId', '=', 'classes.classId')->orderBy('events.created_at', 'asc')->take($take)->get();
     }
 
